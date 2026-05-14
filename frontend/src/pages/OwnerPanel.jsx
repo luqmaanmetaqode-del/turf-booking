@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-const API = 'http://localhost:5000/api';
+const API = 'http://localhost:5001/api';
 
 export default function OwnerPanel() {
   const { token } = useAuth();
   const [data, setData] = useState(null);
   const [tab, setTab] = useState('bookings');
   const [form, setForm] = useState({
-    name: '', location: '', price_per_hour: '',
+    name: '', location: '', city: '', price_per_hour: '',
     sport: 'Football', amenities: '', lat: '', lng: '',
   });
   const [msg, setMsg] = useState('');
@@ -28,9 +28,10 @@ export default function OwnerPanel() {
         ...form,
         price_per_hour: parseInt(form.price_per_hour),
         amenities: form.amenities.split(',').map(a => a.trim()),
+        coordinates: { lat: parseFloat(form.lat), lng: parseFloat(form.lng) },
       }, { headers: { Authorization: `Bearer ${token}` } });
       setMsg('✅ Turf added successfully!');
-      setForm({ name: '', location: '', price_per_hour: '', sport: 'Football', amenities: '', lat: '', lng: '' });
+      setForm({ name: '', location: '', city: '', price_per_hour: '', sport: 'Football', amenities: '', lat: '', lng: '' });
     } catch (err) {
       setMsg('❌ Failed to add turf.');
     }
@@ -75,15 +76,15 @@ export default function OwnerPanel() {
         <div>
           {data.bookings?.length === 0 && <p style={{ color: '#999' }}>No bookings yet.</p>}
           {data.bookings?.map(b => (
-            <div key={b.id} style={{
+            <div key={b._id} style={{
               background: 'white', borderRadius: '12px', padding: '1.25rem',
               marginBottom: '1rem', border: '1px solid #eee',
               display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem',
             }}>
               <div>
-                <strong>{b.Turf?.name}</strong>
+                <strong>{b.turf_id?.name}</strong>
                 <p style={{ color: '#666', fontSize: '0.9rem', marginTop: '4px' }}>
-                  👤 {b.User?.name} — {b.User?.email}
+                  👤 {b.user_id?.name} — {b.user_id?.email}
                 </p>
                 <p style={{ color: '#666', fontSize: '0.9rem' }}>📅 {b.date} at {b.time_slot}</p>
               </div>
@@ -116,7 +117,8 @@ export default function OwnerPanel() {
           <form onSubmit={handleAddTurf}>
             {[
               { label: 'Turf Name', key: 'name', placeholder: 'e.g. Green Arena' },
-              { label: 'Location', key: 'location', placeholder: 'e.g. Koramangala, Bengaluru' },
+              { label: 'Location', key: 'location', placeholder: 'e.g. Koramangala' },
+              { label: 'City', key: 'city', placeholder: 'e.g. Bengaluru' },
               { label: 'Price per Hour (₹)', key: 'price_per_hour', placeholder: 'e.g. 800', type: 'number' },
               { label: 'Amenities (comma separated)', key: 'amenities', placeholder: 'Floodlights, Parking, Washroom' },
               { label: 'Latitude', key: 'lat', placeholder: 'e.g. 12.9352' },
@@ -139,15 +141,25 @@ export default function OwnerPanel() {
             ))}
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', fontWeight: '600', marginBottom: '6px' }}>Sport</label>
-              <select
-                value={form.sport}
-                onChange={e => setForm({ ...form, sport: e.target.value })}
-                style={{ width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1px solid #ddd', fontSize: '1rem' }}
-              >
-                {['Football', 'Cricket', 'Badminton', 'Tennis', 'Basketball'].map(s => (
-                  <option key={s}>{s}</option>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                {['Football', 'Cricket', 'Tennis'].map(s => (
+                  <button
+                    type="button"
+                    key={s}
+                    onClick={() => setForm({ ...form, sport: s })}
+                    style={{
+                      padding: '10px 18px', borderRadius: '10px',
+                      border: `1.5px solid ${form.sport === s ? '#1ebe74' : '#ddd'}`,
+                      background: form.sport === s ? '#f0fdf4' : 'white',
+                      color: form.sport === s ? '#1ebe74' : '#666',
+                      fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer',
+                      transition: 'all 0.2s'
+                    }}
+                  >
+                    {s}
+                  </button>
                 ))}
-              </select>
+              </div>
             </div>
             <button type="submit" style={{
               width: '100%', background: '#1ebe74', color: 'white',

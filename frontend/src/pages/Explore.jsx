@@ -1,186 +1,122 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useSearchParams } from 'react-router-dom';
 import TurfCard from '../components/TurfCard';
 import SportFilter from '../components/SportFilter';
+import { useSearchParams } from 'react-router-dom';
 
-const API = 'http://localhost:5000/api';
+const API = 'http://localhost:5001/api';
 
-// Simple city list (you can expand later)
-const cities = ['Bangalore', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai'];
+const CITIES = ['All Cities', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Ahmedabad'];
 
 export default function Explore() {
   const [turfs, setTurfs] = useState([]);
   const [sport, setSport] = useState('All');
   const [search, setSearch] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
+  const [city, setCity] = useState('All Cities');
   const [loading, setLoading] = useState(true);
-  const [city, setCity] = useState('');
+  const [searchParams] = useSearchParams();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  // Load city from URL
   useEffect(() => {
-    const urlCity = searchParams.get('city');
-    if (urlCity) setCity(urlCity);
-  }, []);
+    const cityParam = searchParams.get('city');
+    if (cityParam) setCity(cityParam);
+  }, [searchParams]);
 
-  // Auto detect city using browser location
   useEffect(() => {
-    if (city) return; // don't override if already selected
-
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(async (pos) => {
-        try {
-          const { latitude, longitude } = pos.coords;
-
-          // Free reverse geocoding API
-          const res = await axios.get(
-            `https://nominatim.openstreetmap.org/reverse`,
-            {
-              params: {
-                lat: latitude,
-                lon: longitude,
-                format: 'json',
-              },
-            }
-          );
-
-          const detectedCity =
-            res.data.address.city ||
-            res.data.address.town ||
-            res.data.address.state;
-
-          if (detectedCity) {
-            setCity(detectedCity);
-            setSearchParams({ city: detectedCity });
-          }
-        } catch (err) {
-          console.log('Location detect failed');
-        }
-      });
-    }
-  }, [city, setSearchParams]);
-
-  // Fetch turfs
-  useEffect(() => {
+    setLoading(true);
     axios.get(`${API}/turfs`)
-      .then(res => {
-        setTurfs(res.data);
-        setLoading(false);
+      .then(res => { 
+        // Handle both array response and object with turfs property
+        const turfData = Array.isArray(res.data) ? res.data : (res.data.turfs || []);
+        setTurfs(turfData); 
+        setLoading(false); 
       })
       .catch(() => setLoading(false));
   }, []);
 
-  // Handle city change
-  const handleCityChange = (value) => {
-    setCity(value);
-    setSearchParams(value ? { city: value } : {});
-  };
-
-  // Filtering
-  const filtered = turfs.filter(t => {
+  // Ensure turfs is always an array
+  const turfsList = Array.isArray(turfs) ? turfs : [];
+  
+  const filtered = turfsList.filter(t => {
     const matchSport = sport === 'All' || t.sport === sport;
-
-    const matchSearch =
-      t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.location.toLowerCase().includes(search.toLowerCase());
-
-    const matchPrice = maxPrice
-      ? t.price_per_hour <= parseInt(maxPrice)
-      : true;
-
-    const matchCity = city
-      ? t.location.toLowerCase().includes(city.toLowerCase())
-      : true;
-
+    const matchSearch = t.name.toLowerCase().includes(search.toLowerCase()) ||
+      t.location.toLowerCase().includes(search.toLowerCase()) ||
+      t.city.toLowerCase().includes(search.toLowerCase());
+    const matchPrice = maxPrice ? t.price_per_hour <= parseInt(maxPrice) : true;
+    const matchCity = city === 'All Cities' || t.city.toLowerCase() === city.toLowerCase();
     return matchSport && matchSearch && matchPrice && matchCity;
   });
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ padding: '3rem 2rem', maxWidth: '1240px', margin: '0 auto' }}>
+      <h2 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '0.75rem', color: '#111', letterSpacing: '-1px' }}>Explore Venues</h2>
+      <p style={{ color: '#666', marginBottom: '2.5rem', fontSize: '1.05rem', fontWeight: '500' }}>Find and book the perfect arena for your game</p>
 
-      <h2 style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
-        Explore Turfs {city && `in ${city}`}
-      </h2>
-
-      <p style={{ color: '#666', marginBottom: '1.5rem' }}>
-        Find and book the perfect turf near you
-      </p>
-
-      {/* Filters */}
+      {/* Search & Filter Bar */}
       <div style={{
-        display: 'flex',
-        gap: '1rem',
-        flexWrap: 'wrap',
-        background: 'white',
-        padding: '1rem',
-        borderRadius: '12px',
-        border: '1px solid #eee',
-        marginBottom: '1.5rem',
+        display: 'flex', gap: '1.25rem', flexWrap: 'wrap',
+        background: 'white', padding: '1.5rem',
+        borderRadius: '24px', border: '1px solid #eee',
+        marginBottom: '2.5rem',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
       }}>
-
-        {/* 🔽 City Dropdown */}
+        {/* City dropdown */}
         <select
           value={city}
-          onChange={(e) => handleCityChange(e.target.value)}
+          onChange={e => setCity(e.target.value)}
           style={{
-            padding: '10px',
-            borderRadius: '10px',
-            border: '1px solid #ddd',
+            padding: '12px 18px', borderRadius: '14px',
+            border: '1.5px solid #eee', fontSize: '0.95rem',
+            background: '#f8fafc', cursor: 'pointer',
+            fontWeight: '700', color: '#111',
+            outline: 'none',
           }}
         >
-          <option value="">All Cities</option>
-          {cities.map(c => (
-            <option key={c} value={c}>{c}</option>
-          ))}
+          {CITIES.map(c => <option key={c}>{c}</option>)}
         </select>
 
-        {/* Search */}
         <input
-          placeholder="🔍 Search..."
+          placeholder="Search by name, location or city..."
           value={search}
           onChange={e => setSearch(e.target.value)}
           style={{
-            flex: 1,
-            padding: '10px',
-            borderRadius: '10px',
-            border: '1px solid #ddd',
-            minWidth: '200px',
+            flex: 1, padding: '12px 20px', borderRadius: '14px',
+            border: '1.5px solid #f1f5f9', fontSize: '1rem', minWidth: '250px',
+            fontWeight: '600', outline: 'none', background: '#f8fafc',
           }}
         />
-
-        {/* Price */}
         <input
+          placeholder="Max price"
           type="number"
-          placeholder="Max ₹/hr"
           value={maxPrice}
           onChange={e => setMaxPrice(e.target.value)}
           style={{
-            width: '150px',
-            padding: '10px',
-            borderRadius: '10px',
-            border: '1px solid #ddd',
+            width: '140px', padding: '12px 18px', borderRadius: '14px',
+            border: '1.5px solid #f1f5f9', fontSize: '1rem',
+            fontWeight: '700', background: '#f8fafc', outline: 'none',
           }}
         />
       </div>
 
       <SportFilter selected={sport} onSelect={setSport} />
 
-      {/* Results */}
       {loading ? (
-        <p style={{ textAlign: 'center' }}>Loading...</p>
+        <div style={{ textAlign: 'center', padding: '5rem' }}>
+           <p style={{ color: '#94a3b8', fontSize: '1.1rem', fontWeight: '600' }}>Fetching premium venues...</p>
+        </div>
       ) : filtered.length === 0 ? (
-        <p style={{ textAlign: 'center' }}>No turfs found</p>
+        <div style={{ textAlign: 'center', padding: '5rem', color: '#94a3b8' }}>
+          <p style={{ fontSize: '1.2rem', fontWeight: '700' }}>No venues match your criteria.</p>
+          <button onClick={() => { setSport('All'); setCity('All Cities'); setSearch(''); setMaxPrice(''); }} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: '#1ebe74', fontWeight: '800', cursor: 'pointer', fontSize: '1rem' }}>Clear All Filters</button>
+        </div>
       ) : (
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: '1.5rem',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+          gap: '2.5rem',
+          marginTop: '2rem',
         }}>
-          {filtered.map(t => (
-            <TurfCard key={t.id} turf={t} />
-          ))}
+          {filtered.map(turf => <TurfCard key={turf._id} turf={turf} />)}
         </div>
       )}
     </div>

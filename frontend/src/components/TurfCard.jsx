@@ -1,84 +1,82 @@
 import { useNavigate } from 'react-router-dom';
 
-const SPORT_EMOJI = {
-  Football: '⚽',
-  Cricket: '🏏',
-  Badminton: '🏸',
-  Tennis: '🎾',
-  Basketball: '🏀',
-};
-
 export default function TurfCard({ turf }) {
   const navigate = useNavigate();
 
   return (
     <div style={{
       background: 'white',
-      borderRadius: '16px',
+      borderRadius: '24px',
       overflow: 'hidden',
-      border: '1px solid #eee',
-      boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+      border: '1.5px solid #f1f5f9',
+      boxShadow: '0 4px 15px rgba(0,0,0,0.02)',
       cursor: 'pointer',
-      transition: 'transform 0.2s, box-shadow 0.2s',
+      transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
     }}
       onMouseEnter={e => {
-        e.currentTarget.style.transform = 'translateY(-4px)';
-        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.12)';
+        e.currentTarget.style.transform = 'translateY(-6px)';
+        e.currentTarget.style.boxShadow = '0 15px 35px rgba(0,0,0,0.06)';
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.06)';
+        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.02)';
       }}
-      onClick={() => navigate(`/turf/${turf.id}`)}
+      onClick={() => navigate(`/turf/${turf._id}`)}
     >
       {/* Image */}
       <div style={{
-        background: 'linear-gradient(135deg, #0a3d2e, #1ebe74)',
-        height: '140px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontSize: '4rem',
+        height: '180px',
         position: 'relative',
+        background: '#f8fafc',
       }}>
-        {SPORT_EMOJI[turf.sport] || '🏟️'}
+        {turf.images && turf.images.length > 0 ? (
+          <img 
+            src={turf.images[0]} 
+            alt={turf.name} 
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+          />
+        ) : (
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontWeight: '700' }}>
+            PREMIUM VENUE
+          </div>
+        )}
         <div style={{
           position: 'absolute',
-          top: '10px',
-          right: '10px',
-          background: 'white',
-          borderRadius: '20px',
-          padding: '3px 10px',
-          fontSize: '0.8rem',
-          fontWeight: '600',
+          top: '12px',
+          right: '12px',
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(8px)',
+          borderRadius: '12px',
+          padding: '6px 14px',
+          fontSize: '0.75rem',
+          fontWeight: '800',
           color: '#0a3d2e',
+          textTransform: 'uppercase',
+          letterSpacing: '0.8px',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
         }}>
           {turf.sport}
         </div>
       </div>
 
       {/* Info */}
-      <div style={{ padding: '1.25rem' }}>
-        <h3 style={{ marginBottom: '4px', fontSize: '1.1rem' }}>{turf.name}</h3>
-        <p style={{ color: '#666', fontSize: '0.875rem', marginBottom: '8px' }}>
-          📍 {turf.location}
+      <div style={{ padding: '1.5rem' }}>
+        <h3 style={{ marginBottom: '6px', fontSize: '1.2rem', fontWeight: '800', color: '#111', letterSpacing: '-0.3px' }}>{turf.name}</h3>
+        <p style={{ color: '#64748b', fontSize: '0.9rem', marginBottom: '16px', fontWeight: '500' }}>
+          {turf.location}, {turf.city}
         </p>
 
-        {turf.distance_meters && (
-          <p style={{ color: '#1ebe74', fontSize: '0.85rem', marginBottom: '8px' }}>
-            📏 {(turf.distance_meters / 1000).toFixed(1)} km away
-          </p>
-        )}
-
-        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
           {turf.amenities?.slice(0, 3).map((a, i) => (
             <span key={i} style={{
               background: '#f0fdf4',
-              color: '#0a3d2e',
+              color: '#166534',
               fontSize: '0.75rem',
-              padding: '3px 10px',
-              borderRadius: '20px',
-              border: '1px solid #d1fae5',
+              padding: '6px 12px',
+              borderRadius: '10px',
+              fontWeight: '700',
+              textTransform: 'uppercase',
+              letterSpacing: '0.3px',
             }}>
               {a}
             </span>
@@ -89,33 +87,20 @@ export default function TurfCard({ turf }) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
+          paddingTop: '16px',
+          borderTop: '1.5px solid #f1f5f9',
         }}>
           <div>
-            <span style={{ fontSize: '1.2rem', fontWeight: '700', color: '#1ebe74' }}>
+            <span style={{ fontSize: '1.4rem', fontWeight: '800', color: '#1ebe74', letterSpacing: '-0.5px' }}>
               ₹{turf.price_per_hour}
             </span>
-            <span style={{ color: '#999', fontSize: '0.85rem' }}>/hr</span>
+            <span style={{ color: '#94a3b8', fontSize: '0.9rem', fontWeight: '600' }}> / hr</span>
           </div>
-          <div style={{ color: '#666', fontSize: '0.85rem' }}>⭐ {turf.rating}</div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+             <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '700', textTransform: 'uppercase' }}>Rating</span>
+             <span style={{ color: '#111', fontSize: '1rem', fontWeight: '700' }}>{turf.rating}</span>
+          </div>
         </div>
-
-        <button
-          style={{
-            width: '100%',
-            marginTop: '12px',
-            background: '#1ebe74',
-            color: 'white',
-            border: 'none',
-            padding: '10px',
-            borderRadius: '10px',
-            cursor: 'pointer',
-            fontWeight: '600',
-            fontSize: '0.95rem',
-          }}
-          onClick={e => { e.stopPropagation(); navigate(`/turf/${turf.id}`); }}
-        >
-          Book Now
-        </button>
       </div>
     </div>
   );

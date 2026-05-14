@@ -1,17 +1,31 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const mongoose = require('mongoose');
 
-const Turf = sequelize.define('Turf', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, allowNull: false },
-  location: { type: DataTypes.STRING, allowNull: false },
-  price_per_hour: { type: DataTypes.INTEGER, allowNull: false },
-  sport: { type: DataTypes.STRING, defaultValue: 'Football' },
-  rating: { type: DataTypes.FLOAT, defaultValue: 4.0 },
-  amenities: { type: DataTypes.ARRAY(DataTypes.TEXT) },
-  images: { type: DataTypes.ARRAY(DataTypes.TEXT) },
-  owner_id: { type: DataTypes.INTEGER },
-  location_point: { type: DataTypes.GEOMETRY('POINT', 4326) },
-}, { tableName: 'turfs', timestamps: false });
+const TurfSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  location: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, default: '' },
+  pincode: { type: String, default: '' },
+  price_per_hour: { type: Number, required: true },
+  sport: { type: String, default: 'Football' },
+  sports: [String],
+  type: { type: String, default: 'Outdoor' },
+  venueSize: { type: String, default: '' },
+  surfaceType: { type: String, default: '' },
+  bookingType: { type: String, default: 'Hourly' },
+  description: { type: String, default: '' },
+  shortDescription: { type: String, default: '' },
+  rating: { type: Number, default: 0 },
+  amenities: [String],
+  images: [String],
+  owner_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  coordinates: {
+    lat: Number,
+    lng: Number,
+  },
+  isActive: { type: Boolean, default: true },
+  openTime: { type: String, default: '06:00 AM' },
+  closeTime: { type: String, default: '11:00 PM' },
+}, { timestamps: true });
 
-module.exports = Turf;
+module.exports = mongoose.model('Turf', TurfSchema);

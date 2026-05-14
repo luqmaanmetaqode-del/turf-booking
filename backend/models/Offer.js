@@ -1,13 +1,11 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const mongoose = require('mongoose');
 
-const Offer = sequelize.define('Offer', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  title: { type: DataTypes.STRING, allowNull: false },
-  description: { type: DataTypes.TEXT },
-  discount: { type: DataTypes.STRING },
-  turf_id: { type: DataTypes.INTEGER },
-  valid_until: { type: DataTypes.DATE },
-}, { tableName: 'offers', timestamps: false });
+const OfferSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  description: { type: String },
+  discount: { type: String },
+  turf_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Turf' },
+  valid_until: { type: Date },
+}, { timestamps: true });
 
-module.exports = Offer;
+module.exports = mongoose.model('Offer', OfferSchema);

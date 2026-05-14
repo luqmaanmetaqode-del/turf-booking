@@ -1,4 +1,4 @@
-const SPORTS = ['All', 'Football', 'Cricket', 'Badminton', 'Tennis', 'Basketball'];
+const SPORTS = ['All', 'Football', 'Cricket', 'Tennis'];
 
 export default function SportFilter({ selected, onSelect }) {
   return (

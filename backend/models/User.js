@@ -1,12 +1,17 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+const mongoose = require('mongoose');
 
-const User = sequelize.define('User', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, allowNull: false },
-  email: { type: DataTypes.STRING, allowNull: false, unique: true },
-  password: { type: DataTypes.STRING, allowNull: false },
-  role: { type: DataTypes.STRING, defaultValue: 'user' },
-}, { tableName: 'users', timestamps: false });
+const UserSchema = new mongoose.Schema({
+  name: { type: String, default: '' },
+  email: { type: String, default: null },
+  phone: { type: String, default: null },
+  password: { type: String, default: '' },
+  role: { type: String, default: 'user' },
+  googleUid: { type: String, default: null },
+  otp: { type: String },
+  otpExpiry: { type: Date },
+}, { timestamps: true });
 
-module.exports = User;
+// Index on phone for fast lookups (not unique to avoid conflicts)
+UserSchema.index({ phone: 1 });
+
+module.exports = mongoose.model('User', UserSchema);

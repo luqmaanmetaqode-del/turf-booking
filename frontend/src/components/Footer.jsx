@@ -29,13 +29,19 @@ export default function Footer() {
           <h4 style={{ color: '#aaa', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
             Company
           </h4>
-          {['About Us', 'Blogs', 'Contact', 'Careers', 'Partner With Us'].map(item => (
-            <div key={item} style={{ marginBottom: '14px' }}>
-              <Link to="/" style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
+          {[
+            { label: 'About Us', path: '/' },
+            { label: 'Blogs', path: '/' },
+            { label: 'Contact', path: '/' },
+            { label: 'Careers', path: '/' },
+            { label: 'Partner With Us', path: '/partner/register' },
+          ].map(item => (
+            <div key={item.label} style={{ marginBottom: '14px' }}>
+              <Link to={item.path} style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
                 onMouseEnter={e => e.target.style.color = '#1ebe74'}
                 onMouseLeave={e => e.target.style.color = '#444'}
               >
-                {item.toUpperCase()}
+                {item.label.toUpperCase()}
               </Link>
             </div>
           ))}

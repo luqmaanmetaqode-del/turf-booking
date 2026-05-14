@@ -1,76 +1,65 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import logo from '../assets/logo.png';
-
-export default function Navbar() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+export default function HowItWorks() {
+  const steps = [
+    { title: 'Search', desc: 'Find turfs near you by sport, city, or location' },
+    { title: 'Select Slot', desc: 'Pick your preferred date, time, and duration' },
+    { title: 'Book & Pay', desc: 'Confirm your booking with secure payment' },
+    { title: 'Play!', desc: 'Show up at the venue and enjoy your game' },
+  ];
 
   return (
-    <nav style={{
-      background: 'white',
-      padding: '0 2rem',
-      height: '70px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
-      boxShadow: '0 1px 8px rgba(0,0,0,0.08)',
-      borderBottom: '1px solid #f0f0f0',
+    <section style={{
+      padding: '5rem 2rem', maxWidth: '1200px', margin: '0 auto',
     }}>
-      {/* Left — Logo + Location */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-        <Link to="/">
-          <img src={logo} alt="TurfX" style={{ height: '60px', objectFit: 'contain' }} />
-        </Link>
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '6px',
-          background: '#f5f5f5', borderRadius: '20px',
-          padding: '8px 16px', cursor: 'pointer',
-        }}>
-          <span style={{ fontSize: '1rem' }}>📍</span>
-          <span style={{ fontSize: '0.95rem', color: '#444', fontWeight: '500' }}>Bengaluru</span>
-        </div>
+      <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+        <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#111', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>
+          Simplified Booking Process
+        </h2>
+        <p style={{ color: '#666', fontSize: '1rem', fontWeight: '400' }}>
+          Get on the field in 4 quick steps
+        </p>
       </div>
 
-      {/* Right — Links */}
-      <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-        <Link to="/" style={{ color: '#444', textDecoration: 'none', fontSize: '0.95rem', fontWeight: '500' }}>Home</Link>
-        <Link to="/explore" style={{ color: '#444', textDecoration: 'none', fontSize: '0.95rem', fontWeight: '500' }}>Explore</Link>
-        {user ? (
-          <>
-            <Link to="/my-bookings" style={{ color: '#444', textDecoration: 'none', fontSize: '0.95rem', fontWeight: '500' }}>My Bookings</Link>
-            {user.role === 'owner' && (
-              <Link to="/owner" style={{ color: '#444', textDecoration: 'none', fontSize: '0.95rem', fontWeight: '500' }}>Dashboard</Link>
-            )}
-            <span style={{ color: '#1ebe74', fontSize: '0.9rem', fontWeight: '600' }}>Hi, {user.name}</span>
-            <button
-              onClick={() => { logout(); navigate('/'); }}
-              style={{
-                background: 'none', border: '1.5px solid #ccc',
-                padding: '7px 18px', borderRadius: '20px',
-                cursor: 'pointer', fontSize: '0.9rem', color: '#444',
-                fontWeight: '500',
-              }}
-            >Logout</button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ color: '#444', textDecoration: 'none', fontSize: '0.95rem', fontWeight: '500' }}>Login</Link>
-            <button
-              onClick={() => navigate('/register')}
-              style={{
-                background: '#1ebe74', color: 'white',
-                border: 'none', padding: '8px 20px',
-                borderRadius: '20px', cursor: 'pointer',
-                fontSize: '0.9rem', fontWeight: '600',
-              }}
-            >Sign Up</button>
-          </>
-        )}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+        gap: '2.5rem',
+      }}>
+        {steps.map((step, i) => (
+          <div key={i} style={{
+            textAlign: 'center', padding: '3rem 2rem',
+            background: 'white', borderRadius: '24px',
+            border: '1px solid #eee',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+            position: 'relative',
+            transition: 'all 0.3s ease',
+            cursor: 'default',
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-8px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.08)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.03)'; }}
+          >
+            {/* Step circle */}
+            <div style={{
+              width: '70px', height: '70px',
+              background: '#f0fdf4',
+              color: '#1ebe74',
+              borderRadius: '50%',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1.8rem', fontWeight: '800',
+              margin: '0 auto 2rem',
+              border: '2px solid #d1fae5',
+            }}>
+              {i + 1}
+            </div>
+
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.75rem', color: '#111' }}>
+              {step.title}
+            </h3>
+            <p style={{ color: '#666', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: '500' }}>
+              {step.desc}
+            </p>
+          </div>
+        ))}
       </div>
-    </nav>
+    </section>
   );
 }

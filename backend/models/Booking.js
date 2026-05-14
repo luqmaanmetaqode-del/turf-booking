@@ -1,20 +1,18 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
-const User = require('./User');
-const Turf = require('./Turf');
+const mongoose = require('mongoose');
 
-const Booking = sequelize.define('Booking', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  user_id: { type: DataTypes.INTEGER, references: { model: User, key: 'id' } },
-  turf_id: { type: DataTypes.INTEGER, references: { model: Turf, key: 'id' } },
-  date: { type: DataTypes.STRING, allowNull: false },
-  time_slot: { type: DataTypes.STRING, allowNull: false },
-  total_price: { type: DataTypes.INTEGER, allowNull: false },
-  status: { type: DataTypes.STRING, defaultValue: 'confirmed' },
-  payment_id: { type: DataTypes.STRING },
-}, { tableName: 'bookings', timestamps: false });
+const BookingSchema = new mongoose.Schema({
+  user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+  turf_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Turf', required: true },
+  date: { type: String, required: true },
+  time_slot: { type: String, required: true },
+  total_price: { type: Number, required: true },
+  status: { type: String, default: 'confirmed' },
+  payment_id: { type: String },
+  refund_amount: { type: Number, default: 0 },
+  refund_status: { type: String, enum: ['none', 'pending', 'processed', 'failed'], default: 'none' },
+  refund_id: { type: String },
+  cancelled_at: { type: Date },
+  cancellation_reason: { type: String },
+}, { timestamps: true });
 
-Booking.belongsTo(Turf, { foreignKey: 'turf_id' });
-Booking.belongsTo(User, { foreignKey: 'user_id' });
-
-module.exports = Booking;
+module.exports = mongoose.model('Booking', BookingSchema);
