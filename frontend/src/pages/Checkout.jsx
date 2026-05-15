@@ -24,12 +24,12 @@ export default function Checkout() {
   const generateHourlySlots = () => {
     const hourlySlots = [];
     for (let hour = 6; hour < 23; hour++) {
-      const startHour = hour > 12 ? hour - 12 : hour;
-      const endHour = hour + 1 > 12 ? hour + 1 - 12 : hour + 1;
+      const startHour = hour > 12 ? hour - 12 : (hour === 12 ? 12 : hour);
+      const endHour = (hour + 1) > 12 ? (hour + 1) - 12 : (hour + 1 === 12 ? 12 : hour + 1);
       const startPeriod = hour >= 12 ? 'PM' : 'AM';
-      const endPeriod = hour + 1 >= 12 ? 'PM' : 'AM';
+      const endPeriod = (hour + 1) >= 12 ? 'PM' : 'AM';
       
-      const slotLabel = `${startHour}:00 ${startPeriod} - ${endHour}:00 ${endPeriod}`;
+      const slotLabel = `${startHour}-${endHour} ${startPeriod === endPeriod ? endPeriod : startPeriod + '-' + endPeriod}`;
       hourlySlots.push({
         label: slotLabel,
         value: slotLabel,
