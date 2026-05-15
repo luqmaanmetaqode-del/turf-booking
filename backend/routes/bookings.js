@@ -244,4 +244,26 @@ router.put('/reschedule/:id', auth, async (req, res) => {
   }
 });
 
+// Get booked slots for a turf on a specific date
+router.get('/booked-slots/:turfId/:date', async (req, res) => {
+  try {
+    const { turfId, date } = req.params;
+    
+    // Find all confirmed bookings for this turf and date
+    const bookings = await Booking.find({
+      turf_id: turfId,
+      date: date,
+      status: 'confirmed'
+    }).select('time_slot');
+    
+    // Extract just the time slot labels
+    const bookedSlots = bookings.map(b => b.time_slot);
+    
+    res.json({ bookedSlots });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 module.exports = router;
