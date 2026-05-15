@@ -29,7 +29,14 @@ export default function Checkout() {
       const startPeriod = hour >= 12 ? 'PM' : 'AM';
       const endPeriod = (hour + 1) >= 12 ? 'PM' : 'AM';
       
-      const slotLabel = `${startHour}-${endHour} ${startPeriod === endPeriod ? endPeriod : startPeriod + '-' + endPeriod}`;
+      // Format: "6-7 AM" or "11-12 PM" or "11 AM-12 PM"
+      let slotLabel;
+      if (startPeriod === endPeriod) {
+        slotLabel = `${startHour}-${endHour} ${endPeriod}`;
+      } else {
+        slotLabel = `${startHour} ${startPeriod}-${endHour} ${endPeriod}`;
+      }
+      
       hourlySlots.push({
         label: slotLabel,
         value: slotLabel,
