@@ -14,6 +14,76 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder',
 });
 
+// Direct booking (no approval needed) - for multi-slot bookings
+router.post('/direct', auth, bookingLimiter, async (req, res) => {
+  try {
+    const { turf_id, date, time_slots, total_price, payment_id } = req.body;
+    if (!turf_id || !date || !time_slots || !Array.isArray(time_slots) || time_slots.length === 0 || !total_price) {
+      return res.status(400).json({ msg: 'Booking details are required' });
+    }
+
+    // Check if any of the selected slots are already booked
+    const existingBookings = await Booking.find({
+      turf_id,
+      date,
+      status: { $in: ['confirmed'] }
+    });
+
+    const bookedSlots = existingBookings.flatMap(b => b.time_slots);
+    const conflictingSlots = time_slots.filter(slot => bookedSlots.includes(slot));
+
+    if (conflictingSlots.length > 0) {
+      return res.status(400).json({ 
+        msg: `The following slots are already booked: ${conflictingSlots.join(', ')}` 
+      });
+    }
+
+    // Mark all slots as booked
+    for (const slot of time_slots) {
+      await Slot.findOneAndUpdate(
+        { turf_id, date, time_slot: slot },
+        { is_booked: true, is_locked: false, locked_until: null },
+        { upsert: true }
+      );
+    }
+
+    // Create confirmed booking
+    const booking = await Booking.create({
+      user_id: req.user.id,
+      turf_id,
+      date,
+      time_slots,
+      total_price,
+      payment_id,
+      status: 'confirmed',
+      payment_status: 'paid'
+    });
+
+    const populatedBooking = await booking.populate('turf_id user_id');
+    
+    // Send confirmation emails
+    const turf = await Turf.findById(turf_id).populate('owner_id');
+    const user = await User.findById(req.user.id);
+    
+    if (user) {
+      emailService.sendBookingConfirmation(populatedBooking, user, turf).catch(err => 
+        console.error('Email error:', err)
+      );
+    }
+    
+    if (turf.owner_id) {
+      emailService.sendPartnerNewBooking(populatedBooking, turf.owner_id, turf, user).catch(err => 
+        console.error('Partner email error:', err)
+      );
+    }
+
+    res.json(booking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 // Create booking request (pending approval)
 router.post('/request', auth, bookingLimiter, async (req, res) => {
   try {

@@ -98,18 +98,65 @@ export default function Checkout() {
     
     setLoading(true);
     try {
-      await axios.post(`${API}/bookings/request`, {
-        turf_id: turfId,
-        date,
-        time_slots: selectedSlots,
-        total_price: totalAmount,
-      }, { headers: { Authorization: `Bearer ${token}` } });
+      // Create Razorpay order
+      const orderRes = await axios.post(`${API}/bookings/razorpay-order`, 
+        { amount: totalAmount }, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       
-      setRequestSent(true);
+      const { id: order_id, amount, currency, demo } = orderRes.data;
+
+      if (demo) {
+        // Bypass Razorpay for demo - direct booking
+        await axios.post(`${API}/bookings/direct`, {
+          turf_id: turfId,
+          date,
+          time_slots: selectedSlots,
+          total_price: totalAmount,
+          payment_id: "demo_payment_" + Date.now(),
+        }, { headers: { Authorization: `Bearer ${token}` } });
+        
+        setRequestSent(true);
+        setLoading(false);
+        return;
+      }
+
+      // Razorpay payment
+      const options = {
+        key: 'rzp_test_placeholder',
+        amount,
+        currency,
+        name: 'TurfX',
+        description: `Booking for ${turf.name}`,
+        order_id,
+        handler: async (response) => {
+          try {
+            await axios.post(`${API}/bookings/direct`, {
+              turf_id: turfId,
+              date,
+              time_slots: selectedSlots,
+              total_price: totalAmount,
+              payment_id: response.razorpay_payment_id,
+            }, { headers: { Authorization: `Bearer ${token}` } });
+            
+            setRequestSent(true);
+          } catch (err) {
+            alert('Payment successful but booking failed. Please contact support.');
+          }
+        },
+        prefill: {
+          name: user?.name,
+          contact: user?.phone,
+        },
+        theme: { color: '#1ebe74' },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (err) {
       console.error(err);
       const errorMsg = err.response?.data?.msg || err.message;
-      alert(`Failed to send booking request: ${errorMsg}`);
+      alert(`Failed to create booking: ${errorMsg}`);
     }
     setLoading(false);
   };
@@ -124,17 +171,14 @@ export default function Checkout() {
 
   if (requestSent) return (
     <div style={{ textAlign:'center', padding:'4rem 2rem', maxWidth:'500px', margin:'0 auto', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
-      <div style={{ width:'80px', height:'80px', borderRadius:'50%', background:'#fff7ed', border: '2px solid #f59e0b', display:'flex', alignItems:'center', justifyContent:'center', color:'#f59e0b', fontSize:'2.5rem', marginBottom:'1.5rem', fontWeight: '900' }}>⏳</div>
-      <h2 style={{ color:'#111', marginBottom:'0.75rem', fontSize:'2.2rem', fontWeight: '900' }}>Request Sent!</h2>
+      <div style={{ width:'80px', height:'80px', borderRadius:'50%', background:'#f0fdf4', border: '2px solid #1ebe74', display:'flex', alignItems:'center', justifyContent:'center', color:'#1ebe74', fontSize:'2.5rem', marginBottom:'1.5rem', fontWeight: '900' }}>✓</div>
+      <h2 style={{ color:'#111', marginBottom:'0.75rem', fontSize:'2.2rem', fontWeight: '900' }}>Booking Confirmed!</h2>
       <p style={{ color:'#111', fontWeight: '700', fontSize: '1.1rem', marginBottom:'0.5rem' }}>{turf.name}</p>
       <p style={{ color:'#666', marginBottom:'1.5rem', fontWeight: '500' }}>{date} | {selectedSlots.join(', ')}</p>
       <div style={{ background:'#f8f9fa', borderRadius:'20px', padding:'1.5rem 2.5rem', marginTop:'1rem', marginBottom:'2.5rem', border:'1.5px solid #eee' }}>
-        <div style={{ fontSize:'0.9rem', color:'#888', fontWeight: '600', marginBottom: '4px' }}>Waiting for Partner Approval</div>
-        <div style={{ fontSize:'1.2rem', fontWeight:'800', color:'#f59e0b', marginTop: '8px' }}>You'll be notified once approved</div>
+        <div style={{ fontSize:'0.9rem', color:'#888', fontWeight: '600', marginBottom: '4px' }}>Total Amount Paid</div>
+        <div style={{ fontSize:'1.8rem', fontWeight:'900', color:'#1ebe74' }}>INR {totalAmount.toLocaleString()}</div>
       </div>
-      <p style={{ color:'#666', fontSize:'0.9rem', marginBottom:'2rem', textAlign:'center', lineHeight: 1.6 }}>
-        The venue partner will review your request. Once approved, you'll receive a notification to complete the payment.
-      </p>
       <button onClick={() => navigate('/my-bookings')} style={{ background:'#1ebe74', color:'white', border:'none', padding:'16px 48px', borderRadius:'16px', cursor:'pointer', fontWeight:'800', fontSize: '1.05rem', boxShadow: '0 8px 25px rgba(30,190,116,0.3)' }}>View My Bookings</button>
     </div>
   );
@@ -298,10 +342,10 @@ export default function Checkout() {
             color:'white', border:'none', padding:'20px', borderRadius:'20px',
             cursor: loading || selectedSlots.length === 0 ? 'not-allowed' : 'pointer', fontWeight:'900', fontSize:'1.15rem',
             boxShadow:'0 10px 30px rgba(30,190,116,0.3)', transition:'all 0.3s',
-          }}>{loading ? 'Sending Request...' : selectedSlots.length === 0 ? 'Select Slots' : 'Send Booking Request'}</button>
+          }}>{loading ? 'Processing...' : selectedSlots.length === 0 ? 'Select Slots' : `Pay INR ${totalAmount.toLocaleString()}`}</button>
           
           <div style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-             <p style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '700' }}>Partner will review your request</p>
+             <p style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: '700' }}>Secure Transaction via Razorpay</p>
           </div>
         </div>
       </div>
