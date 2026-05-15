@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-const API = 'http://localhost:5001/api';
+const API = process.env.REACT_APP_API_URL || 'https://turfx.metaqode.co.in/api';
 const SPORTS = ['Football', 'Cricket', 'Tennis'];
 
 export default function Checkout() {
