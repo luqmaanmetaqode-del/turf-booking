@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 const TIME_SLOTS = [
   '06:00 AM to 07:00 AM', '07:00 AM to 08:00 AM', '08:00 AM to 09:00 AM',

@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerLogin() {
   const { login } = useAuth();

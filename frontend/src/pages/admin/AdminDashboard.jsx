@@ -65,7 +65,7 @@ function PieChart({ slices, size = 220 }) {
   );
 }
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function AdminDashboard() {
   const { token, user, logout } = useAuth();

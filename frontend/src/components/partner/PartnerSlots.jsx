@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Clock, Filter, Plus, Trash2, Edit2, AlertCircle, MapPin } from 'lucide-react';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerSlots({ data, token, onChange }) {
   const [selectedTurf, setSelectedTurf] = useState(null);

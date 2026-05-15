@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReviewCard from '../components/ReviewCard';
 import { useAuth } from '../context/AuthContext';
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function TurfDetail() {
   const { id } = useParams();

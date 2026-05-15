@@ -29,7 +29,7 @@ import PartnerSlots from '../../components/partner/PartnerSlots';
 import PartnerEarnings from '../../components/partner/PartnerEarnings';
 import PartnerOffers from '../../components/partner/PartnerOffers';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerDashboard() {
   const { token, user, logout } = useAuth();

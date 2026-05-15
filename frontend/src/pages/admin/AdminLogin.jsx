@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 const COUNTRY_CODES = [
   { code: '+91',  flag: '🇮🇳', name: 'India' },

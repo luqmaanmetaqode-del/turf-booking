@@ -6,7 +6,7 @@ import {
   Clock, IndianRupee, CheckCircle, Phone
 } from 'lucide-react';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerBookings({ data, onCreateClick, token }) {
   const [activeTab, setActiveTab] = useState('All Bookings');

@@ -7,7 +7,7 @@ import {
   ChevronDown, MapPin, Check
 } from 'lucide-react';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerPricing({ data }) {
   const { token } = useAuth();

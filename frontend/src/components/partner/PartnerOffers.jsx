@@ -2,7 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Percent, Plus, Tag, Trash2, Edit2 } from 'lucide-react';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerOffers({ data, token, onChange }) {
   const offers = data?.offers || [];

@@ -7,7 +7,7 @@ import {
   Star, Wifi, Music, Coffee, Wind, Trash2 
 } from 'lucide-react';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 const SPORTS_LIST = ['Football', 'Cricket', 'Tennis', 'Volleyball', 'Table Tennis', 'Swimming'];
 
 const LOCATION_DATA = {

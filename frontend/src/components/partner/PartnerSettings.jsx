@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Settings, Bell, Lock, Shield, User, Globe, MessageSquare, CreditCard, Save, Check } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerSettings({ user, data }) {
   const { token, login } = useAuth();

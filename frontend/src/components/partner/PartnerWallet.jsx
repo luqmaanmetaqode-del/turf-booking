@@ -7,7 +7,7 @@ import {
   ChevronLeft, ChevronRight, MoreVertical, ExternalLink, X
 } from 'lucide-react';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerWallet({ data }) {
   const { token } = useAuth();

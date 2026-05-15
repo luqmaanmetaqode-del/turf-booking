@@ -8,7 +8,7 @@ import SportFilter from '../components/SportFilter';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 const POPULAR_CITIES = [
   { name: 'Bengaluru' },

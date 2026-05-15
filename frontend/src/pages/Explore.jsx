@@ -4,7 +4,7 @@ import TurfCard from '../components/TurfCard';
 import SportFilter from '../components/SportFilter';
 import { useSearchParams } from 'react-router-dom';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 const CITIES = ['All Cities', 'Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Ahmedabad'];
 

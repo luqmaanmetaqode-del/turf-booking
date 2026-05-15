@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Search, Filter, Plus, Eye, Edit2, MoreVertical, ChevronDown, ChevronUp, MapPin, Phone, Mail, Clock, Star, TrendingUp, Users, Calendar } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-const API = 'http://localhost:5001/api';
+const API = 'https://turfx.metaqode.co.in/api';
 
 export default function PartnerVenues({ data, onAddClick, onTabChange }) {
   const { token } = useAuth();
