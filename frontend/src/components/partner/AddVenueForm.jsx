@@ -90,7 +90,7 @@ export default function AddVenueForm({ onCancel, onComplete }) {
         description: formData.description,
         shortDescription: formData.shortDescription,
         amenities: formData.amenities,
-        images: formData.images,
+        images: formData.images.map(img => img.url),
       }, { headers: { Authorization: `Bearer ${token}` } });
       onComplete?.();
     } catch (err) {
