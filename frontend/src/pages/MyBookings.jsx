@@ -97,8 +97,10 @@ export default function MyBookings() {
                   <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#111' }}>{b.date}</div>
                 </div>
                 <div style={{ background: '#f8fafc', padding: '8px 12px', borderRadius: '10px', border: '1px solid #f1f5f9' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase' }}>Time Slot</div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#111' }}>{b.time_slot}</div>
+                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase' }}>Time Slots</div>
+                  <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#111' }}>
+                    {Array.isArray(b.time_slots) ? b.time_slots.join(', ') : b.time_slot || 'N/A'}
+                  </div>
                 </div>
               </div>
             </div>
@@ -110,9 +112,9 @@ export default function MyBookings() {
                   display: 'inline-block', marginTop: '6px',
                   padding: '4px 14px', borderRadius: '20px',
                   fontSize: '0.75rem', fontWeight: '800',
-                  background: b.status === 'confirmed' ? '#f0fdf4' : '#fff1f2',
-                  color: b.status === 'confirmed' ? '#166534' : '#be123c',
-                  border: `1.5px solid ${b.status === 'confirmed' ? '#dcfce7' : '#fee2e2'}`,
+                  background: b.status === 'confirmed' ? '#f0fdf4' : b.status === 'pending' ? '#fff7ed' : b.status === 'approved' ? '#eff6ff' : '#fff1f2',
+                  color: b.status === 'confirmed' ? '#166534' : b.status === 'pending' ? '#c2410c' : b.status === 'approved' ? '#1e40af' : '#be123c',
+                  border: `1.5px solid ${b.status === 'confirmed' ? '#dcfce7' : b.status === 'pending' ? '#fed7aa' : b.status === 'approved' ? '#dbeafe' : '#fee2e2'}`,
                 }}>
                   {b.status.toUpperCase()}
                 </span>

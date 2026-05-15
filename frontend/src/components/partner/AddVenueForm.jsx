@@ -11,7 +11,7 @@ const API = 'http://localhost:5001/api';
 const SPORTS_LIST = ['Football', 'Cricket', 'Tennis', 'Volleyball', 'Table Tennis', 'Swimming'];
 
 const LOCATION_DATA = {
-  'Karnataka': ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum'],
+  'Karnataka': ['Bangalore', 'Mysore', 'Hubli', 'Mangalore', 'Belgaum', 'Chitradurga'],
   'Maharashtra': ['Mumbai', 'Pune', 'Nagpur', 'Thane', 'Nashik'],
   'Tamil Nadu': ['Chennai', 'Coimbatore', 'Madurai', 'Salem', 'Trichy'],
   'Delhi': ['New Delhi', 'North Delhi', 'South Delhi', 'East Delhi', 'West Delhi'],
@@ -37,6 +37,7 @@ export default function AddVenueForm({ onCancel, onComplete }) {
     price: '',
     amenities: [],
     images: [],
+    videos: [],
     venueSize: 'Medium (8,000 - 12,000 sq.ft)',
     surfaceType: 'Artificial Turf',
     bookingType: 'Hourly'
@@ -589,41 +590,156 @@ function AmenitiesSection({ formData, setFormData }) {
 }
 
 function PhotosUpload({ formData, setFormData }) {
+  const [uploading, setUploading] = useState(false);
+  
+  const handleFileUpload = async (e, type = 'image') => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+    
+    setUploading(true);
+    
+    // Convert files to base64 for preview (in production, upload to server)
+    const filePromises = files.map(file => {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          resolve({
+            url: reader.result,
+            name: file.name,
+            type: type,
+            size: file.size
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+    
+    const uploadedFiles = await Promise.all(filePromises);
+    
+    if (type === 'image') {
+      setFormData({
+        ...formData,
+        images: [...(formData.images || []), ...uploadedFiles]
+      });
+    } else {
+      setFormData({
+        ...formData,
+        videos: [...(formData.videos || []), ...uploadedFiles]
+      });
+    }
+    
+    setUploading(false);
+  };
+  
+  const removeFile = (index, type = 'image') => {
+    if (type === 'image') {
+      const newImages = formData.images.filter((_, i) => i !== index);
+      setFormData({ ...formData, images: newImages });
+    } else {
+      const newVideos = formData.videos.filter((_, i) => i !== index);
+      setFormData({ ...formData, videos: newVideos });
+    }
+  };
+  
   return (
     <div>
-       <SectionHeader icon={<Upload size={20} />} title="Photos" subtitle="Upload high quality photos to showcase your venue" />
+       <SectionHeader icon={<Upload size={20} />} title="Photos & Videos" subtitle="Upload high quality photos and videos to showcase your venue" />
        
-       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', marginBottom: '2.5rem' }}>
-          <div style={{ 
-            aspectRatio: '1', borderRadius: '24px', border: '2.5px dashed #e2e8f0', background: '#f8fafc',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px',
-            cursor: 'pointer', transition: '0.2s', padding: '2rem'
-          }}>
-             <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ebe74', boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}>
-                <Upload size={24} />
-             </div>
-             <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1ebe74' }}>Click to upload</div>
-                <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8', marginTop: '6px' }}>JPG, PNG up to 5MB</div>
-             </div>
-          </div>
-          {/* PLACEHOLDER IMAGES */}
-          {[1, 2].map(i => (
-            <div key={i} style={{ aspectRatio: '1', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #f1f5f9', position: 'relative' }}>
-               <img src={`/images/football.png`} alt="Venue" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-               <div style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(0,0,0,0.5)', color: 'white', padding: '8px', borderRadius: '10px', cursor: 'pointer' }}>
-                  <Trash2 size={16} />
+       {/* PHOTOS SECTION */}
+       <div style={{ marginBottom: '3rem' }}>
+         <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', color: '#111' }}>Photos</h4>
+         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
+            {/* Upload Button */}
+            <label style={{ 
+              aspectRatio: '1', borderRadius: '24px', border: '2.5px dashed #e2e8f0', background: '#f8fafc',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px',
+              cursor: 'pointer', transition: '0.2s', padding: '2rem'
+            }}>
+               <input 
+                 type="file" 
+                 accept="image/*" 
+                 multiple 
+                 onChange={(e) => handleFileUpload(e, 'image')}
+                 style={{ display: 'none' }}
+               />
+               <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ebe74', boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}>
+                  <Upload size={24} />
                </div>
-            </div>
-          ))}
+               <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1ebe74' }}>
+                    {uploading ? 'Uploading...' : 'Click to upload'}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8', marginTop: '6px' }}>JPG, PNG up to 5MB</div>
+               </div>
+            </label>
+            
+            {/* Uploaded Images */}
+            {(formData.images || []).map((img, i) => (
+              <div key={i} style={{ aspectRatio: '1', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #f1f5f9', position: 'relative' }}>
+                 <img src={img.url} alt={`Venue ${i+1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                 <div 
+                   onClick={() => removeFile(i, 'image')}
+                   style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(239,68,68,0.9)', color: 'white', padding: '8px', borderRadius: '10px', cursor: 'pointer' }}
+                 >
+                    <Trash2 size={16} />
+                 </div>
+              </div>
+            ))}
+         </div>
+       </div>
+       
+       {/* VIDEOS SECTION */}
+       <div style={{ marginBottom: '2.5rem' }}>
+         <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', color: '#111' }}>Videos (Optional)</h4>
+         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
+            {/* Upload Button */}
+            <label style={{ 
+              aspectRatio: '16/9', borderRadius: '24px', border: '2.5px dashed #e2e8f0', background: '#f8fafc',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px',
+              cursor: 'pointer', transition: '0.2s', padding: '2rem'
+            }}>
+               <input 
+                 type="file" 
+                 accept="video/*" 
+                 multiple 
+                 onChange={(e) => handleFileUpload(e, 'video')}
+                 style={{ display: 'none' }}
+               />
+               <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}>
+                  <Upload size={24} />
+               </div>
+               <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#3b82f6' }}>
+                    {uploading ? 'Uploading...' : 'Upload Video'}
+                  </div>
+                  <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8', marginTop: '6px' }}>MP4, MOV up to 50MB</div>
+               </div>
+            </label>
+            
+            {/* Uploaded Videos */}
+            {(formData.videos || []).map((video, i) => (
+              <div key={i} style={{ aspectRatio: '16/9', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #f1f5f9', position: 'relative', background: '#000' }}>
+                 <video src={video.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} controls />
+                 <div 
+                   onClick={() => removeFile(i, 'video')}
+                   style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(239,68,68,0.9)', color: 'white', padding: '8px', borderRadius: '10px', cursor: 'pointer' }}
+                 >
+                    <Trash2 size={16} />
+                 </div>
+              </div>
+            ))}
+         </div>
        </div>
 
        <div style={{ background: '#f8fafc', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
-          <h4 style={{ fontWeight: '800', fontSize: '1rem', marginBottom: '1rem', color: '#111' }}>Photo Guidelines</h4>
+          <h4 style={{ fontWeight: '800', fontSize: '1rem', marginBottom: '1rem', color: '#111' }}>Upload Guidelines</h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
              <GuideItem text="Upload at least 3-5 photos" />
              <GuideItem text="Include photos of the turf, entrance & amenities" />
              <GuideItem text="Photos should be well-lit and clear" />
+             <GuideItem text="Videos should be under 50MB" />
+             <GuideItem text="Show actual playing area in videos" />
+             <GuideItem text="Keep videos under 2 minutes" />
           </div>
        </div>
     </div>

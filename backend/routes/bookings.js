@@ -14,6 +14,172 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder',
 });
 
+// Create booking request (pending approval)
+router.post('/request', auth, bookingLimiter, async (req, res) => {
+  try {
+    const { turf_id, date, time_slots, total_price } = req.body;
+    if (!turf_id || !date || !time_slots || !Array.isArray(time_slots) || time_slots.length === 0 || !total_price) {
+      return res.status(400).json({ msg: 'Booking details are required' });
+    }
+
+    // Check if any of the selected slots are already booked
+    const existingBookings = await Booking.find({
+      turf_id,
+      date,
+      status: { $in: ['pending', 'approved', 'confirmed'] }
+    });
+
+    const bookedSlots = existingBookings.flatMap(b => b.time_slots);
+    const conflictingSlots = time_slots.filter(slot => bookedSlots.includes(slot));
+
+    if (conflictingSlots.length > 0) {
+      return res.status(400).json({ 
+        msg: `The following slots are already booked: ${conflictingSlots.join(', ')}` 
+      });
+    }
+
+    // Create booking request with pending status
+    const booking = await Booking.create({
+      user_id: req.user.id,
+      turf_id,
+      date,
+      time_slots,
+      total_price,
+      status: 'pending',
+      payment_status: 'unpaid'
+    });
+
+    const populatedBooking = await booking.populate('turf_id user_id');
+    
+    // Send notification to partner (email)
+    const turf = await Turf.findById(turf_id).populate('owner_id');
+    const user = await User.findById(req.user.id);
+    
+    if (turf.owner_id) {
+      emailService.sendPartnerBookingRequest(populatedBooking, turf.owner_id, turf, user).catch(err => 
+        console.error('Partner email error:', err)
+      );
+    }
+
+    res.json(booking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Partner approves booking
+router.put('/approve/:id', auth, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id).populate('turf_id');
+    if (!booking) return res.status(404).json({ msg: 'Booking not found' });
+    
+    // Check if user is the turf owner
+    if (booking.turf_id.owner_id.toString() !== req.user.id) {
+      return res.status(403).json({ msg: 'Not authorized' });
+    }
+
+    if (booking.status !== 'pending') {
+      return res.status(400).json({ msg: 'Booking is not pending' });
+    }
+
+    booking.status = 'approved';
+    booking.approved_at = new Date();
+    await booking.save();
+
+    // Send notification to user
+    const user = await User.findById(booking.user_id);
+    emailService.sendBookingApproved(booking, user, booking.turf_id).catch(err => 
+      console.error('Email error:', err)
+    );
+
+    res.json(booking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Partner rejects booking
+router.put('/reject/:id', auth, async (req, res) => {
+  try {
+    const { reason } = req.body;
+    const booking = await Booking.findById(req.params.id).populate('turf_id');
+    if (!booking) return res.status(404).json({ msg: 'Booking not found' });
+    
+    // Check if user is the turf owner
+    if (booking.turf_id.owner_id.toString() !== req.user.id) {
+      return res.status(403).json({ msg: 'Not authorized' });
+    }
+
+    if (booking.status !== 'pending') {
+      return res.status(400).json({ msg: 'Booking is not pending' });
+    }
+
+    booking.status = 'rejected';
+    booking.rejected_at = new Date();
+    booking.rejection_reason = reason || 'No reason provided';
+    await booking.save();
+
+    // Send notification to user
+    const user = await User.findById(booking.user_id);
+    emailService.sendBookingRejected(booking, user, booking.turf_id, reason).catch(err => 
+      console.error('Email error:', err)
+    );
+
+    res.json(booking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// User pays for approved booking
+router.post('/pay/:id', auth, async (req, res) => {
+  try {
+    const booking = await Booking.findById(req.params.id);
+    if (!booking) return res.status(404).json({ msg: 'Booking not found' });
+    
+    if (booking.user_id.toString() !== req.user.id) {
+      return res.status(403).json({ msg: 'Not authorized' });
+    }
+
+    if (booking.status !== 'approved') {
+      return res.status(400).json({ msg: 'Booking must be approved before payment' });
+    }
+
+    const { payment_id } = req.body;
+
+    // Mark all slots as booked
+    for (const slot of booking.time_slots) {
+      await Slot.findOneAndUpdate(
+        { turf_id: booking.turf_id, date: booking.date, time_slot: slot },
+        { is_booked: true, is_locked: false, locked_until: null },
+        { upsert: true }
+      );
+    }
+
+    booking.status = 'confirmed';
+    booking.payment_status = 'paid';
+    booking.payment_id = payment_id;
+    await booking.save();
+
+    // Send confirmation emails
+    const user = await User.findById(req.user.id);
+    const turf = await Turf.findById(booking.turf_id).populate('owner_id');
+    const populatedBooking = await booking.populate('turf_id user_id');
+    
+    emailService.sendBookingConfirmation(populatedBooking, user, turf).catch(err => 
+      console.error('Email error:', err)
+    );
+
+    res.json(booking);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 router.post('/razorpay-order', auth, async (req, res) => {
   try {
     const { amount } = req.body;
@@ -44,55 +210,8 @@ router.post('/razorpay-order', auth, async (req, res) => {
 
 router.post('/', auth, bookingLimiter, async (req, res) => {
   try {
-    const { turf_id, date, time_slot, total_price, payment_id } = req.body;
-    if (!turf_id || !date || !time_slot || !total_price) {
-      return res.status(400).json({ msg: 'Booking details are required' });
-    }
-
-    const configuredSlots = await Slot.find({ turf_id, date, created_by_owner: true });
-    if (configuredSlots.length > 0 && !configuredSlots.some(slot => slot.time_slot === time_slot)) {
-      return res.status(400).json({ msg: 'Selected slot is not configured for this date' });
-    }
-
-    const existingSlot = await Slot.findOne({ turf_id, date, time_slot });
-    if (existingSlot?.is_booked) {
-      return res.status(400).json({ msg: 'Selected slot is already booked' });
-    }
-
-    await Slot.findOneAndUpdate(
-      { turf_id, date, time_slot },
-      { is_booked: true, is_locked: false, locked_until: null },
-      { upsert: true }
-    );
-
-    const booking = await Booking.create({
-      user_id: req.user.id,
-      turf_id,
-      date,
-      time_slot,
-      total_price,
-      payment_id,
-      status: 'confirmed',
-    });
-
-    // Send confirmation emails
-    const user = await User.findById(req.user.id);
-    const turf = await Turf.findById(turf_id).populate('owner_id');
-    const populatedBooking = await booking.populate('turf_id user_id');
-    
-    // Email to user
-    emailService.sendBookingConfirmation(populatedBooking, user, turf).catch(err => 
-      console.error('Email error:', err)
-    );
-    
-    // Email to partner
-    if (turf.owner_id) {
-      emailService.sendPartnerNewBooking(populatedBooking, turf.owner_id, turf, user).catch(err => 
-        console.error('Partner email error:', err)
-      );
-    }
-
-    res.json(booking);
+    // This endpoint is deprecated - use /request instead
+    return res.status(400).json({ msg: 'Please use /bookings/request endpoint' });
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });
@@ -124,7 +243,7 @@ router.put('/cancel/:id', auth, async (req, res) => {
     }
 
     // Calculate refund based on cancellation policy
-    const bookingDateTime = new Date(`${booking.date} ${booking.time_slot.split('-')[0]}`);
+    const bookingDateTime = new Date(`${booking.date} ${booking.time_slots[0].split('-')[0]}`);
     const now = new Date();
     const hoursUntilBooking = (bookingDateTime - now) / (1000 * 60 * 60);
 
@@ -146,11 +265,13 @@ router.put('/cancel/:id', auth, async (req, res) => {
 
     const refundAmount = Math.round((booking.total_price * refundPercentage) / 100);
     
-    // Free the slot
-    await Slot.findOneAndUpdate(
-      { turf_id: booking.turf_id, date: booking.date, time_slot: booking.time_slot },
-      { is_booked: false }
-    );
+    // Free all slots
+    for (const slot of booking.time_slots) {
+      await Slot.findOneAndUpdate(
+        { turf_id: booking.turf_id, date: booking.date, time_slot: slot },
+        { is_booked: false }
+      );
+    }
 
     // Update booking
     booking.status = 'cancelled';
@@ -161,7 +282,7 @@ router.put('/cancel/:id', auth, async (req, res) => {
     await booking.save();
 
     // Process refund if applicable (Razorpay refund)
-    if (refundAmount > 0 && booking.payment_id && booking.payment_id !== 'demo') {
+    if (refundAmount > 0 && booking.payment_id && booking.payment_id !== 'demo' && !booking.payment_id.startsWith('demo_')) {
       try {
         const refund = await razorpay.payments.refund(booking.payment_id, {
           amount: refundAmount * 100, // amount in paise
@@ -249,17 +370,39 @@ router.get('/booked-slots/:turfId/:date', async (req, res) => {
   try {
     const { turfId, date } = req.params;
     
-    // Find all confirmed bookings for this turf and date
+    // Find all confirmed/approved/pending bookings for this turf and date
     const bookings = await Booking.find({
       turf_id: turfId,
       date: date,
-      status: 'confirmed'
-    }).select('time_slot');
+      status: { $in: ['pending', 'approved', 'confirmed'] }
+    }).select('time_slots');
     
-    // Extract just the time slot labels
-    const bookedSlots = bookings.map(b => b.time_slot);
+    // Extract all booked slots (flatten the arrays)
+    const bookedSlots = bookings.flatMap(b => b.time_slots);
     
     res.json({ bookedSlots });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// Get pending bookings for partner
+router.get('/partner/pending', auth, async (req, res) => {
+  try {
+    // Find all turfs owned by this partner
+    const turfs = await Turf.find({ owner_id: req.user.id });
+    const turfIds = turfs.map(t => t._id);
+
+    // Find all pending bookings for these turfs
+    const bookings = await Booking.find({
+      turf_id: { $in: turfIds },
+      status: 'pending'
+    })
+      .populate('turf_id user_id')
+      .sort({ createdAt: -1 });
+
+    res.json(bookings);
   } catch (err) {
     console.error(err);
     res.status(500).json({ msg: 'Server error' });

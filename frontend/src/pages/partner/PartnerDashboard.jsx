@@ -15,6 +15,7 @@ import {
 import PartnerVenues from '../../components/partner/PartnerVenues';
 import AddVenueForm from '../../components/partner/AddVenueForm';
 import PartnerBookings from '../../components/partner/PartnerBookings';
+import BookingApprovals from '../../components/partner/BookingApprovals';
 import CreateBooking from '../../components/partner/CreateBooking';
 import PartnerWallet from '../../components/partner/PartnerWallet';
 import PartnerPayouts from '../../components/partner/PartnerPayouts';
@@ -57,6 +58,7 @@ export default function PartnerDashboard() {
     { id:'dashboard', label:'Dashboard', icon: <LayoutDashboard size={20} /> },
     { id:'venues', label:'Venues', icon: <MapPin size={20} /> },
     { id:'bookings', label:'Bookings', icon: <Calendar size={20} /> },
+    { id:'approvals', label:'Approvals', icon: <Bell size={20} /> },
     { id:'slots', label:'Slots', icon: <Clock size={20} /> },
     { id:'pricing', label:'Pricing', icon: <IndianRupee size={20} /> },
     { id:'earnings', label:'Earnings', icon: <TrendingUp size={20} /> },
@@ -247,6 +249,11 @@ export default function PartnerDashboard() {
           {/* BOOKINGS TAB */}
           {tab === 'bookings' && !showCreateBooking && (
             <PartnerBookings data={data} onCreateClick={() => setShowCreateBooking(true)} token={token} />
+          )}
+
+          {/* BOOKING APPROVALS TAB */}
+          {tab === 'approvals' && (
+            <BookingApprovals />
           )}
 
           {/* CREATE BOOKING FLOW */}
