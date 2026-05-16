@@ -101,6 +101,39 @@ export default function TurfDetail() {
             ))}
           </div>
         )}
+
+        {/* Videos Section */}
+        {turf.videos && turf.videos.length > 0 && (
+          <div style={{ marginTop: '2rem' }}>
+            <h3 style={{ marginBottom: '1.5rem', fontSize: '1.5rem', fontWeight: '900', color: '#111', letterSpacing: '-0.5px' }}>
+              Venue Videos ({turf.videos.length})
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+              {turf.videos.map((video, index) => (
+                <div
+                  key={index}
+                  style={{
+                    aspectRatio: '16/9',
+                    borderRadius: '16px',
+                    overflow: 'hidden',
+                    background: '#000',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
+                  }}
+                >
+                  <video
+                    src={video}
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    controls
+                    muted
+                    loop
+                    onMouseEnter={(e) => e.target.play()}
+                    onMouseLeave={(e) => e.target.pause()}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 400px', gap:'5rem', alignItems:'start' }}>

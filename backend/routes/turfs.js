@@ -232,7 +232,7 @@ router.post('/', auth, ownerOnly, async (req, res) => {
       price_per_hour, sport, sports, type,
       venueSize, surfaceType, bookingType,
       description, shortDescription,
-      amenities, images, lat, lng,
+      amenities, images, videos, lat, lng,
       openTime, closeTime,
     } = req.body;
 
@@ -276,6 +276,7 @@ router.post('/', auth, ownerOnly, async (req, res) => {
       shortDescription: shortDescription || '',
       amenities: Array.isArray(amenities) ? amenities : (typeof amenities === 'string' ? amenities.split(',').map(a => a.trim()) : []),
       images: Array.isArray(images) ? images : [],
+      videos: Array.isArray(videos) ? videos : [],
       owner_id: req.user.id,
       coordinates: { lat: parseFloat(lat) || 0, lng: parseFloat(lng) || 0 },
       openTime: openTime || '06:00 AM',

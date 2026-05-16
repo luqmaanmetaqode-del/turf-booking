@@ -18,6 +18,7 @@ const TurfSchema = new mongoose.Schema({
   rating: { type: Number, default: 0 },
   amenities: [String],
   images: [String],
+  videos: [String],
   owner_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   coordinates: {
     lat: Number,

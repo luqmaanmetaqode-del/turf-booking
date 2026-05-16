@@ -94,6 +94,19 @@ export default function AddVenueForm({ onCancel, onComplete }) {
 
       console.log('Submitting venue with', imageUrls.length, 'images');
 
+      // Extract video URLs
+      const videoUrls = formData.videos.map(video => {
+        if (typeof video === 'object' && video.url) {
+          return video.url;
+        } else if (typeof video === 'string') {
+          return video;
+        } else {
+          throw new Error('Invalid video format');
+        }
+      });
+
+      console.log('Submitting venue with', videoUrls.length, 'videos');
+
       await axios.post(`${API}/turfs`, {
         name: formData.name,
         location: formData.location,
@@ -111,6 +124,7 @@ export default function AddVenueForm({ onCancel, onComplete }) {
         shortDescription: formData.shortDescription,
         amenities: formData.amenities,
         images: imageUrls,
+        videos: videoUrls,
       }, { headers: { Authorization: `Bearer ${token}` } });
       onComplete?.();
     } catch (err) {
