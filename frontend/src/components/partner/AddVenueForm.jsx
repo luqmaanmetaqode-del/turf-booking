@@ -807,10 +807,17 @@ function PhotosUpload({ formData, setFormData }) {
             {/* Uploaded Videos */}
             {(formData.videos || []).map((video, i) => (
               <div key={i} style={{ aspectRatio: '16/9', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #f1f5f9', position: 'relative', background: '#000' }}>
-                 <video src={video.url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} controls />
+                 <video 
+                   src={video.url} 
+                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                   muted
+                   loop
+                   onMouseEnter={(e) => e.target.play()}
+                   onMouseLeave={(e) => e.target.pause()}
+                 />
                  <div 
                    onClick={() => removeFile(i, 'video')}
-                   style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(239,68,68,0.9)', color: 'white', padding: '8px', borderRadius: '10px', cursor: 'pointer' }}
+                   style={{ position: 'absolute', top: '12px', right: '12px', background: 'rgba(239,68,68,0.9)', color: 'white', padding: '8px', borderRadius: '10px', cursor: 'pointer', zIndex: 10 }}
                  >
                     <Trash2 size={16} />
                  </div>
