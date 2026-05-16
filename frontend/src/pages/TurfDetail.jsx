@@ -13,6 +13,7 @@ export default function TurfDetail() {
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState('');
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     axios.get(`${API}/turfs/${id}`).then(res => setTurf(res.data)).catch(console.error);
@@ -38,34 +39,68 @@ export default function TurfDetail() {
 
   return (
     <div style={{ maxWidth:'1200px', margin:'0 auto', padding:'4rem 2rem' }}>
-      {/* Hero Banner */}
-      <div style={{
-        borderRadius:'32px', height:'450px',
-        marginBottom:'3.5rem', position:'relative', overflow:'hidden',
-        background: '#f8fafc',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.1)',
-      }}>
-        {turf.images && turf.images.length > 0 ? (
-          <img 
-            src={turf.images[0]} 
-            alt={turf.name} 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-          />
-        ) : (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#cbd5e1', fontSize: '2rem', fontWeight: '900' }}>
-            PREMIUM VENUE
+      {/* Hero Banner with Image Gallery */}
+      <div style={{ marginBottom:'3.5rem' }}>
+        {/* Main Image */}
+        <div style={{
+          borderRadius:'32px', height:'450px',
+          marginBottom:'1.5rem', position:'relative', overflow:'hidden',
+          background: '#f8fafc',
+          boxShadow: '0 20px 50px rgba(0,0,0,0.1)',
+        }}>
+          {turf.images && turf.images.length > 0 ? (
+            <img 
+              src={turf.images[selectedImage]} 
+              alt={turf.name} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+            />
+          ) : (
+            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#cbd5e1', fontSize: '2rem', fontWeight: '900' }}>
+              PREMIUM VENUE
+            </div>
+          )}
+          <div style={{
+            position:'absolute', bottom:'32px', left:'32px',
+            background:'rgba(255,255,255,0.98)', backdropFilter:'blur(12px)',
+            borderRadius:'20px', padding:'14px 32px',
+            boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
+          }}>
+            <span style={{ color:'#062c1e', fontWeight:'900', fontSize:'1.1rem', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+              {turf.sport}
+            </span>
+          </div>
+        </div>
+
+        {/* Image Thumbnails */}
+        {turf.images && turf.images.length > 1 && (
+          <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
+            {turf.images.map((img, index) => (
+              <div
+                key={index}
+                onClick={() => setSelectedImage(index)}
+                style={{
+                  width: '120px',
+                  height: '80px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  border: selectedImage === index ? '3px solid #1ebe74' : '2px solid #f1f5f9',
+                  flexShrink: 0,
+                  transition: 'all 0.3s',
+                  opacity: selectedImage === index ? 1 : 0.6,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = selectedImage === index ? '1' : '0.6'}
+              >
+                <img
+                  src={img}
+                  alt={`${turf.name} ${index + 1}`}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            ))}
           </div>
         )}
-        <div style={{
-          position:'absolute', bottom:'32px', left:'32px',
-          background:'rgba(255,255,255,0.98)', backdropFilter:'blur(12px)',
-          borderRadius:'20px', padding:'14px 32px',
-          boxShadow: '0 8px 30px rgba(0,0,0,0.3)',
-        }}>
-          <span style={{ color:'#062c1e', fontWeight:'900', fontSize:'1.1rem', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
-            {turf.sport}
-          </span>
-        </div>
       </div>
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 400px', gap:'5rem', alignItems:'start' }}>
