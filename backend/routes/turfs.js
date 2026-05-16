@@ -236,6 +236,31 @@ router.post('/', auth, ownerOnly, async (req, res) => {
       openTime, closeTime,
     } = req.body;
 
+    // Validate required fields
+    if (!name || !location || !city) {
+      return res.status(400).json({ msg: 'Name, location, and city are required' });
+    }
+
+    // Validate images array
+    if (images && !Array.isArray(images)) {
+      return res.status(400).json({ msg: 'Images must be an array' });
+    }
+
+    // Check if images contain objects instead of strings
+    if (images && images.length > 0 && typeof images[0] === 'object') {
+      return res.status(400).json({ 
+        msg: 'Invalid image format. Expected array of base64 strings, received array of objects. Please ensure images are properly formatted.' 
+      });
+    }
+
+    // Estimate document size (rough calculation)
+    const estimatedSize = JSON.stringify(req.body).length;
+    if (estimatedSize > 15 * 1024 * 1024) { // 15MB limit (MongoDB limit is 16MB)
+      return res.status(400).json({ 
+        msg: 'Document size too large. Please reduce the number of images or compress them.' 
+      });
+    }
+
     const turf = await Turf.create({
       name, location, city,
       state: state || '',
@@ -258,8 +283,25 @@ router.post('/', auth, ownerOnly, async (req, res) => {
     });
     res.json(turf);
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: 'Server error' });
+    console.error('❌ Create turf error:', err);
+    
+    // Send detailed error message
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ msg: 'Validation error', error: err.message });
+    }
+    
+    if (err.code === 11000) {
+      return res.status(400).json({ msg: 'Duplicate entry', error: err.message });
+    }
+
+    // MongoDB document size limit error
+    if (err.message && err.message.includes('too large')) {
+      return res.status(400).json({ 
+        msg: 'Document size exceeds MongoDB limit (16MB). Please reduce image sizes or quantity.' 
+      });
+    }
+    
+    res.status(500).json({ msg: 'Server error', error: err.message });
   }
 });
 

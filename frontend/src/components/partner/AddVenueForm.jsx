@@ -74,6 +74,26 @@ export default function AddVenueForm({ onCancel, onComplete }) {
     setSubmitting(true);
     setSubmitError('');
     try {
+      // Validate images before sending
+      if (formData.images.length === 0) {
+        setSubmitError('Please upload at least one image');
+        setSubmitting(false);
+        return;
+      }
+
+      // Check if images are properly formatted
+      const imageUrls = formData.images.map(img => {
+        if (typeof img === 'object' && img.url) {
+          return img.url;
+        } else if (typeof img === 'string') {
+          return img;
+        } else {
+          throw new Error('Invalid image format');
+        }
+      });
+
+      console.log('Submitting venue with', imageUrls.length, 'images');
+
       await axios.post(`${API}/turfs`, {
         name: formData.name,
         location: formData.location,
@@ -90,12 +110,24 @@ export default function AddVenueForm({ onCancel, onComplete }) {
         description: formData.description,
         shortDescription: formData.shortDescription,
         amenities: formData.amenities,
-        images: formData.images.map(img => img.url),
+        images: imageUrls,
       }, { headers: { Authorization: `Bearer ${token}` } });
       onComplete?.();
     } catch (err) {
-      console.error(err);
-      setSubmitError(err.response?.data?.msg || 'Failed to submit venue. Please try again.');
+      console.error('❌ Submit venue error:', err);
+      console.error('Error response:', err.response?.data);
+      
+      let errorMsg = 'Failed to submit venue. Please try again.';
+      
+      if (err.response?.data?.msg) {
+        errorMsg = err.response.data.msg;
+      } else if (err.response?.data?.error) {
+        errorMsg = err.response.data.error;
+      } else if (err.message) {
+        errorMsg = err.message;
+      }
+      
+      setSubmitError(errorMsg);
       setSubmitting(false);
     }
   };
@@ -592,40 +624,96 @@ function AmenitiesSection({ formData, setFormData }) {
 function PhotosUpload({ formData, setFormData }) {
   const [uploading, setUploading] = useState(false);
   
+  // Compress image before converting to base64
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          
+          // Resize if image is too large (max 1200px width)
+          const maxWidth = 1200;
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+          
+          canvas.width = width;
+          canvas.height = height;
+          
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          
+          // Convert to base64 with compression (0.7 quality)
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+          
+          resolve({
+            url: compressedBase64,
+            name: file.name,
+            type: 'image',
+            size: Math.round(compressedBase64.length * 0.75) // Approximate size
+          });
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+  
   const handleFileUpload = async (e, type = 'image') => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
     
+    // Limit to 5 images max
+    if (type === 'image' && (formData.images || []).length + files.length > 5) {
+      alert('Maximum 5 images allowed. Please remove some images first.');
+      return;
+    }
+    
     setUploading(true);
     
-    // Convert files to base64 for preview (in production, upload to server)
-    const filePromises = files.map(file => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          resolve({
-            url: reader.result,
-            name: file.name,
-            type: type,
-            size: file.size
+    try {
+      let uploadedFiles;
+      
+      if (type === 'image') {
+        // Compress images before uploading
+        uploadedFiles = await Promise.all(files.map(file => compressImage(file)));
+      } else {
+        // For videos, just convert to base64 (no compression)
+        uploadedFiles = await Promise.all(files.map(file => {
+          return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              resolve({
+                url: reader.result,
+                name: file.name,
+                type: type,
+                size: file.size
+              });
+            };
+            reader.readAsDataURL(file);
           });
-        };
-        reader.readAsDataURL(file);
-      });
-    });
-    
-    const uploadedFiles = await Promise.all(filePromises);
-    
-    if (type === 'image') {
-      setFormData({
-        ...formData,
-        images: [...(formData.images || []), ...uploadedFiles]
-      });
-    } else {
-      setFormData({
-        ...formData,
-        videos: [...(formData.videos || []), ...uploadedFiles]
-      });
+        }));
+      }
+      
+      if (type === 'image') {
+        setFormData({
+          ...formData,
+          images: [...(formData.images || []), ...uploadedFiles]
+        });
+      } else {
+        setFormData({
+          ...formData,
+          videos: [...(formData.videos || []), ...uploadedFiles]
+        });
+      }
+    } catch (error) {
+      console.error('Upload error:', error);
+      alert('Failed to upload files. Please try again.');
     }
     
     setUploading(false);
@@ -734,12 +822,12 @@ function PhotosUpload({ formData, setFormData }) {
        <div style={{ background: '#f8fafc', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
           <h4 style={{ fontWeight: '800', fontSize: '1rem', marginBottom: '1rem', color: '#111' }}>Upload Guidelines</h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
-             <GuideItem text="Upload at least 3-5 photos" />
+             <GuideItem text="Upload 3-5 photos (max 5)" />
              <GuideItem text="Include photos of the turf, entrance & amenities" />
              <GuideItem text="Photos should be well-lit and clear" />
-             <GuideItem text="Videos should be under 50MB" />
-             <GuideItem text="Show actual playing area in videos" />
-             <GuideItem text="Keep videos under 2 minutes" />
+             <GuideItem text="Images are auto-compressed for faster loading" />
+             <GuideItem text="Show actual playing area" />
+             <GuideItem text="Avoid blurry or dark photos" />
           </div>
        </div>
     </div>
