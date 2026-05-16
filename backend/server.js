@@ -23,7 +23,12 @@ const app = express();
 
 // Security middleware
 app.use(helmet()); // Set security headers
-app.use(cors());
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://turfx.metaqode.co.in', 'https://www.turfx.metaqode.co.in']
+    : ['http://localhost:3000', 'http://127.0.0.1:3000'],
+  credentials: true
+}));
 app.use(express.json({ limit: '50mb' })); // Increased limit for base64 images
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(sanitizeInput); // Prevent NoSQL injection

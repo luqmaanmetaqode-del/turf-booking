@@ -4,6 +4,8 @@ import {
   TrendingUp, Calendar, Building2
 } from 'lucide-react';
 
+const API = process.env.REACT_APP_API_URL || 'https://turfx.metaqode.co.in/api';
+
 export default function PartnerPayouts({ data }) {
   const confirmedBookings = data?.bookings?.filter(b => b.status === 'confirmed') || [];
   const totalEarnings = confirmedBookings.reduce((sum, b) => sum + (b.total_price || 0), 0);
@@ -63,7 +65,7 @@ export default function PartnerPayouts({ data }) {
           <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>Payouts</h2>
           <p style={{ color: '#64748b', fontWeight: '500' }}>Estimated weekly settlements from confirmed bookings</p>
         </div>
-        <button onClick={() => window.open(`http://localhost:5001/api/exports/payouts/csv`, '_blank')} style={btnPrimary}><Download size={18} /> Download Statement</button>
+        <button onClick={() => window.open(`${API}/exports/payouts/csv`, '_blank')} style={btnPrimary}><Download size={18} /> Download Statement</button>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>

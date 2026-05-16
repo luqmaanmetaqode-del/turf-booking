@@ -1,5 +1,8 @@
 const nodemailer = require('nodemailer');
 
+// Get frontend URL from environment
+const FRONTEND_URL = process.env.FRONTEND_URL || 'https://turfx.metaqode.co.in';
+
 // Create transporter (using Gmail - free!)
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -38,7 +41,7 @@ const emailTemplates = {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/my-bookings" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">View Booking</a>
+            <a href="${FRONTEND_URL}/my-bookings" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">View Booking</a>
           </div>
           
           <p style="font-size: 14px; color: #64748b; margin-top: 30px;">
@@ -144,7 +147,7 @@ const emailTemplates = {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/partner/dashboard" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">View in Dashboard</a>
+            <a href="${FRONTEND_URL}/partner/dashboard" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">View in Dashboard</a>
           </div>
         </div>
       </div>
@@ -171,7 +174,7 @@ const emailTemplates = {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/partner/dashboard" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Add Your First Venue</a>
+            <a href="${FRONTEND_URL}/partner/dashboard" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Add Your First Venue</a>
           </div>
         </div>
       </div>
@@ -196,7 +199,7 @@ const emailTemplates = {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="http://localhost:3000/partner/kyc" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Resubmit KYC</a>
+            <a href="${FRONTEND_URL}/partner/kyc" style="background: #1ebe74; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Resubmit KYC</a>
           </div>
         </div>
       </div>

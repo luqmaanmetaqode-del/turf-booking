@@ -7,6 +7,8 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
+const API = process.env.REACT_APP_API_URL || 'https://turfx.metaqode.co.in/api';
+
 export default function CreateBooking({ turfs = [], onCancel, onComplete }) {
   const { token } = useAuth();
   const [step, setStep] = useState(1);
@@ -32,7 +34,7 @@ export default function CreateBooking({ turfs = [], onCancel, onComplete }) {
     setSaving(true);
     setError('');
     try {
-      await axios.post('http://localhost:5001/api/bookings', {
+      await axios.post(`${API}/bookings`, {
         turf_id: selectedVenue._id,
         date,
         time_slot: timeSlot,
