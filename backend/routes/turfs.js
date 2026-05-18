@@ -103,10 +103,14 @@ router.get('/', async (req, res) => {
     // Pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
-    let turfs = await Turf.find(filter)
+    // Exclude large fields (images/videos) from listing to prevent MongoDB memory issues
+    const projection = { images: 0, videos: 0 };
+
+    let turfs = await Turf.find(filter, projection)
       .sort(sortOption)
       .skip(skip)
-      .limit(parseInt(limit));
+      .limit(parseInt(limit))
+      .allowDiskUse(true);
     
     // Calculate distance if lat/lng provided
     if (lat && lng) {
