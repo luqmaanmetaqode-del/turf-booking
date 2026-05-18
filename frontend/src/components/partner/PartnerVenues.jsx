@@ -222,6 +222,22 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
     }
   };
 
+  const handleDelete = async () => {
+    if (!window.confirm(`Are you sure you want to delete "${turf.name}"? This action cannot be undone.`)) {
+      return;
+    }
+    
+    try {
+      await axios.delete(`${API}/turfs/${turf._id}`, { headers: { Authorization: `Bearer ${token}` } });
+      alert('Venue deleted successfully');
+      window.location.reload(); // Refresh to show updated list
+    } catch (err) {
+      alert(err.response?.data?.msg || 'Failed to delete venue');
+    } finally {
+      setActionMenu(null);
+    }
+  };
+
   return (
     <div style={{ 
       background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', overflow: 'hidden',
@@ -281,6 +297,10 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
                    <div onClick={() => { onTabChange?.('pricing'); setActionMenu(null); }} style={dropdownItem}>Update Pricing</div>
                    <div onClick={handleToggleStatus} style={{ ...dropdownItem, color: isActive ? '#ef4444' : '#1ebe74' }}>
                      {statusUpdating ? 'Updating...' : isActive ? 'Mark as Inactive' : 'Mark as Active'}
+                   </div>
+                   <div style={{ borderTop: '1px solid #f1f5f9', margin: '4px 0' }}></div>
+                   <div onClick={handleDelete} style={{ ...dropdownItem, color: '#ef4444' }}>
+                     Delete Venue
                    </div>
                  </div>
                )}
