@@ -29,8 +29,8 @@ app.use(cors({
     : ['http://localhost:3000', 'http://127.0.0.1:3000'],
   credentials: true
 }));
-app.use(express.json({ limit: '150mb' })); // Increased limit for base64 images and videos
-app.use(express.urlencoded({ limit: '150mb', extended: true }));
+app.use(express.json({ limit: '400mb' })); // Increased limit for base64 images and videos
+app.use(express.urlencoded({ limit: '400mb', extended: true }));
 app.use(sanitizeInput); // Prevent NoSQL injection
 app.use(preventXSS); // Prevent XSS attacks
 app.use('/api/', apiLimiter); // Rate limiting

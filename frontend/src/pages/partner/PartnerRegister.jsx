@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { Eye, EyeOff } from 'lucide-react';
 import logo from '../../assets/logo.png';
 
 const API = 'https://turfx.metaqode.co.in/api';
@@ -16,6 +17,7 @@ export default function PartnerRegister() {
     email: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +95,35 @@ export default function PartnerRegister() {
 
           <div style={{ marginBottom: '2rem' }}>
              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: '800', color: '#64748b', marginBottom: '8px', textTransform: 'uppercase' }}>Create Password *</label>
-             <input type="password" placeholder="••••••••" value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} style={inputStyle} required />
+             <div style={{ position: 'relative' }}>
+               <input 
+                 type={showPassword ? "text" : "password"} 
+                 placeholder="••••••••" 
+                 value={formData.password} 
+                 onChange={e => setFormData({...formData, password: e.target.value})} 
+                 style={inputStyle} 
+                 required 
+               />
+               <button
+                 type="button"
+                 onClick={() => setShowPassword(!showPassword)}
+                 style={{
+                   position: 'absolute',
+                   right: '16px',
+                   top: '50%',
+                   transform: 'translateY(-50%)',
+                   background: 'none',
+                   border: 'none',
+                   cursor: 'pointer',
+                   color: '#64748b',
+                   padding: '4px',
+                   display: 'flex',
+                   alignItems: 'center',
+                 }}
+               >
+                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+               </button>
+             </div>
           </div>
 
           <button type="submit" disabled={loading} style={{ width: '100%', background: '#1ebe74', color: 'white', border: 'none', padding: '18px', borderRadius: '12px', cursor: 'pointer', fontWeight: '800', fontSize: '1.1rem', transition: '0.3s', boxShadow: '0 10px 25px rgba(30,190,116,0.25)' }}>
