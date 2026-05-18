@@ -86,8 +86,8 @@ router.get('/', async (req, res) => {
       filter._id = { $nin: bookedSlots };
     }
     
-    // Sorting
-    let sortOption = { createdAt: -1 }; // Default: newest first
+    // Sorting - only sort by simple fields, not by large documents
+    let sortOption = { _id: -1 }; // Default: newest first (by ID, much faster than createdAt)
     
     if (sort_by === 'price_low') {
       sortOption = { price_per_hour: 1 };
@@ -96,7 +96,6 @@ router.get('/', async (req, res) => {
     } else if (sort_by === 'rating_high') {
       sortOption = { rating: -1 };
     } else if (sort_by === 'distance' && lat && lng) {
-      // Distance sorting will be done in-memory after fetching
       sortOption = {};
     }
     
@@ -110,7 +109,7 @@ router.get('/', async (req, res) => {
       .sort(sortOption)
       .skip(skip)
       .limit(parseInt(limit))
-      .allowDiskUse(true);
+      .lean();
     
     // Calculate distance if lat/lng provided
     if (lat && lng) {
