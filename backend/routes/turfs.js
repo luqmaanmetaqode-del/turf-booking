@@ -102,14 +102,21 @@ router.get('/', async (req, res) => {
     // Pagination
     const skip = (parseInt(page) - 1) * parseInt(limit);
     
-    // Exclude large fields (images/videos) from listing to prevent MongoDB memory issues
-    const projection = { images: 0, videos: 0 };
-
-    let turfs = await Turf.find(filter, projection)
-      .sort(sortOption)
-      .skip(skip)
-      .limit(parseInt(limit))
-      .lean();
+    // Use aggregation to get only the first image (thumbnail) to avoid MongoDB memory issues
+    // Full images are loaded when user clicks on a specific turf
+    let turfs = await Turf.aggregate([
+      { $match: filter },
+      { $sort: sortOption },
+      { $skip: skip },
+      { $limit: parseInt(limit) },
+      {
+        $addFields: {
+          // Keep only first image as thumbnail, exclude rest
+          images: { $slice: ['$images', 1] },
+          videos: []
+        }
+      }
+    ]);
     
     // Calculate distance if lat/lng provided
     if (lat && lng) {
