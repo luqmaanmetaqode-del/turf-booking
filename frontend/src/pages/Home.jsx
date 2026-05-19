@@ -1,33 +1,23 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import TurfCard from '../components/TurfCard';
-import StatsBar from '../components/StatsBar';
 import HowItWorks from '../components/HowItWorks';
 import OffersSection from '../components/OffersSection';
-import SportFilter from '../components/SportFilter';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
-const POPULAR_CITIES = [
-  { name: 'Bengaluru' },
-  { name: 'Mumbai' },
-  { name: 'Delhi' },
-  { name: 'Hyderabad' },
-  { name: 'Chennai' },
-  { name: 'Pune' },
-  { name: 'Kolkata' },
-  { name: 'Ahmedabad' },
-];
+const POPULAR_CITIES = ['Bengaluru', 'Mumbai', 'Delhi', 'Hyderabad', 'Chennai', 'Pune', 'Kolkata', 'Ahmedabad'];
 
 const SPORTS = [
-  { name: 'Football' },
-  { name: 'Cricket' },
-  { name: 'Badminton' },
-  { name: 'Tennis' },
-  { name: 'Basketball' },
+  { name: 'Football', emoji: '⚽' },
+  { name: 'Cricket', emoji: '🏏' },
+  { name: 'Badminton', emoji: '🏸' },
+  { name: 'Tennis', emoji: '🎾' },
+  { name: 'Basketball', emoji: '🏀' },
 ];
+
+const FILTER_SPORTS = ['All', 'Football', 'Cricket', 'Badminton'];
 
 export default function Home() {
   const [turfs, setTurfs] = useState([]);
@@ -39,7 +29,6 @@ export default function Home() {
   useEffect(() => {
     axios.get(`${API}/turfs`)
       .then(res => {
-        // Handle both array response and object with turfs property
         const turfData = Array.isArray(res.data) ? res.data : (res.data.turfs || []);
         setTurfs(turfData);
       })
@@ -51,189 +40,220 @@ export default function Home() {
     navigator.geolocation.getCurrentPosition(async pos => {
       const { latitude, longitude } = pos.coords;
       try {
-        const res = await axios.get(
-          `${API}/turfs/nearby?lat=${latitude}&lng=${longitude}&radius=10000`
-        );
-        // Handle both array response and object with turfs property
+        const res = await axios.get(`${API}/turfs/nearby?lat=${latitude}&lng=${longitude}&radius=10000`);
         const turfData = Array.isArray(res.data) ? res.data : (res.data.turfs || []);
         setTurfs(turfData);
-      } catch (err) {
-        console.error(err);
-      }
+      } catch (err) { console.error(err); }
       setLoading(false);
-    }, () => {
-      alert('Location access denied');
-      setLoading(false);
-    });
+    }, () => { alert('Location access denied'); setLoading(false); });
   };
 
-  // Ensure turfs is always an array
   const turfsList = Array.isArray(turfs) ? turfs : [];
   const filtered = sport === 'All' ? turfsList : turfsList.filter(t => t.sport === sport);
 
   return (
-    <div style={{ background: '#F8FAF7' }}>
+    <div style={{ background: '#F8FAF7', fontFamily: "'Inter', sans-serif" }}>
 
       {/* HERO */}
       <div style={{
-        background: 'linear-gradient(135deg, #084734 0%, #084734 40%, #CEF17B 100%)',
+        background: '#084734',
         padding: '5rem 2rem 4rem',
         textAlign: 'center',
         color: 'white',
         position: 'relative',
         overflow: 'hidden',
+        minHeight: '520px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}>
-        {/* Background pattern */}
+        {/* Subtle background pattern */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(30,190,116,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30,190,116,0.1) 0%, transparent 50%)',
+          backgroundImage: 'radial-gradient(circle at 15% 50%, rgba(206,241,123,0.08) 0%, transparent 50%), radial-gradient(circle at 85% 30%, rgba(206,241,123,0.06) 0%, transparent 50%)',
           pointerEvents: 'none',
         }} />
 
-        <img src={logo} alt="TurfX" style={{ height: '160px', objectFit: 'contain', marginBottom: '1.5rem', filter: 'drop-shadow(0 4px 20px rgba(0,0,0,0.3))' }} />
+        {/* Badge */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '8px',
+          background: 'rgba(206,241,123,0.15)', border: '1px solid rgba(206,241,123,0.3)',
+          borderRadius: '50px', padding: '8px 20px', marginBottom: '2rem',
+          fontSize: '0.8rem', fontWeight: '700', color: '#CEF17B',
+          letterSpacing: '1px', textTransform: 'uppercase',
+        }}>
+          🏟 India's #1 Sports Booking Platform
+        </div>
 
         <h1 style={{
-          fontSize: '3.5rem', fontWeight: '800',
-          marginBottom: '1rem', letterSpacing: '-2px',
-          lineHeight: 1.1,
+          fontSize: '4.5rem', fontWeight: '900',
+          marginBottom: '0.5rem', lineHeight: 1.05,
+          letterSpacing: '-2px', color: 'white',
         }}>
-          Book Play Enjoy
+          Book. Play.
         </h1>
-        <p style={{
-          fontSize: '1rem', opacity: 0.7,
-          letterSpacing: '3px', fontWeight: '500',
-          marginBottom: '1rem',
+        <h1 style={{
+          fontSize: '4.5rem', fontWeight: '900',
+          marginBottom: '1.5rem', lineHeight: 1.05,
+          letterSpacing: '-2px', color: '#CEF17B',
         }}>
-          ONE TURF. EVERY GAME.
-        </p>
-        <p style={{ fontSize: '1.1rem', opacity: 0.85, marginBottom: '3rem', maxWidth: '500px', margin: '0 auto 3rem', fontWeight: '400' }}>
-          Find and book premium sports turfs near you in seconds.
+          Enjoy.
+        </h1>
+
+        <p style={{
+          fontSize: '1.1rem', color: 'rgba(255,255,255,0.7)',
+          marginBottom: '2.5rem', maxWidth: '480px',
+          fontWeight: '400', lineHeight: 1.6,
+        }}>
+          Find and reserve premium sports turfs near you — football, cricket, badminton & more.
         </p>
 
         {/* CTA Buttons */}
-        <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
+        <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
           <button onClick={() => navigate('/explore')} style={{
             background: '#CEF17B', color: '#084734',
-            border: 'none', padding: '18px 48px',
-            borderRadius: '50px', fontSize: '1.05rem',
+            border: 'none', padding: '16px 36px',
+            borderRadius: '50px', fontSize: '1rem',
             fontWeight: '800', cursor: 'pointer',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
+            display: 'flex', alignItems: 'center', gap: '8px',
             transition: 'all 0.3s',
-            letterSpacing: '0.5px',
-          }}>
-            Book a Turf
+          }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 25px rgba(206,241,123,0.4)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            🔍 Book a Turf
           </button>
           <button onClick={fetchNearby} style={{
-            background: 'rgba(255,255,255,0.15)',
-            color: 'white',
-            border: '2px solid rgba(255,255,255,0.5)',
-            padding: '18px 48px',
-            borderRadius: '50px', fontSize: '1.05rem',
-            fontWeight: '700', cursor: 'pointer',
-            backdropFilter: 'blur(10px)',
+            background: 'transparent', color: 'white',
+            border: '1.5px solid rgba(255,255,255,0.4)',
+            padding: '16px 36px', borderRadius: '50px',
+            fontSize: '1rem', fontWeight: '600', cursor: 'pointer',
             transition: 'all 0.3s',
-          }}>
-            {loading ? 'Locating...' : 'Venues Near Me'}
+          }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.7)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)'; }}
+          >
+            {loading ? 'Locating...' : 'Venues Near Me →'}
           </button>
         </div>
 
         {/* Sport Quick Select */}
-        <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap' }}>
           {SPORTS.map(s => (
-            <button
-              key={s.name}
-              onClick={() => { setSport(s.name); navigate('/explore'); }}
+            <button key={s.name} onClick={() => { navigate(`/explore?sport=${s.name}`); }}
               style={{
-                background: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.25)',
-                color: 'white', padding: '12px 24px',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: 'rgba(255,255,255,0.85)', padding: '10px 20px',
                 borderRadius: '50px', cursor: 'pointer',
-                fontSize: '0.95rem', fontWeight: '700',
-                backdropFilter: 'blur(10px)',
+                fontSize: '0.9rem', fontWeight: '600',
                 transition: 'all 0.2s',
               }}
-              onMouseEnter={e => e.target.style.background = 'rgba(255,255,255,0.25)'}
-              onMouseLeave={e => e.target.style.background = 'rgba(255,255,255,0.12)'}
+              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(206,241,123,0.15)'; e.currentTarget.style.borderColor = '#CEF17B'; e.currentTarget.style.color = '#CEF17B'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}
             >
-              {s.name}
+              {s.emoji} {s.name}
             </button>
           ))}
         </div>
       </div>
 
-      {/* STATS */}
-      <StatsBar />
+      {/* STATS BAR */}
+      <div style={{ background: '#161616', padding: '2rem' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', textAlign: 'center' }}>
+          {[
+            { value: '10K+', label: 'Active Players' },
+            { value: '500+', label: 'Turfs Listed' },
+            { value: '50K+', label: 'Bookings Made' },
+            { value: '4.8', label: 'Average Rating' },
+          ].map(stat => (
+            <div key={stat.label}>
+              <div style={{ fontSize: '2rem', fontWeight: '900', color: '#CEF17B', marginBottom: '4px' }}>{stat.value}</div>
+              <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500', textTransform: 'uppercase', letterSpacing: '1px' }}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
 
       {/* POPULAR CITIES */}
       <div style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.75rem', color: '#161616' }}>
-          Popular Cities
-        </h2>
-        <p style={{ color: '#666', marginBottom: '2.5rem', fontSize: '1rem', fontWeight: '400' }}>
-          Find turfs in your city
-        </p>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-          gap: '1.25rem',
-        }}>
+        <div style={{ marginBottom: '2rem' }}>
+          <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#084734', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ display: 'inline-block', width: '20px', height: '2px', background: '#CEF17B' }}></span>
+            Find your field
+          </div>
+          <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>Popular Cities</h2>
+          <p style={{ color: '#98A2B3', fontSize: '1rem' }}>Book turfs across India's top sports cities</p>
+        </div>
+        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
           {POPULAR_CITIES.map(c => (
-            <div
-              key={c.name}
-              onClick={() => { setSelectedCity(c.name); navigate(`/explore?city=${c.name}`); }}
+            <div key={c} onClick={() => { setSelectedCity(c); navigate(`/explore?city=${c}`); }}
               style={{
-                background: selectedCity === c.name ? '#DCEFB8' : 'white',
-                border: `2px solid ${selectedCity === c.name ? '#CEF17B' : '#eee'}`,
-                borderRadius: '20px', padding: '1.5rem 1rem',
-                textAlign: 'center', cursor: 'pointer',
-                transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                background: selectedCity === c ? '#084734' : 'white',
+                border: `1.5px solid ${selectedCity === c ? '#084734' : '#e5e7eb'}`,
+                borderRadius: '50px', padding: '10px 24px',
+                cursor: 'pointer', fontSize: '0.9rem',
+                fontWeight: selectedCity === c ? '700' : '500',
+                color: selectedCity === c ? 'white' : '#161616',
+                transition: 'all 0.2s',
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#CEF17B'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(30,190,116,0.1)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = selectedCity === c.name ? '#CEF17B' : '#eee'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.03)'; }}
+              onMouseEnter={e => { if (selectedCity !== c) { e.currentTarget.style.borderColor = '#084734'; e.currentTarget.style.color = '#084734'; } }}
+              onMouseLeave={e => { if (selectedCity !== c) { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.color = '#161616'; } }}
             >
-              <div style={{ fontSize: '1rem', fontWeight: '700', color: selectedCity === c.name ? '#CEF17B' : '#161616' }}>
-                {c.name}
-              </div>
+              {c}
             </div>
           ))}
         </div>
       </div>
 
       {/* FEATURED TURFS */}
-      <div style={{ padding: '2rem 2rem 5rem', maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#161616' }}>Featured Turfs</h2>
-          <button
-            onClick={() => navigate('/explore')}
-            style={{
-              background: 'none', border: '2px solid #CEF17B',
-              color: '#CEF17B', padding: '10px 24px',
-              borderRadius: '50px', cursor: 'pointer',
-              fontSize: '0.95rem', fontWeight: '700',
-              transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.target.style.background = '#CEF17B'; e.target.style.color = 'white'; }}
-            onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#CEF17B'; }}
+      <div style={{ padding: '0 2rem 5rem', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '2rem' }}>
+          <div>
+            <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#084734', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ display: 'inline-block', width: '20px', height: '2px', background: '#CEF17B' }}></span>
+              Top rated near you
+            </div>
+            <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#161616' }}>
+              Featured <span style={{ color: '#084734' }}>Turfs</span>
+            </h2>
+          </div>
+          <button onClick={() => navigate('/explore')} style={{
+            background: 'none', border: 'none', color: '#084734',
+            fontSize: '0.95rem', fontWeight: '700', cursor: 'pointer',
+            display: 'flex', alignItems: 'center', gap: '6px',
+          }}
+            onMouseEnter={e => e.currentTarget.style.color = '#CEF17B'}
+            onMouseLeave={e => e.currentTarget.style.color = '#084734'}
           >
-            View All Venues
+            View All Venues →
           </button>
         </div>
-        <p style={{ color: '#666', marginBottom: '2.5rem', fontSize: '1rem', fontWeight: '400' }}>Discover top rated sports facilities</p>
 
-        <SportFilter selected={sport} onSelect={setSport} />
+        {/* Sport Filter */}
+        <div style={{ display: 'flex', gap: '10px', marginBottom: '2rem', flexWrap: 'wrap' }}>
+          {FILTER_SPORTS.map(s => (
+            <button key={s} onClick={() => setSport(s)} style={{
+              background: sport === s ? '#161616' : 'white',
+              color: sport === s ? 'white' : '#161616',
+              border: `1.5px solid ${sport === s ? '#161616' : '#e5e7eb'}`,
+              padding: '8px 20px', borderRadius: '50px',
+              fontSize: '0.88rem', fontWeight: '600', cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}>
+              {s}
+            </button>
+          ))}
+        </div>
 
         {filtered.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '4rem', color: '#999' }}>
+          <div style={{ textAlign: 'center', padding: '4rem', color: '#98A2B3' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏟</div>
             <p style={{ fontSize: '1.1rem', fontWeight: '500' }}>No venues match your current selection.</p>
           </div>
         ) : (
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-            gap: '2rem',
-            marginTop: '2rem',
-          }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
             {filtered.slice(0, 6).map(turf => <TurfCard key={turf._id} turf={turf} />)}
           </div>
         )}
@@ -243,7 +263,7 @@ export default function Home() {
       <HowItWorks />
 
       {/* OFFERS */}
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
         <OffersSection />
       </div>
 

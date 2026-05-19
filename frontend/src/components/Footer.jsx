@@ -3,85 +3,63 @@ import logo from '../assets/logo.png';
 
 export default function Footer() {
   return (
-    <footer style={{
-      background: '#f7f7f7',
-      borderTop: '1px solid #e8e8e8',
-      padding: '4rem 2rem 2rem',
-      marginTop: '4rem',
-    }}>
+    <footer style={{ background: '#161616', padding: '4rem 2rem 2rem' }}>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-        gap: '2.5rem',
-        maxWidth: '1100px',
+        gridTemplateColumns: '1.5fr 1fr 1fr 1fr',
+        gap: '3rem',
+        maxWidth: '1200px',
         margin: '0 auto',
       }}>
-        {/* Logo */}
+        {/* Logo + Description */}
         <div>
-          <img src={logo} alt="TurfX" style={{ height: '80px', objectFit: 'contain', marginBottom: '1rem' }} />
-          <p style={{ color: '#999', fontSize: '0.85rem', lineHeight: 1.7 }}>
-            © 2024 MetaQode Technologies<br />Pvt. Ltd. All Rights Reserved.
+          <img src={logo} alt="TurfX" style={{ height: '60px', objectFit: 'contain', marginBottom: '1rem' }} />
+          <p style={{ color: '#98A2B3', fontSize: '0.88rem', lineHeight: 1.7, maxWidth: '240px' }}>
+            India's premier sports turf booking platform. Find, book, and play at premium venues near you.
           </p>
         </div>
 
         {/* Company */}
         <div>
-          <h4 style={{ color: '#aaa', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+          <h4 style={{ color: '#98A2B3', fontSize: '0.72rem', fontWeight: '700', letterSpacing: '2px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
             Company
           </h4>
-          {[
-            { label: 'About Us', path: '/' },
-            { label: 'Blogs', path: '/' },
-            { label: 'Contact', path: '/' },
-            { label: 'Careers', path: '/' },
-            { label: 'Partner With Us', path: '/partner/register' },
-          ].map(item => (
-            <div key={item.label} style={{ marginBottom: '14px' }}>
-              <Link to={item.path} style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
+          {['About Us', 'Blogs', 'Contact', 'Careers', 'Partner with Us'].map(item => (
+            <div key={item} style={{ marginBottom: '12px' }}>
+              <Link to="/" style={{ color: '#98A2B3', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '500', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#CEF17B'}
-                onMouseLeave={e => e.target.style.color = '#444'}
-              >
-                {item.label.toUpperCase()}
-              </Link>
+                onMouseLeave={e => e.target.style.color = '#98A2B3'}
+              >{item}</Link>
             </div>
           ))}
         </div>
 
         {/* Social */}
         <div>
-          <h4 style={{ color: '#aaa', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+          <h4 style={{ color: '#98A2B3', fontSize: '0.72rem', fontWeight: '700', letterSpacing: '2px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
             Social
           </h4>
-          {[
-            { name: 'Instagram', icon: '📸' },
-            { name: 'Facebook', icon: '👥' },
-            { name: 'LinkedIn', icon: '💼' },
-            { name: 'Twitter', icon: '🐦' },
-          ].map(item => (
-            <div key={item.name} style={{ marginBottom: '14px' }}>
-              <Link to="/" style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
+          {['Instagram', 'Facebook', 'LinkedIn', 'Twitter'].map(item => (
+            <div key={item} style={{ marginBottom: '12px' }}>
+              <Link to="/" style={{ color: '#98A2B3', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '500', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#CEF17B'}
-                onMouseLeave={e => e.target.style.color = '#444'}
-              >
-                {item.name.toUpperCase()}
-              </Link>
+                onMouseLeave={e => e.target.style.color = '#98A2B3'}
+              >{item}</Link>
             </div>
           ))}
         </div>
 
         {/* Legal */}
         <div>
-          <h4 style={{ color: '#aaa', fontSize: '0.75rem', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
+          <h4 style={{ color: '#98A2B3', fontSize: '0.72rem', fontWeight: '700', letterSpacing: '2px', marginBottom: '1.5rem', textTransform: 'uppercase' }}>
             Privacy & Terms
           </h4>
           {['FAQs', 'Privacy Policy', 'Terms of Service', 'Cancellation Policy'].map(item => (
-            <div key={item} style={{ marginBottom: '14px' }}>
-              <Link to="/" style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
+            <div key={item} style={{ marginBottom: '12px' }}>
+              <Link to="/" style={{ color: '#98A2B3', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '500', transition: 'color 0.2s' }}
                 onMouseEnter={e => e.target.style.color = '#CEF17B'}
-                onMouseLeave={e => e.target.style.color = '#444'}
-              >
-                {item.toUpperCase()}
-              </Link>
+                onMouseLeave={e => e.target.style.color = '#98A2B3'}
+              >{item}</Link>
             </div>
           ))}
         </div>
@@ -89,20 +67,19 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div style={{
-        borderTop: '1px solid #e0e0e0',
+        borderTop: '1px solid rgba(255,255,255,0.08)',
         marginTop: '3rem', paddingTop: '1.5rem',
-        maxWidth: '1100px', margin: '3rem auto 0',
+        maxWidth: '1200px', margin: '3rem auto 0',
         display: 'flex', justifyContent: 'space-between',
         alignItems: 'center', flexWrap: 'wrap', gap: '1rem',
       }}>
-        <p style={{ color: '#aaa', fontSize: '0.85rem' }}>
-          Powered by <strong style={{ color: '#CEF17B' }}>MetaQode Technologies Pvt. Ltd.</strong>
+        <p style={{ color: '#98A2B3', fontSize: '0.82rem' }}>
+          © 2024 MetaQode Technologies Pvt. Ltd. All Rights Reserved. Powered by{' '}
+          <span style={{ color: '#CEF17B', fontWeight: '600' }}>MetaQode Technologies Pvt. Ltd.</span>
         </p>
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           {['Book', 'Play', 'Enjoy'].map(w => (
-            <span key={w} style={{ color: '#ccc', fontSize: '0.85rem', fontWeight: '700', letterSpacing: '1px' }}>
-              {w}
-            </span>
+            <span key={w} style={{ color: '#98A2B3', fontSize: '0.82rem', fontWeight: '600' }}>{w}</span>
           ))}
         </div>
       </div>

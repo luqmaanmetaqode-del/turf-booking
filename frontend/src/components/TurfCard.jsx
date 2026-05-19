@@ -1,105 +1,107 @@
 import { useNavigate } from 'react-router-dom';
 
+const SPORT_EMOJI = {
+  Football: '⚽', Cricket: '🏏', Badminton: '🏸',
+  Tennis: '🎾', Basketball: '🏀', Volleyball: '🏐',
+  Swimming: '🏊', 'Table Tennis': '🏓',
+};
+
 export default function TurfCard({ turf }) {
   const navigate = useNavigate();
+  const emoji = SPORT_EMOJI[turf.sport] || '🏟';
 
   return (
-    <div style={{
-      background: 'white',
-      borderRadius: '24px',
-      overflow: 'hidden',
-      border: '1.5px solid #EEF2E6',
-      boxShadow: '0 4px 15px rgba(0,0,0,0.02)',
-      cursor: 'pointer',
-      transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-    }}
-      onMouseEnter={e => {
-        e.currentTarget.style.transform = 'translateY(-6px)';
-        e.currentTarget.style.boxShadow = '0 15px 35px rgba(0,0,0,0.06)';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform = 'translateY(0)';
-        e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.02)';
-      }}
+    <div
       onClick={() => navigate(`/turf/${turf._id}`)}
+      style={{
+        background: 'white',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        border: '1px solid #e5e7eb',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+        cursor: 'pointer',
+        transition: 'all 0.3s',
+      }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.1)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.04)'; }}
     >
-      {/* Image */}
-      <div style={{
-        height: '180px',
-        position: 'relative',
-        background: '#F8FAF7',
-      }}>
+      {/* Image / Sport Area */}
+      <div style={{ height: '180px', position: 'relative', background: '#084734', overflow: 'hidden' }}>
         {turf.images && turf.images.length > 0 ? (
-          <img 
-            src={turf.images[0]} 
-            alt={turf.name} 
-            style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-          />
+          <img src={turf.images[0]} alt={turf.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
-          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontWeight: '700' }}>
-            PREMIUM VENUE
+          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem' }}>
+            {emoji}
           </div>
         )}
+
+        {/* Sport badge */}
         <div style={{
-          position: 'absolute',
-          top: '12px',
-          right: '12px',
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(8px)',
-          borderRadius: '12px',
-          padding: '6px 14px',
-          fontSize: '0.75rem',
-          fontWeight: '800',
-          color: '#084734',
-          textTransform: 'uppercase',
-          letterSpacing: '0.8px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          position: 'absolute', top: '12px', right: '12px',
+          background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)',
+          color: 'white', fontSize: '0.7rem', fontWeight: '800',
+          padding: '4px 10px', borderRadius: '6px',
+          textTransform: 'uppercase', letterSpacing: '0.5px',
         }}>
           {turf.sport}
         </div>
+
+        {/* Premium badge */}
+        {turf.rating >= 4.5 && (
+          <div style={{
+            position: 'absolute', top: '12px', left: '12px',
+            background: '#CEF17B', color: '#084734',
+            fontSize: '0.65rem', fontWeight: '800',
+            padding: '4px 10px', borderRadius: '6px',
+            textTransform: 'uppercase', letterSpacing: '0.5px',
+          }}>
+            Premium
+          </div>
+        )}
       </div>
 
       {/* Info */}
-      <div style={{ padding: '1.5rem' }}>
-        <h3 style={{ marginBottom: '6px', fontSize: '1.2rem', fontWeight: '800', color: '#161616', letterSpacing: '-0.3px' }}>{turf.name}</h3>
-        <p style={{ color: '#98A2B3', fontSize: '0.9rem', marginBottom: '16px', fontWeight: '500' }}>
-          {turf.location}, {turf.city}
+      <div style={{ padding: '1.25rem' }}>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: '700', color: '#161616', marginBottom: '4px' }}>{turf.name}</h3>
+        <p style={{ color: '#98A2B3', fontSize: '0.85rem', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          📍 {turf.location}, {turf.city}
         </p>
 
-        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '20px' }}>
+        {/* Amenity tags */}
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
           {turf.amenities?.slice(0, 3).map((a, i) => (
             <span key={i} style={{
-              background: '#DCEFB8',
-              color: '#084734',
-              fontSize: '0.75rem',
-              padding: '6px 12px',
-              borderRadius: '10px',
-              fontWeight: '700',
-              textTransform: 'uppercase',
-              letterSpacing: '0.3px',
+              background: '#DCEFB8', color: '#084734',
+              fontSize: '0.7rem', padding: '4px 10px',
+              borderRadius: '6px', fontWeight: '700',
+              textTransform: 'uppercase', letterSpacing: '0.3px',
             }}>
               {a}
             </span>
           ))}
         </div>
 
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          paddingTop: '16px',
-          borderTop: '1.5px solid #EEF2E6',
-        }}>
+        {/* Price + Book */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '12px', borderTop: '1px solid #f3f4f6' }}>
           <div>
-            <span style={{ fontSize: '1.4rem', fontWeight: '800', color: '#084734', letterSpacing: '-0.5px' }}>
-              ₹{turf.price_per_hour}
-            </span>
-            <span style={{ color: '#94a3b8', fontSize: '0.9rem', fontWeight: '600' }}> / hr</span>
+            <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#161616' }}>₹{turf.price_per_hour}</span>
+            <span style={{ color: '#98A2B3', fontSize: '0.85rem' }}> / hr</span>
+            <div style={{ fontSize: '0.8rem', color: '#98A2B3', marginTop: '2px' }}>★ {turf.rating || 0}</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-             <span style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '700', textTransform: 'uppercase' }}>Rating</span>
-             <span style={{ color: '#161616', fontSize: '1rem', fontWeight: '700' }}>{turf.rating}</span>
-          </div>
+          <button
+            onClick={e => { e.stopPropagation(); navigate(`/turf/${turf._id}`); }}
+            style={{
+              background: '#084734', color: 'white',
+              border: 'none', padding: '10px 20px',
+              borderRadius: '10px', fontSize: '0.85rem',
+              fontWeight: '700', cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={e => { e.target.style.background = '#CEF17B'; e.target.style.color = '#084734'; }}
+            onMouseLeave={e => { e.target.style.background = '#084734'; e.target.style.color = 'white'; }}
+          >
+            Book Now
+          </button>
         </div>
       </div>
     </div>
