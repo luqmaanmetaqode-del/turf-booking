@@ -78,9 +78,9 @@ export default function PartnerDashboard() {
 
   const navItemStyle = (id) => ({
     display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 24px',
-    cursor: 'pointer', color: tab === id ? '#1ebe74' : colors.textSecondary,
+    cursor: 'pointer', color: tab === id ? '#CEF17B' : colors.textSecondary,
     background: tab === id ? colors.primaryLight : 'transparent',
-    borderLeft: `4px solid ${tab === id ? '#1ebe74' : 'transparent'}`,
+    borderLeft: `4px solid ${tab === id ? '#CEF17B' : 'transparent'}`,
     fontWeight: tab === id ? '700' : '500', fontSize: '0.95rem',
     transition: '0.2s all'
   });
@@ -151,7 +151,7 @@ export default function PartnerDashboard() {
                 <div style={{ fontWeight: '700', fontSize: '0.95rem', color: colors.text }}>{user?.name}</div>
                 <div style={{ fontSize: '0.75rem', color: colors.textSecondary, fontWeight: '600' }}>Partner Owner</div>
               </div>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: colors.hover, color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', border: `1.5px solid ${colors.border}` }}>
+              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: colors.hover, color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', border: `1.5px solid ${colors.border}` }}>
                 <UserIcon size={24} />
               </div>
             </div>
@@ -170,13 +170,13 @@ export default function PartnerDashboard() {
                   { label: 'Upcoming Bookings', value: data.upcomingBookingsCount || 0, trend: '+0%', trendUp: true, icon: <Clock /> },
                   { label: 'Total Venues', value: data.turfs?.length || 0, trend: 'No change', trendUp: null, icon: <MapPin /> },
                 ].map((s, i) => (
-                  <div key={i} style={{ background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
+                  <div key={i} style={{ background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                      <div style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>{s.label}</div>
-                      <div style={{ color: '#1ebe74' }}>{s.icon}</div>
+                      <div style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>{s.label}</div>
+                      <div style={{ color: '#CEF17B' }}>{s.icon}</div>
                     </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>{s.value}</div>
-                    <div style={{ fontSize: '0.8rem', fontWeight: '700', color: s.trendUp ? '#1ebe74' : '#94a3b8' }}>
+                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>{s.value}</div>
+                    <div style={{ fontSize: '0.8rem', fontWeight: '700', color: s.trendUp ? '#CEF17B' : '#94a3b8' }}>
                       {s.trendUp && '▲'} {s.trend} <span style={{ color: '#94a3b8', fontWeight: '500' }}>vs last month</span>
                     </div>
                   </div>
@@ -185,29 +185,29 @@ export default function PartnerDashboard() {
 
               <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
                 {/* UPCOMING BOOKINGS */}
-                <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1.5px solid #f1f5f9' }}>
+                <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1.5px solid #EEF2E6' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <h3 style={{ fontWeight: '800', fontSize: '1.1rem' }}>Upcoming Bookings</h3>
-                    <span onClick={() => setTab('bookings')} style={{ color: '#1ebe74', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}>View All</span>
+                    <span onClick={() => setTab('bookings')} style={{ color: '#CEF17B', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}>View All</span>
                   </div>
                   {data.upcomingBookings?.length > 0 ? data.upcomingBookings.map((b, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', borderBottom: i < data.upcomingBookings.length - 1 ? '1px solid #f1f5f9' : 'none', paddingBottom: i < data.upcomingBookings.length - 1 ? '1.5rem' : '0' }}>
-                      <div style={{ background: '#f8fafc', padding: '10px', borderRadius: '12px', textAlign: 'center', minWidth: '70px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: '700', textTransform: 'uppercase' }}>
+                    <div key={i} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', borderBottom: i < data.upcomingBookings.length - 1 ? '1px solid #EEF2E6' : 'none', paddingBottom: i < data.upcomingBookings.length - 1 ? '1.5rem' : '0' }}>
+                      <div style={{ background: '#F8FAF7', padding: '10px', borderRadius: '12px', textAlign: 'center', minWidth: '70px' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#98A2B3', fontWeight: '700', textTransform: 'uppercase' }}>
                           {new Date(b.date).toLocaleString('default', { month: 'short' })}
                         </div>
-                        <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#111' }}>
+                        <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#161616' }}>
                           {new Date(b.date).getDate()}
                         </div>
                       </div>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: '700', color: '#111', fontSize: '0.95rem' }}>{b.turf_id?.name}</div>
-                        <div style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '500', marginTop: '4px' }}>{b.time_slot}</div>
+                        <div style={{ fontWeight: '700', color: '#161616', fontSize: '0.95rem' }}>{b.turf_id?.name}</div>
+                        <div style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '500', marginTop: '4px' }}>{b.time_slot}</div>
                         <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: '500' }}>{b.user_id?.name}</div>
                       </div>
                       <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontWeight: '800', color: '#111', fontSize: '1rem' }}>₹{b.total_price}</div>
-                        <div style={{ color: '#1ebe74', background: '#f0fdf4', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', display: 'inline-block', marginTop: '6px' }}>{b.status.toUpperCase()}</div>
+                        <div style={{ fontWeight: '800', color: '#161616', fontSize: '1rem' }}>₹{b.total_price}</div>
+                        <div style={{ color: '#CEF17B', background: '#DCEFB8', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', display: 'inline-block', marginTop: '6px' }}>{b.status.toUpperCase()}</div>
                       </div>
                     </div>
                   )) : (
@@ -216,18 +216,18 @@ export default function PartnerDashboard() {
                 </div>
 
                 {/* EARNINGS CHART */}
-                <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1.5px solid #f1f5f9' }}>
+                <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1.5px solid #EEF2E6' }}>
                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                     <h3 style={{ fontWeight: '800', fontSize: '1.1rem' }}>Earnings Overview</h3>
-                    <select style={{ border: 'none', background: 'none', color: '#64748b', fontWeight: '600', outline: 'none', cursor: 'pointer' }}>
+                    <select style={{ border: 'none', background: 'none', color: '#98A2B3', fontWeight: '600', outline: 'none', cursor: 'pointer' }}>
                       <option>Total</option>
                     </select>
                   </div>
                   <div style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '2rem' }}>₹{(data.totalEarnings || 0).toLocaleString()}</div>
                   <div style={{ height: '180px', display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
                     {chartHeights.map((h, i) => (
-                      <div key={i} style={{ flex: 1, background: '#f0fdf4', borderRadius: '6px', height: `${h}%`, position: 'relative', cursor: 'pointer' }}>
-                        <div style={{ position: 'absolute', bottom: 0, width: '100%', background: '#1ebe74', height: '30%', borderRadius: '6px' }}></div>
+                      <div key={i} style={{ flex: 1, background: '#DCEFB8', borderRadius: '6px', height: `${h}%`, position: 'relative', cursor: 'pointer' }}>
+                        <div style={{ position: 'absolute', bottom: 0, width: '100%', background: '#CEF17B', height: '30%', borderRadius: '6px' }}></div>
                       </div>
                     ))}
                   </div>
@@ -330,12 +330,12 @@ export default function PartnerDashboard() {
 }
 
 const btnActionStyle = {
-  background: 'white', border: '1.5px solid #f1f5f9', padding: '8px 16px',
-  borderRadius: '10px', fontSize: '0.85rem', fontWeight: '700', color: '#64748b',
+  background: 'white', border: '1.5px solid #EEF2E6', padding: '8px 16px',
+  borderRadius: '10px', fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3',
   cursor: 'pointer'
 };
 
-const smallLabelStyle = { fontSize: '0.75rem', color: '#64748b', fontWeight: '700', marginBottom: '4px', textTransform: 'uppercase' };
-const smallValStyle = { fontSize: '1.1rem', fontWeight: '800', color: '#111' };
-const labelStyle = { display: 'block', fontWeight: '700', fontSize: '0.85rem', color: '#111', marginBottom: '8px', textTransform: 'uppercase' };
-const formInputStyle = { width: '100%', padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #f1f5f9', fontSize: '1rem', background: '#f8fafc', fontWeight: '500', outline: 'none' };
+const smallLabelStyle = { fontSize: '0.75rem', color: '#98A2B3', fontWeight: '700', marginBottom: '4px', textTransform: 'uppercase' };
+const smallValStyle = { fontSize: '1.1rem', fontWeight: '800', color: '#161616' };
+const labelStyle = { display: 'block', fontWeight: '700', fontSize: '0.85rem', color: '#161616', marginBottom: '8px', textTransform: 'uppercase' };
+const formInputStyle = { width: '100%', padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #EEF2E6', fontSize: '1rem', background: '#F8FAF7', fontWeight: '500', outline: 'none' };

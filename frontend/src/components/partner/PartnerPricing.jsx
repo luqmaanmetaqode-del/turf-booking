@@ -139,8 +139,8 @@ export default function PartnerPricing({ data }) {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>Pricing Management</h2>
-          <p style={{ color: '#64748b', fontWeight: '500' }}>Set dynamic pricing based on time slots and days</p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>Pricing Management</h2>
+          <p style={{ color: '#98A2B3', fontWeight: '500' }}>Set dynamic pricing based on time slots and days</p>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '8px' }}>
           <button onClick={handleSave} disabled={saving} style={btnPrimary}>
@@ -153,19 +153,19 @@ export default function PartnerPricing({ data }) {
       <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: '2rem' }}>
         {/* LEFT: TURF SELECTION */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-           <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: '#111', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Your Venues</h3>
+           <h3 style={{ fontSize: '0.9rem', fontWeight: '800', color: '#161616', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Your Venues</h3>
            {data?.turfs?.map(t => (
              <div 
                key={t._id} 
                onClick={() => handleTurfSelect(t._id)}
                style={{ 
-                 padding: '1.2rem', borderRadius: '16px', border: '1.5px solid #f1f5f9',
-                 background: selectedTurf === t._id ? '#f0fdf4' : 'white',
-                 borderColor: selectedTurf === t._id ? '#1ebe74' : '#f1f5f9',
+                 padding: '1.2rem', borderRadius: '16px', border: '1.5px solid #EEF2E6',
+                 background: selectedTurf === t._id ? '#DCEFB8' : 'white',
+                 borderColor: selectedTurf === t._id ? '#CEF17B' : '#EEF2E6',
                  cursor: 'pointer', transition: '0.2s'
                }}
              >
-                <div style={{ fontWeight: '800', color: selectedTurf === t._id ? '#111' : '#64748b', fontSize: '0.95rem', marginBottom: '4px' }}>{t.name}</div>
+                <div style={{ fontWeight: '800', color: selectedTurf === t._id ? '#161616' : '#98A2B3', fontSize: '0.95rem', marginBottom: '4px' }}>{t.name}</div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.8rem', color: '#94a3b8' }}>
                    <MapPin size={12} /> {t.location}
                 </div>
@@ -178,22 +178,22 @@ export default function PartnerPricing({ data }) {
            {/* QUICK STATS */}
            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
               <div style={priceStatCard}>
-                 <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '700', marginBottom: '8px' }}>Base Hourly Rate</div>
+                 <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '700', marginBottom: '8px' }}>Base Hourly Rate</div>
                  <input 
                    type="number" 
                    value={basePrice} 
                    onChange={e => setBasePrice(parseFloat(e.target.value) || 0)}
-                   style={{ fontSize: '1.5rem', fontWeight: '900', color: '#111', border: 'none', outline: 'none', width: '100%', background: 'transparent' }}
+                   style={{ fontSize: '1.5rem', fontWeight: '900', color: '#161616', border: 'none', outline: 'none', width: '100%', background: 'transparent' }}
                  />
               </div>
               <div style={priceStatCard}>
-                 <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '700', marginBottom: '8px' }}>Prime Time Price</div>
-                 <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#1ebe74' }}>
+                 <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '700', marginBottom: '8px' }}>Prime Time Price</div>
+                 <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#CEF17B' }}>
                    Rs.{rules.find(r => r.id.endsWith('-prime'))?.price || Math.round(basePrice * 1.25)}
                  </div>
               </div>
               <div style={priceStatCard}>
-                 <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '700', marginBottom: '8px' }}>Active Rules</div>
+                 <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '700', marginBottom: '8px' }}>Active Rules</div>
                  <div style={{ fontSize: '1.5rem', fontWeight: '900', color: '#3b82f6' }}>
                    {rules.filter(r => r.active).length}
                  </div>
@@ -201,8 +201,8 @@ export default function PartnerPricing({ data }) {
            </div>
 
            {/* RULES LIST */}
-           <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
-              <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+           <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+              <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #EEF2E6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                  <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>Pricing Rules</h3>
                  <button onClick={() => setShowModal(true)} style={btnSmall}><Plus size={16} /> Add New Rule</button>
               </div>
@@ -221,20 +221,20 @@ export default function PartnerPricing({ data }) {
                      </thead>
                      <tbody>
                         {rules.map((rule) => (
-                          <tr key={rule.id} style={{ borderBottom: '1px solid #f1f5f9', opacity: rule.active ? 1 : 0.6 }}>
+                          <tr key={rule.id} style={{ borderBottom: '1px solid #EEF2E6', opacity: rule.active ? 1 : 0.6 }}>
                              <td style={tdStyle}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                   <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                   <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#F8FAF7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                       <Zap size={16} color={rule.active ? "#f59e0b" : "#94a3b8"} />
                                    </div>
-                                   <div style={{ fontWeight: '700', fontSize: '0.9rem', color: rule.active ? '#111' : '#94a3b8' }}>{rule.category}</div>
+                                   <div style={{ fontWeight: '700', fontSize: '0.9rem', color: rule.active ? '#161616' : '#94a3b8' }}>{rule.category}</div>
                                 </div>
                              </td>
                              <td style={tdStyle}>
-                                <span style={{ padding: '4px 10px', borderRadius: '6px', background: '#f1f5f9', fontSize: '0.75rem', fontWeight: '700', color: '#64748b' }}>{rule.type}</span>
+                                <span style={{ padding: '4px 10px', borderRadius: '6px', background: '#EEF2E6', fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3' }}>{rule.type}</span>
                              </td>
                              <td style={tdStyle}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>
                                    <Clock size={14} /> {rule.startTime} - {rule.endTime}
                                 </div>
                              </td>
@@ -244,7 +244,7 @@ export default function PartnerPricing({ data }) {
                                      type="number" 
                                      value={rule.price} 
                                      onChange={e => handlePriceChange(rule.id, e.target.value)}
-                                     style={{ width: '80px', padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #f1f5f9', fontWeight: '800', outline: 'none', textAlign: 'center' }}
+                                     style={{ width: '80px', padding: '6px 10px', borderRadius: '8px', border: '1.5px solid #EEF2E6', fontWeight: '800', outline: 'none', textAlign: 'center' }}
                                    />
                                 </div>
                              </td>
@@ -253,7 +253,7 @@ export default function PartnerPricing({ data }) {
                                   onClick={() => toggleRuleActive(rule.id)}
                                   style={{ 
                                     width: '40px', height: '22px', 
-                                    background: rule.active ? '#1ebe74' : '#cbd5e1', 
+                                    background: rule.active ? '#CEF17B' : '#cbd5e1', 
                                     borderRadius: '20px', position: 'relative', cursor: 'pointer',
                                     transition: '0.3s'
                                   }}
@@ -283,9 +283,9 @@ export default function PartnerPricing({ data }) {
                   </table>
                </div>
                
-               <div style={{ padding: '1.5rem', background: '#f8fafc', display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1.5px solid #f1f5f9' }}>
+               <div style={{ padding: '1.5rem', background: '#F8FAF7', display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1.5px solid #EEF2E6' }}>
                   <AlertCircle size={18} color="#3b82f6" />
-                  <p style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500' }}>
+                  <p style={{ fontSize: '0.85rem', color: '#98A2B3', fontWeight: '500' }}>
                      Tip: Prime time pricing usually starts from 5 PM on weekdays.
                   </p>
                </div>
@@ -298,7 +298,7 @@ export default function PartnerPricing({ data }) {
         <div style={modalOverlayStyle}>
           <div style={modalContentStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#111', margin: 0 }}>Add Pricing Rule</h3>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#161616', margin: 0 }}>Add Pricing Rule</h3>
               <button onClick={() => setShowModal(false)} style={{ border: 'none', background: 'none', cursor: 'pointer', color: '#94a3b8' }}>
                 <X size={20} />
               </button>
@@ -377,17 +377,17 @@ export default function PartnerPricing({ data }) {
 }
 
 const priceStatCard = {
-  background: 'white', padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #f1f5f9'
+  background: 'white', padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #EEF2E6'
 };
 
 const btnPrimary = {
-  background: '#1ebe74', color: 'white', border: 'none', padding: '12px 24px',
+  background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px',
   borderRadius: '12px', fontWeight: '800', fontSize: '0.9rem', display: 'flex',
   alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)'
 };
 
 const btnSmall = {
-  background: '#f0fdf4', color: '#1ebe74', border: 'none', padding: '8px 16px',
+  background: '#DCEFB8', color: '#CEF17B', border: 'none', padding: '8px 16px',
   borderRadius: '10px', fontWeight: '800', fontSize: '0.8rem', display: 'flex',
   alignItems: 'center', gap: '6px', cursor: 'pointer'
 };
@@ -422,7 +422,7 @@ const labelStyle = {
   display: 'block',
   fontSize: '0.8rem',
   fontWeight: '800',
-  color: '#64748b',
+  color: '#98A2B3',
   textTransform: 'uppercase',
   marginBottom: '6px'
 };
@@ -431,7 +431,7 @@ const inputStyle = {
   width: '100%',
   padding: '10px 14px',
   borderRadius: '10px',
-  border: '1.5px solid #e2e8f0',
+  border: '1.5px solid #DCEFB8',
   outline: 'none',
   fontSize: '0.9rem',
   fontWeight: '700',
@@ -442,7 +442,7 @@ const selectStyle = {
   width: '100%',
   padding: '10px 14px',
   borderRadius: '10px',
-  border: '1.5px solid #e2e8f0',
+  border: '1.5px solid #DCEFB8',
   outline: 'none',
   fontSize: '0.9rem',
   fontWeight: '700',
@@ -452,8 +452,8 @@ const selectStyle = {
 
 const btnSecondary = {
   flex: 1,
-  background: '#f1f5f9',
-  color: '#64748b',
+  background: '#EEF2E6',
+  color: '#98A2B3',
   border: 'none',
   padding: '12px',
   borderRadius: '12px',
@@ -464,7 +464,7 @@ const btnSecondary = {
 
 const btnSubmitRule = {
   flex: 1,
-  background: '#1ebe74',
+  background: '#CEF17B',
   color: 'white',
   border: 'none',
   padding: '12px',

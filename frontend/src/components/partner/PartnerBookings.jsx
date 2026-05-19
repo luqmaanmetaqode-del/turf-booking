@@ -68,7 +68,7 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
   const stats = [
     { label: 'Total Bookings', value: bookings.length, sub: 'Lifetime', icon: <CalIcon size={20} />, color: '#3b82f6' },
     { label: 'Upcoming', value: tabs[1].count, sub: 'Active', icon: <Clock size={20} />, color: '#f59e0b' },
-    { label: 'Today', value: tabs[2].count, sub: 'Scheduled', icon: <CalIcon size={20} />, color: '#1ebe74' },
+    { label: 'Today', value: tabs[2].count, sub: 'Scheduled', icon: <CalIcon size={20} />, color: '#CEF17B' },
     { label: 'Completed', value: tabs[3].count, sub: 'History', icon: <CheckCircle size={20} />, color: '#10b981' },
     { label: 'Cancelled', value: tabs[4].count, sub: 'Lost', icon: <XIcon size={20} />, color: '#ef4444' },
   ];
@@ -78,19 +78,19 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
       {/* LEFT SIDE - LIST & FILTERS */}
       <div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-           <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #f1f5f9', paddingBottom: '10px' }}>
+           <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #EEF2E6', paddingBottom: '10px' }}>
             {tabs.map((t) => (
               <div 
                 key={t.label} 
                 onClick={() => setActiveTab(t.label)}
                 style={{ 
                   fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer',
-                  color: activeTab === t.label ? '#1ebe74' : '#64748b',
+                  color: activeTab === t.label ? '#CEF17B' : '#98A2B3',
                   position: 'relative', padding: '0 5px', display: 'flex', alignItems: 'center', gap: '8px'
                 }}
               >
                 {t.label} <span style={{ fontSize: '0.75rem', opacity: 0.6 }}>{t.count}</span>
-                {activeTab === t.label && <div style={{ position: 'absolute', bottom: '-11.5px', left: 0, width: '100%', height: '3px', background: '#1ebe74', borderRadius: '10px' }} />}
+                {activeTab === t.label && <div style={{ position: 'absolute', bottom: '-11.5px', left: 0, width: '100%', height: '3px', background: '#CEF17B', borderRadius: '10px' }} />}
               </div>
             ))}
           </div>
@@ -108,8 +108,8 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
                       {s.icon}
                    </div>
                    <div>
-                      <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b' }}>{s.label}</div>
-                      <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#111' }}>{s.value}</div>
+                      <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3' }}>{s.label}</div>
+                      <div style={{ fontSize: '1.1rem', fontWeight: '800', color: '#161616' }}>{s.value}</div>
                    </div>
                 </div>
                 <div style={{ fontSize: '0.7rem', fontWeight: '600', color: '#94a3b8' }}>{s.sub}</div>
@@ -118,13 +118,13 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
         </div>
 
         {notice && (
-          <div style={{ marginBottom: '1.5rem', padding: '12px 16px', borderRadius: '12px', border: `1.5px solid ${notice.type === 'success' ? '#bbf7d0' : '#fecaca'}`, background: notice.type === 'success' ? '#f0fdf4' : '#fff1f2', color: notice.type === 'success' ? '#166534' : '#991b1b', fontWeight: '700', fontSize: '0.9rem' }}>
+          <div style={{ marginBottom: '1.5rem', padding: '12px 16px', borderRadius: '12px', border: `1.5px solid ${notice.type === 'success' ? '#DCEFB8' : '#fecaca'}`, background: notice.type === 'success' ? '#DCEFB8' : '#fff1f2', color: notice.type === 'success' ? '#084734' : '#991b1b', fontWeight: '700', fontSize: '0.9rem' }}>
             {notice.text}
           </div>
         )}
 
         {/* SEARCH & FILTERS */}
-        <div style={{ background: 'white', padding: '1.2rem', borderRadius: '16px', border: '1.5px solid #f1f5f9', display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
+        <div style={{ background: 'white', padding: '1.2rem', borderRadius: '16px', border: '1.5px solid #EEF2E6', display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
            <div style={{ flex: 1, position: 'relative' }}>
               <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
               <input 
@@ -132,7 +132,7 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
                 placeholder="Search by booking ID, customer name..." 
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                style={{ width: '100%', padding: '12px 12px 12px 48px', borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.9rem', outline: 'none' }} 
+                style={{ width: '100%', padding: '12px 12px 12px 48px', borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.9rem', outline: 'none' }} 
               />
            </div>
            <select style={filterSelect}><option>All Venues</option></select>
@@ -142,9 +142,9 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
         </div>
 
         {/* TABLE */}
-        <div style={{ background: 'white', borderRadius: '16px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
+        <div style={{ background: 'white', borderRadius: '16px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-              <thead style={{ background: '#f8fafc', borderBottom: '1.5px solid #f1f5f9' }}>
+              <thead style={{ background: '#F8FAF7', borderBottom: '1.5px solid #EEF2E6' }}>
                  <tr>
                     <th style={thStyle}>Booking ID</th>
                     <th style={thStyle}>Customer Name</th>
@@ -159,11 +159,11 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
               </thead>
               <tbody>
                  {finalBookings.length > 0 ? finalBookings.map((b, i) => (
-                   <tr key={b._id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                   <tr key={b._id} style={{ borderBottom: '1px solid #EEF2E6' }}>
 
                       {/* BOOKING ID */}
                       <td style={tdStyle}>
-                        <span style={{ fontFamily: 'monospace', fontWeight: '800', fontSize: '0.85rem', color: '#1ebe74', background: '#f0fdf4', padding: '4px 10px', borderRadius: '8px' }}>
+                        <span style={{ fontFamily: 'monospace', fontWeight: '800', fontSize: '0.85rem', color: '#CEF17B', background: '#DCEFB8', padding: '4px 10px', borderRadius: '8px' }}>
                           #{b._id.slice(-6).toUpperCase()}
                         </span>
                       </td>
@@ -174,7 +174,7 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
                           <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: '800', flexShrink: 0 }}>
                             {(b.user_id?.name || 'U').split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)}
                           </div>
-                          <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#111' }}>
+                          <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#161616' }}>
                             {b.user_id?.name || 'Unknown User'}
                           </div>
                         </div>
@@ -192,13 +192,13 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
 
                       {/* VENUE */}
                       <td style={tdStyle}>
-                        <div style={{ fontWeight: '700', fontSize: '0.85rem', color: '#111' }}>{b.turf_id?.name || '—'}</div>
+                        <div style={{ fontWeight: '700', fontSize: '0.85rem', color: '#161616' }}>{b.turf_id?.name || '—'}</div>
                         <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: '500', marginTop: '2px' }}>{b.turf_id?.sport || 'Multi-sport'}</div>
                       </td>
 
                       {/* DATE */}
                       <td style={tdStyle}>
-                        <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#111' }}>
+                        <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#161616' }}>
                           {b.date ? new Date(b.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
                         </div>
                       </td>
@@ -213,7 +213,7 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
 
                       {/* PRICE */}
                       <td style={tdStyle}>
-                        <div style={{ fontWeight: '800', fontSize: '0.95rem', color: '#111' }}>₹{(b.total_price || 0).toLocaleString()}</div>
+                        <div style={{ fontWeight: '800', fontSize: '0.95rem', color: '#161616' }}>₹{(b.total_price || 0).toLocaleString()}</div>
                       </td>
 
                       {/* STATUS */}
@@ -225,7 +225,7 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
                       <td style={tdStyle}>
                         <div style={{ display: 'flex', gap: '8px', position: 'relative' }}>
                           <button onClick={() => setActionMenu(actionMenu === b._id ? null : b._id)}
-                            style={{ ...iconBtn, background: actionMenu === b._id ? '#f1f5f9' : 'none' }}>
+                            style={{ ...iconBtn, background: actionMenu === b._id ? '#EEF2E6' : 'none' }}>
                             <MoreVertical size={16} />
                           </button>
                           {actionMenu === b._id && (
@@ -252,11 +252,11 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
                  )}
               </tbody>
            </table>
-           <div style={{ padding: '1.2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' }}>
-              <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '600' }}>Showing {finalBookings.length} of {bookings.length} bookings</div>
+           <div style={{ padding: '1.2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAF7' }}>
+              <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '600' }}>Showing {finalBookings.length} of {bookings.length} bookings</div>
               <div style={{ display: 'flex', gap: '6px' }}>
                  <button style={pageBtn}><ChevronLeft size={16} /></button>
-                 <button style={{ ...pageBtn, background: '#1ebe74', color: 'white' }}>1</button>
+                 <button style={{ ...pageBtn, background: '#CEF17B', color: '#084734' }}>1</button>
                  <button style={pageBtn}><ChevronRight size={16} /></button>
               </div>
            </div>
@@ -291,12 +291,12 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
                    cells.push(
                      <div key={d} style={{ 
                        fontSize: '0.75rem', fontWeight: '700', padding: '8px 0', borderRadius: '8px',
-                       background: d === todayDate ? '#1ebe74' : bookingDates.has(d) ? '#f0fdf4' : 'transparent',
-                       color: d === todayDate ? 'white' : '#111',
+                       background: d === todayDate ? '#CEF17B' : bookingDates.has(d) ? '#DCEFB8' : 'transparent',
+                       color: d === todayDate ? 'white' : '#161616',
                        cursor: 'pointer', position: 'relative'
                      }}>
                        {d}
-                       {bookingDates.has(d) && d !== todayDate && <div style={{ width: '4px', height: '4px', background: '#1ebe74', borderRadius: '50%', margin: '2px auto 0' }}></div>}
+                       {bookingDates.has(d) && d !== todayDate && <div style={{ width: '4px', height: '4px', background: '#CEF17B', borderRadius: '50%', margin: '2px auto 0' }}></div>}
                      </div>
                    );
                  }
@@ -310,18 +310,18 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
             <h3 style={{ fontWeight: '800', fontSize: '0.9rem', marginBottom: '1.5rem' }}>Upcoming Summary</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                <SummaryItem icon={<CalIcon size={16} />} label="Total Bookings" value={tabs[1].count.toString()} />
-               <SummaryItem icon={<IndianRupee size={16} />} label="Total Revenue" value={`₹${upcomingRevenue.toLocaleString()}`} color="#1ebe74" />
+               <SummaryItem icon={<IndianRupee size={16} />} label="Total Revenue" value={`₹${upcomingRevenue.toLocaleString()}`} color="#CEF17B" />
                <SummaryItem icon={<Clock size={16} />} label="Total Hours Booked" value={`${upcomingHours}h`} />
             </div>
-            <button style={{ width: '100%', marginTop: '1.5rem', padding: '12px', borderRadius: '10px', border: '1.5px solid #f1f5f9', background: 'white', color: '#1ebe74', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}>
+            <button style={{ width: '100%', marginTop: '1.5rem', padding: '12px', borderRadius: '10px', border: '1.5px solid #EEF2E6', background: 'white', color: '#CEF17B', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}>
                View All Bookings
             </button>
          </div>
 
          {/* DID YOU KNOW */}
-         <div style={{ ...sidebarCard, background: '#f0fdf4', border: '1.5px solid #dcfce7' }}>
-            <h4 style={{ fontSize: '0.8rem', fontWeight: '800', color: '#166534', marginBottom: '8px' }}>Did you know?</h4>
-            <p style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '600', lineHeight: 1.5 }}>
+         <div style={{ ...sidebarCard, background: '#DCEFB8', border: '1.5px solid #DCEFB8' }}>
+            <h4 style={{ fontSize: '0.8rem', fontWeight: '800', color: '#084734', marginBottom: '8px' }}>Did you know?</h4>
+            <p style={{ fontSize: '0.75rem', color: '#084734', fontWeight: '600', lineHeight: 1.5 }}>
                You have **{tabs[2].count} bookings** scheduled for today. 
                <span onClick={() => setActiveTab('Today')} style={{ display: 'block', marginTop: '8px', textDecoration: 'underline', cursor: 'pointer' }}>View today's schedule →</span>
             </p>
@@ -334,12 +334,12 @@ export default function PartnerBookings({ data, onCreateClick, token }) {
 function SummaryItem({ icon, label, value, color }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-       <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f8fafc', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+       <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#F8FAF7', color: '#94a3b8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {icon}
        </div>
        <div style={{ flex: 1 }}>
           <div style={{ fontSize: '0.7rem', fontWeight: '700', color: '#94a3b8' }}>{label}</div>
-          <div style={{ fontSize: '0.9rem', fontWeight: '800', color: color || '#111' }}>{value}</div>
+          <div style={{ fontSize: '0.9rem', fontWeight: '800', color: color || '#161616' }}>{value}</div>
        </div>
     </div>
   );
@@ -348,9 +348,9 @@ function SummaryItem({ icon, label, value, color }) {
 function StatusBadge({ status }) {
   const s = status?.toLowerCase();
   const map = {
-    'confirmed': { bg: '#f0fdf4', text: '#16a34a' },
+    'confirmed': { bg: '#DCEFB8', text: '#16a34a' },
     'pending':   { bg: '#fffbeb', text: '#d97706' },
-    'completed': { bg: '#f1f5f9', text: '#475569' },
+    'completed': { bg: '#EEF2E6', text: '#475569' },
     'cancelled': { bg: '#fef2f2', text: '#dc2626' },
     'checked-in':{ bg: '#eff6ff', text: '#2563eb' },
   };
@@ -364,30 +364,30 @@ function StatusBadge({ status }) {
 }
 
 const btnPrimary = {
-  background: '#1ebe74', color: 'white', border: 'none', padding: '10px 20px',
+  background: '#CEF17B', color: '#084734', border: 'none', padding: '10px 20px',
   borderRadius: '12px', fontWeight: '800', fontSize: '0.85rem', display: 'flex',
   alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(30,190,116,0.2)'
 };
 
 const btnSecondary = {
-  background: 'white', color: '#111', border: '1.5px solid #f1f5f9', padding: '10px 20px',
+  background: 'white', color: '#161616', border: '1.5px solid #EEF2E6', padding: '10px 20px',
   borderRadius: '12px', fontWeight: '700', fontSize: '0.85rem', display: 'flex',
   alignItems: 'center', gap: '8px', cursor: 'pointer'
 };
 
 const statCard = {
-  background: 'white', padding: '1rem', borderRadius: '16px', border: '1.5px solid #f1f5f9'
+  background: 'white', padding: '1rem', borderRadius: '16px', border: '1.5px solid #EEF2E6'
 };
 
 const filterSelect = {
-  padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #f1f5f9',
-  fontSize: '0.85rem', fontWeight: '600', color: '#111', outline: 'none'
+  padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #EEF2E6',
+  fontSize: '0.85rem', fontWeight: '600', color: '#161616', outline: 'none'
 };
 
 const filterBtn = {
   display: 'flex', alignItems: 'center', gap: '8px', padding: '0 15px',
-  borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.85rem',
-  fontWeight: '600', color: '#64748b', cursor: 'pointer'
+  borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.85rem',
+  fontWeight: '600', color: '#98A2B3', cursor: 'pointer'
 };
 
 const thStyle = {
@@ -400,29 +400,29 @@ const tdStyle = {
 };
 
 const iconBtn = {
-  background: 'none', border: '1.5px solid #f1f5f9', padding: '6px',
-  borderRadius: '8px', color: '#64748b', cursor: 'pointer'
+  background: 'none', border: '1.5px solid #EEF2E6', padding: '6px',
+  borderRadius: '8px', color: '#98A2B3', cursor: 'pointer'
 };
 
 const pageBtn = {
-  width: '32px', height: '32px', borderRadius: '8px', border: '1.5px solid #f1f5f9',
+  width: '32px', height: '32px', borderRadius: '8px', border: '1.5px solid #EEF2E6',
   background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
   fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer'
 };
 
 const sidebarCard = {
-  background: 'white', padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #f1f5f9'
+  background: 'white', padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6'
 };
 
 const dropdownStyle = {
   position: 'absolute', top: '100%', right: 0, width: '180px',
-  background: 'white', borderRadius: '12px', border: '1.5px solid #f1f5f9',
+  background: 'white', borderRadius: '12px', border: '1.5px solid #EEF2E6',
   boxShadow: '0 8px 30px rgba(0,0,0,0.08)', zIndex: 1000,
   padding: '8px', marginTop: '8px', overflow: 'hidden'
 };
 
 const dropdownItem = {
-  padding: '10px 14px', fontSize: '0.85rem', fontWeight: '700', color: '#64748b',
+  padding: '10px 14px', fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3',
   cursor: 'pointer', borderRadius: '8px', transition: '0.2s', display: 'flex',
   alignItems: 'center', gap: '10px'
 };

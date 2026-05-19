@@ -62,17 +62,17 @@ export default function BookingApprovals() {
   if (loading) {
     return (
       <div style={{ padding: '2rem', textAlign: 'center' }}>
-        <p style={{ color: '#64748b', fontWeight: '600' }}>Loading pending bookings...</p>
+        <p style={{ color: '#98A2B3', fontWeight: '600' }}>Loading pending bookings...</p>
       </div>
     );
   }
 
   if (bookings.length === 0) {
     return (
-      <div style={{ padding: '3rem 2rem', textAlign: 'center', background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9' }}>
+      <div style={{ padding: '3rem 2rem', textAlign: 'center', background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6' }}>
         <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>✅</div>
-        <h3 style={{ color: '#111', fontWeight: '800', marginBottom: '0.5rem' }}>No Pending Requests</h3>
-        <p style={{ color: '#64748b', fontWeight: '600' }}>All booking requests have been reviewed.</p>
+        <h3 style={{ color: '#161616', fontWeight: '800', marginBottom: '0.5rem' }}>No Pending Requests</h3>
+        <p style={{ color: '#98A2B3', fontWeight: '600' }}>All booking requests have been reviewed.</p>
       </div>
     );
   }
@@ -80,10 +80,10 @@ export default function BookingApprovals() {
   return (
     <div>
       <div style={{ marginBottom: '1.5rem' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#111', marginBottom: '0.5rem' }}>
+        <h2 style={{ fontSize: '1.5rem', fontWeight: '900', color: '#161616', marginBottom: '0.5rem' }}>
           Booking Requests
         </h2>
-        <p style={{ color: '#64748b', fontWeight: '600' }}>
+        <p style={{ color: '#98A2B3', fontWeight: '600' }}>
           {bookings.length} pending {bookings.length === 1 ? 'request' : 'requests'}
         </p>
       </div>
@@ -103,7 +103,7 @@ export default function BookingApprovals() {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#111' }}>
+                <h3 style={{ margin: 0, fontSize: '1.2rem', fontWeight: '800', color: '#161616' }}>
                   {booking.turf_id?.name}
                 </h3>
                 <span style={{
@@ -118,7 +118,7 @@ export default function BookingApprovals() {
                   PENDING
                 </span>
               </div>
-              <p style={{ color: '#64748b', fontSize: '0.9rem', fontWeight: '600', margin: 0 }}>
+              <p style={{ color: '#98A2B3', fontSize: '0.9rem', fontWeight: '600', margin: 0 }}>
                 👤 {booking.user_id?.name} ({booking.user_id?.phone})
               </p>
             </div>
@@ -133,19 +133,19 @@ export default function BookingApprovals() {
           </div>
 
           <div style={{ display: 'flex', gap: '20px', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-            <div style={{ background: '#f8fafc', padding: '10px 14px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
+            <div style={{ background: '#F8FAF7', padding: '10px 14px', borderRadius: '12px', border: '1px solid #EEF2E6' }}>
               <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>
                 Date
               </div>
-              <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#111' }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#161616' }}>
                 {booking.date}
               </div>
             </div>
-            <div style={{ background: '#f8fafc', padding: '10px 14px', borderRadius: '12px', border: '1px solid #f1f5f9', flex: 1 }}>
+            <div style={{ background: '#F8FAF7', padding: '10px 14px', borderRadius: '12px', border: '1px solid #EEF2E6', flex: 1 }}>
               <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: '700', textTransform: 'uppercase', marginBottom: '4px' }}>
                 Time Slots
               </div>
-              <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#111' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#161616' }}>
                 {booking.time_slots.join(', ')}
               </div>
             </div>
@@ -160,7 +160,7 @@ export default function BookingApprovals() {
                 padding: '14px',
                 borderRadius: '12px',
                 border: 'none',
-                background: actionLoading === booking._id ? '#94d3b2' : '#1ebe74',
+                background: actionLoading === booking._id ? '#94d3b2' : '#CEF17B',
                 color: 'white',
                 fontWeight: '800',
                 fontSize: '0.95rem',

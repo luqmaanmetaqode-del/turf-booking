@@ -73,10 +73,10 @@ export default function Navbar() {
             onClick={() => setShowCities(!showCities)}
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
-              background: showCities ? '#f0fdf4' : '#f8f9fa',
+              background: showCities ? '#DCEFB8' : '#f8f9fa',
               borderRadius: '25px',
               padding: '8px 16px', cursor: 'pointer',
-              border: showCities ? '1.5px solid #1ebe74' : '1.5px solid transparent',
+              border: showCities ? '1.5px solid #CEF17B' : '1.5px solid transparent',
               transition: 'all 0.2s',
             }}
           >
@@ -114,8 +114,8 @@ export default function Navbar() {
                   style={{
                     padding: '8px 12px', borderRadius: '10px',
                     cursor: 'pointer', fontSize: '0.85rem',
-                    color: city === c ? '#1ebe74' : '#444',
-                    background: city === c ? '#f0fdf4' : 'transparent',
+                    color: city === c ? '#CEF17B' : '#444',
+                    background: city === c ? '#DCEFB8' : 'transparent',
                     fontWeight: city === c ? '700' : '500',
                     transition: 'all 0.15s',
                   }}
@@ -134,17 +134,17 @@ export default function Navbar() {
       <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
         {navLinks.map(({ path, label }) => (
           <Link key={path} to={path} style={{
-            color: isActive(path) ? '#1ebe74' : '#555',
+            color: isActive(path) ? '#CEF17B' : '#555',
             textDecoration: 'none',
             fontSize: '0.85rem', fontWeight: '700',
             letterSpacing: '1px',
             padding: '8px 18px',
             borderRadius: '8px',
-            background: isActive(path) ? '#f0fdf4' : 'transparent',
+            background: isActive(path) ? '#DCEFB8' : 'transparent',
             transition: 'all 0.2s',
             position: 'relative',
           }}
-            onMouseEnter={e => { if (!isActive(path)) { e.target.style.color = '#1ebe74'; e.target.style.background = '#f8fdf9'; }}}
+            onMouseEnter={e => { if (!isActive(path)) { e.target.style.color = '#CEF17B'; e.target.style.background = '#f8fdf9'; }}}
             onMouseLeave={e => { if (!isActive(path)) { e.target.style.color = '#555'; e.target.style.background = 'transparent'; }}}
           >
             {label}
@@ -173,14 +173,14 @@ export default function Navbar() {
 
         {/* List your venue CTA */}
         <Link to="/partner" style={{
-          color: '#1ebe74', textDecoration: 'none',
+          color: '#CEF17B', textDecoration: 'none',
           fontSize: '0.85rem', fontWeight: '700',
           padding: '7px 16px', borderRadius: '20px',
-          border: '1.5px solid #1ebe74',
+          border: '1.5px solid #CEF17B',
           transition: 'all 0.2s',
         }}
-          onMouseEnter={e => { e.target.style.background = '#1ebe74'; e.target.style.color = 'white'; }}
-          onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#1ebe74'; }}
+          onMouseEnter={e => { e.target.style.background = '#CEF17B'; e.target.style.color = 'white'; }}
+          onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#CEF17B'; }}
         >
           List Your Venue
         </Link>
@@ -201,7 +201,7 @@ export default function Navbar() {
             >
               <div style={{
                 width: '32px', height: '32px', borderRadius: '50%',
-                background: 'linear-gradient(135deg, #1ebe74, #0a9d5c)',
+                background: 'linear-gradient(135deg, #CEF17B, #0a9d5c)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 color: 'white', fontWeight: '800', fontSize: '0.85rem',
                 boxShadow: '0 2px 8px rgba(30,190,116,0.3)',
@@ -226,7 +226,7 @@ export default function Navbar() {
                   padding: '12px 14px', borderBottom: '1px solid #f0f0f0',
                   marginBottom: '4px',
                 }}>
-                  <div style={{ fontWeight: '800', fontSize: '0.9rem', color: '#111' }}>{user.name}</div>
+                  <div style={{ fontWeight: '800', fontSize: '0.9rem', color: '#161616' }}>{user.name}</div>
                   <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '2px' }}>{user.email}</div>
                 </div>
                 <Link to="/my-bookings" onClick={() => setShowUserMenu(false)} style={{
@@ -260,15 +260,15 @@ export default function Navbar() {
             onClick={() => navigate('/login')}
             style={{
               display: 'flex', alignItems: 'center', gap: '8px',
-              background: '#1ebe74', color: 'white',
+              background: '#CEF17B', color: '#161616',
               border: 'none', padding: '10px 24px',
               borderRadius: '25px', cursor: 'pointer',
               fontSize: '0.88rem', fontWeight: '800',
-              boxShadow: '0 4px 15px rgba(30,190,116,0.3)',
+              boxShadow: '0 4px 15px rgba(8,71,52,0.2)',
               transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 6px 20px rgba(30,190,116,0.4)'; }}
-            onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 4px 15px rgba(30,190,116,0.3)'; }}
+            onMouseEnter={e => { e.target.style.transform = 'translateY(-1px)'; e.target.style.boxShadow = '0 6px 20px rgba(8,71,52,0.3)'; }}
+            onMouseLeave={e => { e.target.style.transform = 'translateY(0)'; e.target.style.boxShadow = '0 4px 15px rgba(8,71,52,0.2)'; }}
           >
             Login / Signup
           </button>

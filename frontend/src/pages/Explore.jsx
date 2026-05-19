@@ -49,7 +49,7 @@ export default function Explore() {
 
   return (
     <div style={{ padding: '3rem 2rem', maxWidth: '1240px', margin: '0 auto' }}>
-      <h2 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '0.75rem', color: '#111', letterSpacing: '-1px' }}>Explore Venues</h2>
+      <h2 style={{ fontSize: '2.5rem', fontWeight: '900', marginBottom: '0.75rem', color: '#161616', letterSpacing: '-1px' }}>Explore Venues</h2>
       <p style={{ color: '#666', marginBottom: '2.5rem', fontSize: '1.05rem', fontWeight: '500' }}>Find and book the perfect arena for your game</p>
 
       {/* Search & Filter Bar */}
@@ -67,8 +67,8 @@ export default function Explore() {
           style={{
             padding: '12px 18px', borderRadius: '14px',
             border: '1.5px solid #eee', fontSize: '0.95rem',
-            background: '#f8fafc', cursor: 'pointer',
-            fontWeight: '700', color: '#111',
+            background: '#F8FAF7', cursor: 'pointer',
+            fontWeight: '700', color: '#161616',
             outline: 'none',
           }}
         >
@@ -81,8 +81,8 @@ export default function Explore() {
           onChange={e => setSearch(e.target.value)}
           style={{
             flex: 1, padding: '12px 20px', borderRadius: '14px',
-            border: '1.5px solid #f1f5f9', fontSize: '1rem', minWidth: '250px',
-            fontWeight: '600', outline: 'none', background: '#f8fafc',
+            border: '1.5px solid #EEF2E6', fontSize: '1rem', minWidth: '250px',
+            fontWeight: '600', outline: 'none', background: '#F8FAF7',
           }}
         />
         <input
@@ -92,8 +92,8 @@ export default function Explore() {
           onChange={e => setMaxPrice(e.target.value)}
           style={{
             width: '140px', padding: '12px 18px', borderRadius: '14px',
-            border: '1.5px solid #f1f5f9', fontSize: '1rem',
-            fontWeight: '700', background: '#f8fafc', outline: 'none',
+            border: '1.5px solid #EEF2E6', fontSize: '1rem',
+            fontWeight: '700', background: '#F8FAF7', outline: 'none',
           }}
         />
       </div>
@@ -107,7 +107,7 @@ export default function Explore() {
       ) : filtered.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '5rem', color: '#94a3b8' }}>
           <p style={{ fontSize: '1.2rem', fontWeight: '700' }}>No venues match your criteria.</p>
-          <button onClick={() => { setSport('All'); setCity('All Cities'); setSearch(''); setMaxPrice(''); }} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: '#1ebe74', fontWeight: '800', cursor: 'pointer', fontSize: '1rem' }}>Clear All Filters</button>
+          <button onClick={() => { setSport('All'); setCity('All Cities'); setSearch(''); setMaxPrice(''); }} style={{ marginTop: '1.5rem', background: 'none', border: 'none', color: '#CEF17B', fontWeight: '800', cursor: 'pointer', fontSize: '1rem' }}>Clear All Filters</button>
         </div>
       ) : (
         <div style={{

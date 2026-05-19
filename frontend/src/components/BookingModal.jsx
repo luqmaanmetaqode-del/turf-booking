@@ -56,7 +56,7 @@ export default function BookingModal({ turf, onClose }) {
         />
 
         <button onClick={handleProceed} style={{
-          width: '100%', background: '#1ebe74',
+          width: '100%', background: '#CEF17B',
           color: 'white', border: 'none',
           padding: '12px', borderRadius: '10px',
           cursor: 'pointer', fontSize: '1rem', fontWeight: '600',

@@ -148,7 +148,7 @@ export default function Checkout() {
           name: user?.name,
           contact: user?.phone,
         },
-        theme: { color: '#1ebe74' },
+        theme: { color: '#CEF17B' },
       };
 
       const rzp = new window.Razorpay(options);
@@ -163,23 +163,23 @@ export default function Checkout() {
 
   if (!turf) return (
     <div style={{ textAlign:'center', padding:'6rem 2rem', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
-      <h2 style={{ color:'#111', marginBottom:'1rem', fontSize: '2rem', fontWeight: '900' }}>No Venue Selected</h2>
+      <h2 style={{ color:'#161616', marginBottom:'1rem', fontSize: '2rem', fontWeight: '900' }}>No Venue Selected</h2>
       <p style={{ color:'#666', marginBottom:'2rem', fontWeight: '500' }}>Please choose a turf to book first</p>
-      <button onClick={() => navigate('/explore')} style={{ background:'#1ebe74', color:'white', border:'none', padding:'14px 40px', borderRadius:'14px', cursor:'pointer', fontWeight:'800', fontSize: '1rem' }}>Browse Venues</button>
+      <button onClick={() => navigate('/explore')} style={{ background:'#CEF17B', color:'white', border:'none', padding:'14px 40px', borderRadius:'14px', cursor:'pointer', fontWeight:'800', fontSize: '1rem' }}>Browse Venues</button>
     </div>
   );
 
   if (requestSent) return (
     <div style={{ textAlign:'center', padding:'4rem 2rem', maxWidth:'500px', margin:'0 auto', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
-      <div style={{ width:'80px', height:'80px', borderRadius:'50%', background:'#f0fdf4', border: '2px solid #1ebe74', display:'flex', alignItems:'center', justifyContent:'center', color:'#1ebe74', fontSize:'2.5rem', marginBottom:'1.5rem', fontWeight: '900' }}>✓</div>
-      <h2 style={{ color:'#111', marginBottom:'0.75rem', fontSize:'2.2rem', fontWeight: '900' }}>Booking Confirmed!</h2>
-      <p style={{ color:'#111', fontWeight: '700', fontSize: '1.1rem', marginBottom:'0.5rem' }}>{turf.name}</p>
+      <div style={{ width:'80px', height:'80px', borderRadius:'50%', background:'#DCEFB8', border: '2px solid #CEF17B', display:'flex', alignItems:'center', justifyContent:'center', color:'#CEF17B', fontSize:'2.5rem', marginBottom:'1.5rem', fontWeight: '900' }}>✓</div>
+      <h2 style={{ color:'#161616', marginBottom:'0.75rem', fontSize:'2.2rem', fontWeight: '900' }}>Booking Confirmed!</h2>
+      <p style={{ color:'#161616', fontWeight: '700', fontSize: '1.1rem', marginBottom:'0.5rem' }}>{turf.name}</p>
       <p style={{ color:'#666', marginBottom:'1.5rem', fontWeight: '500' }}>{date} | {selectedSlots.join(', ')}</p>
       <div style={{ background:'#f8f9fa', borderRadius:'20px', padding:'1.5rem 2.5rem', marginTop:'1rem', marginBottom:'2.5rem', border:'1.5px solid #eee' }}>
         <div style={{ fontSize:'0.9rem', color:'#888', fontWeight: '600', marginBottom: '4px' }}>Total Amount Paid</div>
-        <div style={{ fontSize:'1.8rem', fontWeight:'900', color:'#1ebe74' }}>INR {totalAmount.toLocaleString()}</div>
+        <div style={{ fontSize:'1.8rem', fontWeight:'900', color:'#CEF17B' }}>INR {totalAmount.toLocaleString()}</div>
       </div>
-      <button onClick={() => navigate('/my-bookings')} style={{ background:'#1ebe74', color:'white', border:'none', padding:'16px 48px', borderRadius:'16px', cursor:'pointer', fontWeight:'800', fontSize: '1.05rem', boxShadow: '0 8px 25px rgba(30,190,116,0.3)' }}>View My Bookings</button>
+      <button onClick={() => navigate('/my-bookings')} style={{ background:'#CEF17B', color:'white', border:'none', padding:'16px 48px', borderRadius:'16px', cursor:'pointer', fontWeight:'800', fontSize: '1.05rem', boxShadow: '0 8px 25px rgba(30,190,116,0.3)' }}>View My Bookings</button>
     </div>
   );
 
@@ -187,25 +187,25 @@ export default function Checkout() {
   const rowStyle = { display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem' };
 
   return (
-    <div style={{ background:'#fafafa', minHeight:'calc(100vh - 72px)' }}>
+    <div style={{ background:'#F8FAF7', minHeight:'calc(100vh - 72px)' }}>
       <div style={{ maxWidth:'1100px', margin:'0 auto', padding:'3rem 2rem', display:'grid', gridTemplateColumns:'1fr 400px', gap:'3rem', alignItems:'start' }}>
         {/* LEFT */}
         <div>
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'2rem', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
               <div>
-                <h2 style={{ fontSize:'1.8rem', fontWeight:'900', color:'#111', marginBottom:'8px', letterSpacing: '-0.5px' }}>{turf.name}</h2>
-                <p style={{ color:'#64748b', fontSize:'1rem', fontWeight: '500' }}>{turf.location}, {turf.city}</p>
+                <h2 style={{ fontSize:'1.8rem', fontWeight:'900', color:'#161616', marginBottom:'8px', letterSpacing: '-0.5px' }}>{turf.name}</h2>
+                <p style={{ color:'#98A2B3', fontSize:'1rem', fontWeight: '500' }}>{turf.location}, {turf.city}</p>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#f8f9fa', padding: '6px 14px', borderRadius: '12px', border: '1px solid #eee' }}>
-                 <span style={{ fontWeight: '800', fontSize: '1rem', color: '#111' }}>{turf.rating} Rating</span>
+                 <span style={{ fontWeight: '800', fontSize: '1rem', color: '#161616' }}>{turf.rating} Rating</span>
               </div>
             </div>
           </div>
 
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'2rem', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
             <div style={rowStyle}>
-              <label style={{ fontWeight:'800', color:'#111', fontSize: '1rem' }}>Activity</label>
+              <label style={{ fontWeight:'800', color:'#161616', fontSize: '1rem' }}>Activity</label>
               <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                 {SPORTS.map(s => (
                   <button 
@@ -213,9 +213,9 @@ export default function Checkout() {
                     onClick={() => setSport(s)}
                     style={{
                       padding: '10px 18px', borderRadius: '12px',
-                      border: `1.5px solid ${sport === s ? '#1ebe74' : '#eee'}`,
-                      background: sport === s ? '#f0fdf4' : 'white',
-                      color: sport === s ? '#1ebe74' : '#64748b',
+                      border: `1.5px solid ${sport === s ? '#CEF17B' : '#eee'}`,
+                      background: sport === s ? '#DCEFB8' : 'white',
+                      color: sport === s ? '#CEF17B' : '#98A2B3',
                       fontWeight: '800', fontSize: '0.9rem', cursor: 'pointer',
                       transition: '0.2s all', outline: 'none'
                     }}
@@ -226,11 +226,11 @@ export default function Checkout() {
               </div>
             </div>
             <div style={rowStyle}>
-              <label style={{ fontWeight:'800', color:'#111', fontSize: '1rem' }}>Date</label>
+              <label style={{ fontWeight:'800', color:'#161616', fontSize: '1rem' }}>Date</label>
               <input type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split('T')[0]} style={inputStyle} />
             </div>
             <div style={rowStyle}>
-              <label style={{ fontWeight:'800', color:'#111', fontSize: '1rem' }}>Select Time Slot</label>
+              <label style={{ fontWeight:'800', color:'#161616', fontSize: '1rem' }}>Select Time Slot</label>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '1.5rem' }}>
               {slotsLoading ? (
@@ -247,9 +247,9 @@ export default function Checkout() {
                       style={{
                         padding: '12px 8px',
                         borderRadius: '12px',
-                        border: `2px solid ${isSelected ? '#1ebe74' : isBooked ? '#f5f5f5' : '#eee'}`,
-                        background: isSelected ? '#1ebe74' : isBooked ? '#f5f5f5' : 'white',
-                        color: isSelected ? 'white' : isBooked ? '#ccc' : '#111',
+                        border: `2px solid ${isSelected ? '#CEF17B' : isBooked ? '#f5f5f5' : '#eee'}`,
+                        background: isSelected ? '#CEF17B' : isBooked ? '#f5f5f5' : 'white',
+                        color: isSelected ? 'white' : isBooked ? '#ccc' : '#161616',
                         cursor: isBooked ? 'not-allowed' : 'pointer',
                         fontSize: '0.85rem',
                         fontWeight: isSelected ? '800' : '600',
@@ -271,8 +271,8 @@ export default function Checkout() {
               )}
             </div>
             {selectedSlots.length > 0 && (
-              <div style={{ background: '#f0fdf4', border: '1.5px solid #dcfce7', borderRadius: '12px', padding: '12px 16px', marginBottom: '1.5rem' }}>
-                <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#166534', marginBottom: '6px' }}>
+              <div style={{ background: '#DCEFB8', border: '1.5px solid #DCEFB8', borderRadius: '12px', padding: '12px 16px', marginBottom: '1.5rem' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: '700', color: '#084734', marginBottom: '6px' }}>
                   Selected Slots ({selectedSlots.length})
                 </div>
                 <div style={{ fontSize: '0.9rem', fontWeight: '600', color: '#15803d' }}>
@@ -283,9 +283,9 @@ export default function Checkout() {
           </div>
 
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee' }}>
-            <h3 style={{ fontSize:'1.1rem', fontWeight:'800', marginBottom:'1rem', color: '#111' }}>Policies</h3>
+            <h3 style={{ fontSize:'1.1rem', fontWeight:'800', marginBottom:'1rem', color: '#161616' }}>Policies</h3>
             <p style={{ fontSize:'0.9rem', color:'#666', lineHeight:1.7, marginBottom:'1.5rem', fontWeight: '500' }}>Cancellations allowed up to 2 hours before the slot. A 15% fee applies for late cancellations.</p>
-            <h3 style={{ fontSize:'1.1rem', fontWeight:'800', marginBottom:'1rem', color: '#111' }}>Venue Rules</h3>
+            <h3 style={{ fontSize:'1.1rem', fontWeight:'800', marginBottom:'1rem', color: '#161616' }}>Venue Rules</h3>
             <ul style={{ fontSize:'0.9rem', color:'#666', lineHeight:2, paddingLeft:'1.25rem', margin:0, fontWeight: '500' }}>
               <li>Please wear appropriate sports gear.</li>
               <li>Outside food and drinks are not allowed.</li>
@@ -297,12 +297,12 @@ export default function Checkout() {
         {/* RIGHT */}
         <div style={{ position:'sticky', top:'100px' }}>
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-            <h3 style={{ fontSize:'1.2rem', fontWeight:'900', color: '#111', marginBottom: '1.5rem' }}>Booking Summary</h3>
-            <div style={{ background:'#f8fafc', borderRadius:'16px', padding:'1.25rem', border:'1.5px solid #f1f5f9' }}>
-              <div style={{ fontWeight:'800', fontSize:'1rem', marginBottom:'8px', color: '#111' }}>{turf.name}</div>
-              <div style={{ fontSize:'0.9rem', color:'#64748b', fontWeight: '600' }}>{date}</div>
+            <h3 style={{ fontSize:'1.2rem', fontWeight:'900', color: '#161616', marginBottom: '1.5rem' }}>Booking Summary</h3>
+            <div style={{ background:'#F8FAF7', borderRadius:'16px', padding:'1.25rem', border:'1.5px solid #EEF2E6' }}>
+              <div style={{ fontWeight:'800', fontSize:'1rem', marginBottom:'8px', color: '#161616' }}>{turf.name}</div>
+              <div style={{ fontSize:'0.9rem', color:'#98A2B3', fontWeight: '600' }}>{date}</div>
               {selectedSlots.length > 0 && (
-                <div style={{ fontSize:'0.85rem', color:'#1ebe74', fontWeight: '700', marginTop: '8px' }}>
+                <div style={{ fontSize:'0.85rem', color:'#CEF17B', fontWeight: '700', marginTop: '8px' }}>
                   {selectedSlots.join(', ')}
                 </div>
               )}
@@ -310,26 +310,26 @@ export default function Checkout() {
           </div>
 
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
-            <h3 style={{ fontSize:'1.2rem', fontWeight:'900', marginBottom:'1.5rem', color: '#111' }}>Price Breakdown</h3>
+            <h3 style={{ fontSize:'1.2rem', fontWeight:'900', marginBottom:'1.5rem', color: '#161616' }}>Price Breakdown</h3>
             
             <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
-              <span style={{ color:'#64748b', fontWeight: '600' }}>Court Rental ({numberOfSlots} {numberOfSlots === 1 ? 'Slot' : 'Slots'})</span>
-              <span style={{ fontWeight:'800', color: '#111' }}>INR {courtPrice.toLocaleString()}</span>
+              <span style={{ color:'#98A2B3', fontWeight: '600' }}>Court Rental ({numberOfSlots} {numberOfSlots === 1 ? 'Slot' : 'Slots'})</span>
+              <span style={{ fontWeight:'800', color: '#161616' }}>INR {courtPrice.toLocaleString()}</span>
             </div>
 
             <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
-              <span style={{ color:'#64748b', fontWeight: '600' }}>Platform Fee</span>
-              <span style={{ fontWeight:'800', color: '#111' }}>INR {platformFee.toLocaleString()}</span>
+              <span style={{ color:'#98A2B3', fontWeight: '600' }}>Platform Fee</span>
+              <span style={{ fontWeight:'800', color: '#161616' }}>INR {platformFee.toLocaleString()}</span>
             </div>
 
             <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
-              <span style={{ color:'#64748b', fontWeight: '600' }}>GST (18%)</span>
-              <span style={{ fontWeight:'800', color: '#111' }}>INR {gstOnFee.toLocaleString()}</span>
+              <span style={{ color:'#98A2B3', fontWeight: '600' }}>GST (18%)</span>
+              <span style={{ fontWeight:'800', color: '#161616' }}>INR {gstOnFee.toLocaleString()}</span>
             </div>
 
-            <div style={{ display:'flex', justifyContent:'space-between', paddingTop:'16px', borderTop:'1.5px solid #f1f5f9', marginTop: '8px' }}>
-              <span style={{ fontWeight:'900', fontSize:'1.2rem', color: '#111' }}>Total Amount</span>
-              <span style={{ fontWeight:'900', fontSize:'1.2rem', color: '#1ebe74' }}>INR {totalAmount.toLocaleString()}</span>
+            <div style={{ display:'flex', justifyContent:'space-between', paddingTop:'16px', borderTop:'1.5px solid #EEF2E6', marginTop: '8px' }}>
+              <span style={{ fontWeight:'900', fontSize:'1.2rem', color: '#161616' }}>Total Amount</span>
+              <span style={{ fontWeight:'900', fontSize:'1.2rem', color: '#CEF17B' }}>INR {totalAmount.toLocaleString()}</span>
             </div>
             
             <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '12px', fontWeight: '600', textAlign: 'center' }}>
@@ -338,7 +338,7 @@ export default function Checkout() {
           </div>
 
           <button onClick={handleSendRequest} disabled={loading || selectedSlots.length === 0} style={{
-            width:'100%', background: loading || selectedSlots.length === 0 ? '#94d3b2' : '#1ebe74',
+            width:'100%', background: loading || selectedSlots.length === 0 ? '#94d3b2' : '#CEF17B',
             color:'white', border:'none', padding:'20px', borderRadius:'20px',
             cursor: loading || selectedSlots.length === 0 ? 'not-allowed' : 'pointer', fontWeight:'900', fontSize:'1.15rem',
             boxShadow:'0 10px 30px rgba(30,190,116,0.3)', transition:'all 0.3s',

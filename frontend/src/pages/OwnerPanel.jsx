@@ -39,7 +39,7 @@ export default function OwnerPanel() {
 
   const tabStyle = (t) => ({
     padding: '10px 24px', borderRadius: '10px', border: 'none',
-    background: tab === t ? '#1ebe74' : '#f0f0f0',
+    background: tab === t ? '#CEF17B' : '#f0f0f0',
     color: tab === t ? 'white' : '#333',
     cursor: 'pointer', fontWeight: '600', fontSize: '0.95rem',
   });
@@ -60,7 +60,7 @@ export default function OwnerPanel() {
               border: '1px solid #eee', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
               flex: 1, minWidth: '150px', textAlign: 'center',
             }}>
-              <div style={{ fontSize: '1.8rem', fontWeight: '700', color: '#1ebe74' }}>{s.value}</div>
+              <div style={{ fontSize: '1.8rem', fontWeight: '700', color: '#CEF17B' }}>{s.value}</div>
               <div style={{ color: '#666', fontSize: '0.9rem', marginTop: '4px' }}>{s.label}</div>
             </div>
           ))}
@@ -89,13 +89,13 @@ export default function OwnerPanel() {
                 <p style={{ color: '#666', fontSize: '0.9rem' }}>📅 {b.date} at {b.time_slot}</p>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontWeight: '700', color: '#1ebe74' }}>₹{b.total_price}</div>
+                <div style={{ fontWeight: '700', color: '#CEF17B' }}>₹{b.total_price}</div>
                 <span style={{
                   display: 'inline-block', marginTop: '6px',
                   padding: '3px 12px', borderRadius: '20px',
                   fontSize: '0.8rem', fontWeight: '600',
-                  background: b.status === 'confirmed' ? '#f0fdf4' : '#fff1f2',
-                  color: b.status === 'confirmed' ? '#166534' : '#be123c',
+                  background: b.status === 'confirmed' ? '#DCEFB8' : '#fff1f2',
+                  color: b.status === 'confirmed' ? '#084734' : '#be123c',
                 }}>{b.status.toUpperCase()}</span>
               </div>
             </div>
@@ -109,8 +109,8 @@ export default function OwnerPanel() {
           {msg && (
             <div style={{
               padding: '10px 14px', borderRadius: '10px',
-              background: msg.includes('✅') ? '#f0fdf4' : '#fff1f2',
-              color: msg.includes('✅') ? '#166534' : '#be123c',
+              background: msg.includes('✅') ? '#DCEFB8' : '#fff1f2',
+              color: msg.includes('✅') ? '#084734' : '#be123c',
               marginBottom: '1.5rem', fontSize: '0.9rem',
             }}>{msg}</div>
           )}
@@ -149,9 +149,9 @@ export default function OwnerPanel() {
                     onClick={() => setForm({ ...form, sport: s })}
                     style={{
                       padding: '10px 18px', borderRadius: '10px',
-                      border: `1.5px solid ${form.sport === s ? '#1ebe74' : '#ddd'}`,
-                      background: form.sport === s ? '#f0fdf4' : 'white',
-                      color: form.sport === s ? '#1ebe74' : '#666',
+                      border: `1.5px solid ${form.sport === s ? '#CEF17B' : '#ddd'}`,
+                      background: form.sport === s ? '#DCEFB8' : 'white',
+                      color: form.sport === s ? '#CEF17B' : '#666',
                       fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer',
                       transition: 'all 0.2s'
                     }}
@@ -162,7 +162,7 @@ export default function OwnerPanel() {
               </div>
             </div>
             <button type="submit" style={{
-              width: '100%', background: '#1ebe74', color: 'white',
+              width: '100%', background: '#CEF17B', color: '#084734',
               border: 'none', padding: '13px', borderRadius: '12px',
               cursor: 'pointer', fontWeight: '700', fontSize: '1rem',
             }}>Add Turf 🏟️</button>

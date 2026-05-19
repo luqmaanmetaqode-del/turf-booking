@@ -91,14 +91,14 @@ export default function PartnerSupport() {
     { label: 'FAQs', sub: 'Quick answers to common questions', icon: <FileText size={24} />, color: '#8b5cf6', action: () => setExpandedFaq(0) },
     { label: 'My Tickets', sub: `${tickets.length} support tickets`, icon: <Ticket size={24} />, color: '#3b82f6', action: () => {} },
     { label: 'Contact Us', sub: 'Get in touch with our support team', icon: <Phone size={24} />, color: '#f59e0b', action: () => window.location.href = 'tel:+918045678900' },
-    { label: 'Live Chat', sub: 'Chat with support (8 AM - 10 PM)', icon: <MessageCircle size={24} />, color: '#1ebe74', action: handleStartChat },
+    { label: 'Live Chat', sub: 'Chat with support (8 AM - 10 PM)', icon: <MessageCircle size={24} />, color: '#CEF17B', action: handleStartChat },
   ];
 
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ marginBottom: '3rem' }}>
-        <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>How can we help you today?</h2>
-        <p style={{ color: '#64748b', fontWeight: '500' }}>Our support team is here to assist you, anytime you need us.</p>
+        <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>How can we help you today?</h2>
+        <p style={{ color: '#98A2B3', fontWeight: '500' }}>Our support team is here to assist you, anytime you need us.</p>
       </div>
 
       <div style={{ position: 'relative', marginBottom: '3rem' }}>
@@ -108,7 +108,7 @@ export default function PartnerSupport() {
           placeholder="Search for help articles..." 
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
-          style={{ width: '100%', padding: '18px 20px 18px 60px', borderRadius: '16px', border: '1.5px solid #f1f5f9', fontSize: '1rem', fontWeight: '500', outline: 'none', boxSizing: 'border-box' }} 
+          style={{ width: '100%', padding: '18px 20px 18px 60px', borderRadius: '16px', border: '1.5px solid #EEF2E6', fontSize: '1rem', fontWeight: '500', outline: 'none', boxSizing: 'border-box' }} 
         />
       </div>
 
@@ -120,7 +120,7 @@ export default function PartnerSupport() {
               {c.icon}
             </div>
             <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '8px' }}>{c.label}</h3>
-            <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500', lineHeight: 1.5, marginBottom: '1.5rem' }}>{c.sub}</p>
+            <p style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500', lineHeight: 1.5, marginBottom: '1.5rem' }}>{c.sub}</p>
             <ChevronRight size={18} style={{ color: '#94a3b8' }} />
           </div>
         ))}
@@ -128,24 +128,24 @@ export default function PartnerSupport() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem', marginBottom: '3rem' }}>
         {/* FAQ TOPICS */}
-        <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
+        <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #EEF2E6' }}>
            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '1.5rem' }}>Frequently Asked Questions</h3>
            {filteredFaqs.length > 0 ? filteredFaqs.map((faq, i) => (
-             <div key={i} style={{ borderBottom: i < filteredFaqs.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+             <div key={i} style={{ borderBottom: i < filteredFaqs.length - 1 ? '1px solid #EEF2E6' : 'none' }}>
                <div 
                  onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
                  style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 0', cursor: 'pointer' }}
                >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                     <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f0fdf4', color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                     <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#DCEFB8', color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <FileText size={16} />
                      </div>
-                     <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#111' }}>{faq.q}</span>
+                     <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#161616' }}>{faq.q}</span>
                   </div>
                   <ChevronRight size={16} style={{ color: '#94a3b8', transform: expandedFaq === i ? 'rotate(90deg)' : 'none', transition: '0.2s' }} />
                </div>
                {expandedFaq === i && (
-                 <div style={{ padding: '0 0 14px 44px', fontSize: '0.85rem', color: '#64748b', fontWeight: '500', lineHeight: 1.6 }}>
+                 <div style={{ padding: '0 0 14px 44px', fontSize: '0.85rem', color: '#98A2B3', fontWeight: '500', lineHeight: 1.6 }}>
                    {faq.a}
                  </div>
                )}
@@ -156,68 +156,68 @@ export default function PartnerSupport() {
         </div>
 
         {/* IMMEDIATE HELP */}
-        <div style={{ background: '#f0fdf4', padding: '2rem', borderRadius: '24px', border: '1.5px solid #dcfce7' }}>
+        <div style={{ background: '#DCEFB8', padding: '2rem', borderRadius: '24px', border: '1.5px solid #DCEFB8' }}>
            <h3 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '8px' }}>Need Immediate Help?</h3>
-           <p style={{ fontSize: '0.85rem', color: '#166534', fontWeight: '500', marginBottom: '2rem' }}>We're here for you! Reach out to our support team directly.</p>
+           <p style={{ fontSize: '0.85rem', color: '#084734', fontWeight: '500', marginBottom: '2rem' }}>We're here for you! Reach out to our support team directly.</p>
            
            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <div style={{ display: 'flex', gap: '15px' }}>
-                 <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'white', color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'white', color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Phone size={20} />
                  </div>
                  <div>
                     <div style={{ fontSize: '0.8rem', fontWeight: '800' }}>Call Us</div>
-                    <a href="tel:+918045678900" style={{ fontSize: '0.9rem', fontWeight: '800', color: '#166534', textDecoration: 'none' }}>+91 80 4567 8900</a>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '500' }}>Mon–Sat, 9 AM – 7 PM</div>
+                    <a href="tel:+918045678900" style={{ fontSize: '0.9rem', fontWeight: '800', color: '#084734', textDecoration: 'none' }}>+91 80 4567 8900</a>
+                    <div style={{ fontSize: '0.75rem', color: '#98A2B3', fontWeight: '500' }}>Mon–Sat, 9 AM – 7 PM</div>
                  </div>
               </div>
               <div style={{ display: 'flex', gap: '15px' }}>
-                 <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'white', color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'white', color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Mail size={20} />
                  </div>
                  <div>
                     <div style={{ fontSize: '0.8rem', fontWeight: '800' }}>Email Us</div>
-                    <a href="mailto:partner-support@turfx.in" style={{ fontSize: '0.9rem', fontWeight: '800', color: '#166534', textDecoration: 'none' }}>partner-support@turfx.in</a>
-                    <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '500' }}>Response within 24 hours</div>
+                    <a href="mailto:partner-support@turfx.in" style={{ fontSize: '0.9rem', fontWeight: '800', color: '#084734', textDecoration: 'none' }}>partner-support@turfx.in</a>
+                    <div style={{ fontSize: '0.75rem', color: '#98A2B3', fontWeight: '500' }}>Response within 24 hours</div>
                  </div>
               </div>
            </div>
 
-           <button onClick={handleStartChat} style={{ width: '100%', marginTop: '2rem', padding: '16px', borderRadius: '14px', border: 'none', background: '#1ebe74', color: 'white', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', cursor: 'pointer' }}>
+           <button onClick={handleStartChat} style={{ width: '100%', marginTop: '2rem', padding: '16px', borderRadius: '14px', border: 'none', background: '#CEF17B', color: '#084734', fontWeight: '800', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', cursor: 'pointer' }}>
               <MessageCircle size={20} /> Chat with Support
            </button>
-           <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.75rem', color: '#166534', fontWeight: '600' }}>Live chat available from 8 AM to 10 PM</div>
+           <div style={{ textAlign: 'center', marginTop: '12px', fontSize: '0.75rem', color: '#084734', fontWeight: '600' }}>Live chat available from 8 AM to 10 PM</div>
         </div>
       </div>
 
       {/* MY TICKETS */}
-      <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9', marginBottom: '3rem' }}>
+      <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #EEF2E6', marginBottom: '3rem' }}>
          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>My Support Tickets</h3>
-            <button onClick={() => setShowCreateTicket(!showCreateTicket)} style={{ background: '#1ebe74', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '12px', fontWeight: '800', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+            <button onClick={() => setShowCreateTicket(!showCreateTicket)} style={{ background: '#CEF17B', color: '#084734', border: 'none', padding: '10px 20px', borderRadius: '12px', fontWeight: '800', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
               <Plus size={18} /> Create Ticket
             </button>
          </div>
 
          {showCreateTicket && (
-           <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '16px', marginBottom: '2rem' }}>
+           <div style={{ background: '#F8FAF7', padding: '1.5rem', borderRadius: '16px', marginBottom: '2rem' }}>
              <h4 style={{ fontSize: '0.9rem', fontWeight: '800', marginBottom: '1rem' }}>Create New Support Ticket</h4>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                <input 
                  placeholder="Subject" 
                  value={newTicket.subject}
                  onChange={e => setNewTicket({...newTicket, subject: e.target.value})}
-                 style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none' }}
+                 style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none' }}
                />
                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                 <select value={newTicket.category} onChange={e => setNewTicket({...newTicket, category: e.target.value})} style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none' }}>
+                 <select value={newTicket.category} onChange={e => setNewTicket({...newTicket, category: e.target.value})} style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none' }}>
                    <option>Booking Issues</option>
                    <option>Venue Management</option>
                    <option>Payouts & Wallet</option>
                    <option>Technical</option>
                    <option>Other</option>
                  </select>
-                 <select value={newTicket.priority} onChange={e => setNewTicket({...newTicket, priority: e.target.value})} style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none' }}>
+                 <select value={newTicket.priority} onChange={e => setNewTicket({...newTicket, priority: e.target.value})} style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none' }}>
                    <option>Low</option>
                    <option>Medium</option>
                    <option>High</option>
@@ -228,13 +228,13 @@ export default function PartnerSupport() {
                  placeholder="Describe your issue in detail..." 
                  value={newTicket.description}
                  onChange={e => setNewTicket({...newTicket, description: e.target.value})}
-                 style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', minHeight: '100px', resize: 'vertical' }}
+                 style={{ padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none', minHeight: '100px', resize: 'vertical' }}
                />
                <div style={{ display: 'flex', gap: '10px' }}>
-                 <button onClick={handleCreateTicket} disabled={creating} style={{ background: '#1ebe74', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '10px', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                 <button onClick={handleCreateTicket} disabled={creating} style={{ background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px', borderRadius: '10px', fontWeight: '800', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
                    <Send size={16} /> {creating ? 'Creating...' : 'Submit Ticket'}
                  </button>
-                 <button onClick={() => setShowCreateTicket(false)} style={{ background: 'white', color: '#111', border: '1.5px solid #e2e8f0', padding: '12px 24px', borderRadius: '10px', fontWeight: '700', cursor: 'pointer' }}>
+                 <button onClick={() => setShowCreateTicket(false)} style={{ background: 'white', color: '#161616', border: '1.5px solid #DCEFB8', padding: '12px 24px', borderRadius: '10px', fontWeight: '700', cursor: 'pointer' }}>
                    Cancel
                  </button>
                </div>
@@ -245,21 +245,21 @@ export default function PartnerSupport() {
          {tickets.length > 0 ? (
            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
              {tickets.map(ticket => (
-               <div key={ticket._id} style={{ padding: '1.5rem', borderRadius: '12px', border: '1.5px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+               <div key={ticket._id} style={{ padding: '1.5rem', borderRadius: '12px', border: '1.5px solid #EEF2E6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                  <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#f0fdf4', color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                   <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#DCEFB8', color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                      <Ticket size={20} />
                    </div>
                    <div>
-                     <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#111' }}>{ticket.subject}</div>
-                     <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500' }}>{ticket.category} • Created {new Date(ticket.createdAt).toLocaleDateString()}</div>
+                     <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#161616' }}>{ticket.subject}</div>
+                     <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500' }}>{ticket.category} • Created {new Date(ticket.createdAt).toLocaleDateString()}</div>
                    </div>
                  </div>
                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                    <span style={{ 
                      padding: '4px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800',
-                     background: ticket.status === 'Resolved' ? '#f0fdf4' : ticket.status === 'In Progress' ? '#eff6ff' : '#fff7ed',
-                     color: ticket.status === 'Resolved' ? '#1ebe74' : ticket.status === 'In Progress' ? '#3b82f6' : '#f59e0b'
+                     background: ticket.status === 'Resolved' ? '#DCEFB8' : ticket.status === 'In Progress' ? '#eff6ff' : '#fff7ed',
+                     color: ticket.status === 'Resolved' ? '#CEF17B' : ticket.status === 'In Progress' ? '#3b82f6' : '#f59e0b'
                    }}>{ticket.status}</span>
                    <ChevronRight size={18} style={{ color: '#94a3b8', cursor: 'pointer' }} />
                  </div>
@@ -276,12 +276,12 @@ export default function PartnerSupport() {
       </div>
 
       {/* SUPPORT ACTIVITY */}
-      <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
+      <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #EEF2E6' }}>
          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '2rem' }}>
             <h3 style={{ fontSize: '1.1rem', fontWeight: '800' }}>Quick Help Topics</h3>
          </div>
          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
-            <ActivityItem icon={<Ticket size={20} />} label="Booking Issues" sub="Cancellations, rescheduling, payment problems" color="#1ebe74" />
+            <ActivityItem icon={<Ticket size={20} />} label="Booking Issues" sub="Cancellations, rescheduling, payment problems" color="#CEF17B" />
             <ActivityItem icon={<Clock size={20} />} label="Venue Management" sub="Listing updates, slot configuration, pricing" color="#f59e0b" />
             <ActivityItem icon={<CheckCircle size={20} />} label="Payouts & Wallet" sub="Settlement queries, bank account issues" color="#3b82f6" />
          </div>
@@ -297,11 +297,11 @@ function ActivityItem({ icon, label, sub, color }) {
           {icon}
        </div>
        <div>
-          <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#111' }}>{label}</div>
-          <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500' }}>{sub}</p>
+          <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#161616' }}>{label}</div>
+          <p style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500' }}>{sub}</p>
        </div>
     </div>
   );
 }
 
-const supportCard = { background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9', cursor: 'pointer', transition: '0.3s' };
+const supportCard = { background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #EEF2E6', cursor: 'pointer', transition: '0.3s' };

@@ -17,9 +17,9 @@ export default function SlotPicker({ slots, selected, onSelect }) {
             style={{
               padding: '10px 8px',
               borderRadius: '10px',
-              border: `1px solid ${selected === slot.time ? '#1ebe74' : slot.available ? '#ddd' : '#f5f5f5'}`,
+              border: `1px solid ${selected === slot.time ? '#CEF17B' : slot.available ? '#ddd' : '#f5f5f5'}`,
               background: selected === slot.time
-                ? '#1ebe74'
+                ? '#CEF17B'
                 : slot.available ? 'white' : '#f5f5f5',
               color: selected === slot.time
                 ? 'white'

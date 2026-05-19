@@ -38,7 +38,7 @@ export default function Footer() {
           ].map(item => (
             <div key={item.label} style={{ marginBottom: '14px' }}>
               <Link to={item.path} style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
-                onMouseEnter={e => e.target.style.color = '#1ebe74'}
+                onMouseEnter={e => e.target.style.color = '#CEF17B'}
                 onMouseLeave={e => e.target.style.color = '#444'}
               >
                 {item.label.toUpperCase()}
@@ -60,7 +60,7 @@ export default function Footer() {
           ].map(item => (
             <div key={item.name} style={{ marginBottom: '14px' }}>
               <Link to="/" style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
-                onMouseEnter={e => e.target.style.color = '#1ebe74'}
+                onMouseEnter={e => e.target.style.color = '#CEF17B'}
                 onMouseLeave={e => e.target.style.color = '#444'}
               >
                 {item.name.toUpperCase()}
@@ -77,7 +77,7 @@ export default function Footer() {
           {['FAQs', 'Privacy Policy', 'Terms of Service', 'Cancellation Policy'].map(item => (
             <div key={item} style={{ marginBottom: '14px' }}>
               <Link to="/" style={{ color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '700', letterSpacing: '0.5px' }}
-                onMouseEnter={e => e.target.style.color = '#1ebe74'}
+                onMouseEnter={e => e.target.style.color = '#CEF17B'}
                 onMouseLeave={e => e.target.style.color = '#444'}
               >
                 {item.toUpperCase()}
@@ -96,7 +96,7 @@ export default function Footer() {
         alignItems: 'center', flexWrap: 'wrap', gap: '1rem',
       }}>
         <p style={{ color: '#aaa', fontSize: '0.85rem' }}>
-          Powered by <strong style={{ color: '#1ebe74' }}>MetaQode Technologies Pvt. Ltd.</strong>
+          Powered by <strong style={{ color: '#CEF17B' }}>MetaQode Technologies Pvt. Ltd.</strong>
         </p>
         <div style={{ display: 'flex', gap: '1.5rem' }}>
           {['Book', 'Play', 'Enjoy'].map(w => (

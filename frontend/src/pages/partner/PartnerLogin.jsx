@@ -44,16 +44,16 @@ export default function PartnerLogin() {
 
   const inputStyle = {
     width: '100%', padding: '16px 20px', borderRadius: '12px',
-    border: '1.5px solid #e2e8f0', fontSize: '1rem',
+    border: '1.5px solid #DCEFB8', fontSize: '1rem',
     outline: 'none', boxSizing: 'border-box',
-    fontWeight: '600', background: 'white', color: '#111',
+    fontWeight: '600', background: 'white', color: '#161616',
     transition: 'border-color 0.2s',
   };
 
   const featureItemStyle = { display: 'flex', gap: '16px', marginBottom: '24px', alignItems: 'flex-start' };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#fafafa', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: '#F8FAF7', fontFamily: "'Inter', sans-serif" }}>
       {/* LEFT — Login Form */}
       <div style={{
         width: '550px', background: 'white', display: 'flex',
@@ -62,10 +62,10 @@ export default function PartnerLogin() {
         <div style={{ marginBottom: '3rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '2rem' }}>
             <Link to="/"><img src={logo} alt="TurfX" style={{ height: '36px' }} /></Link>
-            <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#64748b', letterSpacing: '1px' }}>PARTNER</span>
+            <span style={{ fontWeight: '700', fontSize: '0.9rem', color: '#98A2B3', letterSpacing: '1px' }}>PARTNER</span>
           </div>
-          <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>Partner Access</h2>
-          <p style={{ color: '#64748b', fontWeight: '500' }}>Sign in to manage your venue operations and bookings.</p>
+          <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>Partner Access</h2>
+          <p style={{ color: '#98A2B3', fontWeight: '500' }}>Sign in to manage your venue operations and bookings.</p>
         </div>
 
         {error && (
@@ -84,7 +84,7 @@ export default function PartnerLogin() {
             <div style={{ display: 'flex', gap: '10px' }}>
               <div style={{
                 ...inputStyle, width: '70px', textAlign: 'center',
-                background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: '#F8FAF7', display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>+91</div>
               <input
                 type="tel"
@@ -119,7 +119,7 @@ export default function PartnerLogin() {
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  color: '#64748b',
+                  color: '#98A2B3',
                   padding: '4px',
                   display: 'flex',
                   alignItems: 'center',
@@ -134,7 +134,7 @@ export default function PartnerLogin() {
             type="submit"
             disabled={loading}
             style={{
-              width: '100%', background: loading ? '#94d3b2' : '#1ebe74',
+              width: '100%', background: loading ? '#94d3b2' : '#CEF17B',
               color: 'white', border: 'none', padding: '18px',
               borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer',
               fontWeight: '800', fontSize: '1.1rem', transition: '0.3s',
@@ -145,10 +145,10 @@ export default function PartnerLogin() {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid #f1f5f9' }}>
-          <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
+        <div style={{ textAlign: 'center', marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid #EEF2E6' }}>
+          <p style={{ color: '#98A2B3', fontSize: '0.95rem', fontWeight: '500' }}>
             New partner?{' '}
-            <Link to="/partner/register" style={{ color: '#1ebe74', fontWeight: '800', textDecoration: 'none' }}>
+            <Link to="/partner/register" style={{ color: '#CEF17B', fontWeight: '800', textDecoration: 'none' }}>
               Register your venue
             </Link>
           </p>
@@ -157,12 +157,12 @@ export default function PartnerLogin() {
 
       {/* RIGHT — Branding */}
       <div style={{
-        flex: 1, background: '#f8fafc', padding: '5rem',
+        flex: 1, background: '#F8FAF7', padding: '5rem',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         position: 'relative', overflow: 'hidden',
       }}>
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#111', marginBottom: '1.5rem', lineHeight: 1.2 }}>
+          <h1 style={{ fontSize: '2.5rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', lineHeight: 1.2 }}>
             Scale Your Sports Venue Business
           </h1>
 
@@ -175,13 +175,13 @@ export default function PartnerLogin() {
               <div key={f.n} style={featureItemStyle}>
                 <div style={{
                   width: '40px', height: '40px', borderRadius: '50%',
-                  background: '#f0fdf4', color: '#1ebe74',
+                  background: '#DCEFB8', color: '#CEF17B',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '0.9rem', fontWeight: '800', flexShrink: 0,
                 }}>{f.n}</div>
                 <div>
-                  <div style={{ fontWeight: '800', color: '#111', fontSize: '1.1rem' }}>{f.title}</div>
-                  <div style={{ color: '#64748b', fontWeight: '500', marginTop: '4px' }}>{f.sub}</div>
+                  <div style={{ fontWeight: '800', color: '#161616', fontSize: '1.1rem' }}>{f.title}</div>
+                  <div style={{ color: '#98A2B3', fontWeight: '500', marginTop: '4px' }}>{f.sub}</div>
                 </div>
               </div>
             ))}
@@ -200,5 +200,5 @@ export default function PartnerLogin() {
 
 const labelStyle = {
   display: 'block', fontSize: '0.8rem', fontWeight: '800',
-  color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px',
+  color: '#98A2B3', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px',
 };

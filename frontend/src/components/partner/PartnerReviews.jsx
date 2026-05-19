@@ -9,25 +9,25 @@ export default function PartnerReviews({ data }) {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>User Reviews</h2>
-          <p style={{ color: '#64748b', fontWeight: '500' }}>Manage and respond to player feedback</p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>User Reviews</h2>
+          <p style={{ color: '#98A2B3', fontWeight: '500' }}>Manage and respond to player feedback</p>
         </div>
         <div style={{ display: 'flex', gap: '1rem' }}>
            <div style={statBox}>
-              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#64748b' }}>Average Rating</div>
+              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3' }}>Average Rating</div>
               <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '4px' }}>
                  {avgRating} <Star size={20} fill="#f59e0b" />
               </div>
            </div>
            <div style={statBox}>
-              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#64748b' }}>Total Reviews</div>
-              <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#111' }}>{reviews.length}</div>
+              <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3' }}>Total Reviews</div>
+              <div style={{ fontSize: '1.4rem', fontWeight: '900', color: '#161616' }}>{reviews.length}</div>
            </div>
         </div>
       </div>
 
-      <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
-        <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #EEF2E6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
            <div style={{ display: 'flex', gap: '1rem' }}>
               <select style={filterSelect}><option>All Venues</option></select>
               <select style={filterSelect}><option>All Ratings</option></select>
@@ -37,10 +37,10 @@ export default function PartnerReviews({ data }) {
 
         <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
            {reviews.length > 0 ? reviews.map((r) => (
-             <div key={r._id} style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #f1f5f9', background: '#f8fafc' }}>
+             <div key={r._id} style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6', background: '#F8FAF7' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#111', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#161616', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                          <User size={20} />
                       </div>
                       <div>
@@ -55,12 +55,12 @@ export default function PartnerReviews({ data }) {
                    </div>
                 </div>
                 
-                <div style={{ fontSize: '0.8rem', color: '#1ebe74', fontWeight: '700', marginBottom: '8px' }}>@ {r.turf_id?.name}</div>
+                <div style={{ fontSize: '0.8rem', color: '#CEF17B', fontWeight: '700', marginBottom: '8px' }}>@ {r.turf_id?.name}</div>
                 <p style={{ fontSize: '0.9rem', color: '#475569', fontWeight: '500', lineHeight: 1.6, marginBottom: '1.5rem' }}>"{r.comment}"</p>
                 
                 <div style={{ display: 'flex', gap: '12px' }}>
                    <button style={replyBtn}><MessageCircle size={16} /> Reply to Review</button>
-                   <button style={{ ...replyBtn, background: 'none', border: 'none', color: '#64748b' }}>Report</button>
+                   <button style={{ ...replyBtn, background: 'none', border: 'none', color: '#98A2B3' }}>Report</button>
                 </div>
              </div>
            )) : (
@@ -72,7 +72,7 @@ export default function PartnerReviews({ data }) {
   );
 }
 
-const statBox = { background: 'white', padding: '12px 20px', borderRadius: '16px', border: '1.5px solid #f1f5f9', textAlign: 'center' };
-const filterSelect = { padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.85rem', fontWeight: '600', color: '#111', outline: 'none', background: 'white' };
-const filterBtn = { display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.85rem', fontWeight: '600', color: '#64748b', cursor: 'pointer', background: 'white' };
-const replyBtn = { background: 'white', border: '1.5px solid #f1f5f9', padding: '8px 16px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' };
+const statBox = { background: 'white', padding: '12px 20px', borderRadius: '16px', border: '1.5px solid #EEF2E6', textAlign: 'center' };
+const filterSelect = { padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.85rem', fontWeight: '600', color: '#161616', outline: 'none', background: 'white' };
+const filterBtn = { display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.85rem', fontWeight: '600', color: '#98A2B3', cursor: 'pointer', background: 'white' };
+const replyBtn = { background: 'white', border: '1.5px solid #EEF2E6', padding: '8px 16px', borderRadius: '10px', fontSize: '0.85rem', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' };

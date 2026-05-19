@@ -72,11 +72,11 @@ export default function Home() {
   const filtered = sport === 'All' ? turfsList : turfsList.filter(t => t.sport === sport);
 
   return (
-    <div style={{ background: '#fafafa' }}>
+    <div style={{ background: '#F8FAF7' }}>
 
       {/* HERO */}
       <div style={{
-        background: 'linear-gradient(135deg, #062c1e 0%, #0a3d2e 40%, #1ebe74 100%)',
+        background: 'linear-gradient(135deg, #084734 0%, #084734 40%, #CEF17B 100%)',
         padding: '5rem 2rem 4rem',
         textAlign: 'center',
         color: 'white',
@@ -113,7 +113,7 @@ export default function Home() {
         {/* CTA Buttons */}
         <div style={{ display: 'flex', gap: '1.5rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
           <button onClick={() => navigate('/explore')} style={{
-            background: 'white', color: '#0a3d2e',
+            background: '#CEF17B', color: '#084734',
             border: 'none', padding: '18px 48px',
             borderRadius: '50px', fontSize: '1.05rem',
             fontWeight: '800', cursor: 'pointer',
@@ -166,7 +166,7 @@ export default function Home() {
 
       {/* POPULAR CITIES */}
       <div style={{ padding: '4rem 2rem', maxWidth: '1200px', margin: '0 auto' }}>
-        <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.75rem', color: '#111' }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: '800', marginBottom: '0.75rem', color: '#161616' }}>
           Popular Cities
         </h2>
         <p style={{ color: '#666', marginBottom: '2.5rem', fontSize: '1rem', fontWeight: '400' }}>
@@ -182,17 +182,17 @@ export default function Home() {
               key={c.name}
               onClick={() => { setSelectedCity(c.name); navigate(`/explore?city=${c.name}`); }}
               style={{
-                background: selectedCity === c.name ? '#f0fdf4' : 'white',
-                border: `2px solid ${selectedCity === c.name ? '#1ebe74' : '#eee'}`,
+                background: selectedCity === c.name ? '#DCEFB8' : 'white',
+                border: `2px solid ${selectedCity === c.name ? '#CEF17B' : '#eee'}`,
                 borderRadius: '20px', padding: '1.5rem 1rem',
                 textAlign: 'center', cursor: 'pointer',
                 transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
                 boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
               }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = '#1ebe74'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(30,190,116,0.1)'; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = selectedCity === c.name ? '#1ebe74' : '#eee'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.03)'; }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = '#CEF17B'; e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 10px 25px rgba(30,190,116,0.1)'; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = selectedCity === c.name ? '#CEF17B' : '#eee'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.03)'; }}
             >
-              <div style={{ fontSize: '1rem', fontWeight: '700', color: selectedCity === c.name ? '#1ebe74' : '#111' }}>
+              <div style={{ fontSize: '1rem', fontWeight: '700', color: selectedCity === c.name ? '#CEF17B' : '#161616' }}>
                 {c.name}
               </div>
             </div>
@@ -203,18 +203,18 @@ export default function Home() {
       {/* FEATURED TURFS */}
       <div style={{ padding: '2rem 2rem 5rem', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#111' }}>Featured Turfs</h2>
+          <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#161616' }}>Featured Turfs</h2>
           <button
             onClick={() => navigate('/explore')}
             style={{
-              background: 'none', border: '2px solid #1ebe74',
-              color: '#1ebe74', padding: '10px 24px',
+              background: 'none', border: '2px solid #CEF17B',
+              color: '#CEF17B', padding: '10px 24px',
               borderRadius: '50px', cursor: 'pointer',
               fontSize: '0.95rem', fontWeight: '700',
               transition: 'all 0.2s',
             }}
-            onMouseEnter={e => { e.target.style.background = '#1ebe74'; e.target.style.color = 'white'; }}
-            onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#1ebe74'; }}
+            onMouseEnter={e => { e.target.style.background = '#CEF17B'; e.target.style.color = 'white'; }}
+            onMouseLeave={e => { e.target.style.background = 'transparent'; e.target.style.color = '#CEF17B'; }}
           >
             View All Venues
           </button>

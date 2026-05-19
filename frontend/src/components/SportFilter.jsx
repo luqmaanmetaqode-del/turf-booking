@@ -10,8 +10,8 @@ export default function SportFilter({ selected, onSelect }) {
           style={{
             padding: '8px 20px',
             borderRadius: '20px',
-            border: `1px solid ${selected === sport ? '#1ebe74' : '#ddd'}`,
-            background: selected === sport ? '#1ebe74' : 'white',
+            border: `1px solid ${selected === sport ? '#CEF17B' : '#ddd'}`,
+            background: selected === sport ? '#CEF17B' : 'white',
             color: selected === sport ? 'white' : '#333',
             cursor: 'pointer',
             fontSize: '0.9rem',

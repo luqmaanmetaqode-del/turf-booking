@@ -11,7 +11,7 @@ export default function HowItWorks() {
       padding: '5rem 2rem', maxWidth: '1200px', margin: '0 auto',
     }}>
       <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-        <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#111', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>
+        <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#161616', marginBottom: '0.75rem', letterSpacing: '-0.5px' }}>
           Simplified Booking Process
         </h2>
         <p style={{ color: '#666', fontSize: '1rem', fontWeight: '400' }}>
@@ -40,18 +40,18 @@ export default function HowItWorks() {
             {/* Step circle */}
             <div style={{
               width: '70px', height: '70px',
-              background: '#f0fdf4',
-              color: '#1ebe74',
+              background: '#DCEFB8',
+              color: '#CEF17B',
               borderRadius: '50%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: '1.8rem', fontWeight: '800',
               margin: '0 auto 2rem',
-              border: '2px solid #d1fae5',
+              border: '2px solid #DCEFB8',
             }}>
               {i + 1}
             </div>
 
-            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.75rem', color: '#111' }}>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: '700', marginBottom: '0.75rem', color: '#161616' }}>
               {step.title}
             </h3>
             <p style={{ color: '#666', fontSize: '0.95rem', lineHeight: 1.6, fontWeight: '500' }}>

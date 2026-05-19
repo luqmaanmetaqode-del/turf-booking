@@ -115,7 +115,7 @@ export default function PartnerWallet({ data }) {
           contact: data?.user?.phone || ''
         },
         theme: {
-          color: '#1ebe74'
+          color: '#CEF17B'
         }
       };
 
@@ -173,7 +173,7 @@ export default function PartnerWallet({ data }) {
   };
 
   const stats = [
-    { label: 'Available Balance', value: `Rs.${availableBalance.toLocaleString()}`, icon: <IndianRupee size={22} />, color: '#1ebe74', sub: 'After platform fees' },
+    { label: 'Available Balance', value: `Rs.${availableBalance.toLocaleString()}`, icon: <IndianRupee size={22} />, color: '#CEF17B', sub: 'After platform fees' },
     { label: 'Total Credits', value: `Rs.${totalAdded.toLocaleString()}`, icon: <ArrowDownCircle size={22} />, color: '#3b82f6', sub: 'Confirmed bookings' },
     { label: 'Total Debits', value: `Rs.${totalWithdrawn.toLocaleString()}`, icon: <ArrowUpCircle size={22} />, color: '#f59e0b', sub: 'Platform fees' },
     { label: 'Last Transaction', value: lastTransaction ? `Rs.${Math.abs(lastTransaction.amount).toLocaleString()}` : 'Rs.0', icon: <Clock size={22} />, color: '#8b5cf6', sub: lastTransaction?.date || 'No transactions yet' },
@@ -183,8 +183,8 @@ export default function PartnerWallet({ data }) {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>Wallet</h2>
-          <p style={{ color: '#64748b', fontWeight: '500' }}>Manage your wallet balance and transactions</p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>Wallet</h2>
+          <p style={{ color: '#98A2B3', fontWeight: '500' }}>Manage your wallet balance and transactions</p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
           <button onClick={() => setShowAddMoney(true)} style={btnSecondary}><Plus size={18} /> Add Money</button>
@@ -198,16 +198,16 @@ export default function PartnerWallet({ data }) {
           <div style={modalContent}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h3 style={{ fontSize: '1.2rem', fontWeight: '800' }}>Add Money to Wallet</h3>
-              <X size={24} onClick={() => setShowAddMoney(false)} style={{ cursor: 'pointer', color: '#64748b' }} />
+              <X size={24} onClick={() => setShowAddMoney(false)} style={{ cursor: 'pointer', color: '#98A2B3' }} />
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '8px' }}>Amount (₹)</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', display: 'block', marginBottom: '8px' }}>Amount (₹)</label>
               <input 
                 type="number" 
                 value={addAmount}
                 onChange={e => setAddAmount(e.target.value)}
                 placeholder="Enter amount (min ₹100)"
-                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
@@ -218,7 +218,7 @@ export default function PartnerWallet({ data }) {
                 Cancel
               </button>
             </div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.75rem', color: '#98A2B3', marginTop: '1rem', textAlign: 'center' }}>
               Secure payment powered by Razorpay
             </p>
           </div>
@@ -231,63 +231,63 @@ export default function PartnerWallet({ data }) {
           <div style={modalContent}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
               <h3 style={{ fontSize: '1.2rem', fontWeight: '800' }}>Withdraw Money</h3>
-              <X size={24} onClick={() => setShowWithdraw(false)} style={{ cursor: 'pointer', color: '#64748b' }} />
+              <X size={24} onClick={() => setShowWithdraw(false)} style={{ cursor: 'pointer', color: '#98A2B3' }} />
             </div>
-            <div style={{ marginBottom: '1rem', padding: '12px', background: '#f0fdf4', borderRadius: '10px', border: '1px solid #dcfce7' }}>
-              <p style={{ fontSize: '0.85rem', color: '#166534', fontWeight: '600' }}>
+            <div style={{ marginBottom: '1rem', padding: '12px', background: '#DCEFB8', borderRadius: '10px', border: '1px solid #DCEFB8' }}>
+              <p style={{ fontSize: '0.85rem', color: '#084734', fontWeight: '600' }}>
                 Available Balance: <strong>₹{availableBalance.toLocaleString()}</strong>
               </p>
             </div>
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '8px' }}>Amount (₹)</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', display: 'block', marginBottom: '8px' }}>Amount (₹)</label>
               <input 
                 type="number" 
                 value={withdrawAmount}
                 onChange={e => setWithdrawAmount(e.target.value)}
                 placeholder="Enter amount (min ₹500)"
-                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '1rem', outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
             <div style={{ marginBottom: '1rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '8px' }}>Account Holder Name</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', display: 'block', marginBottom: '8px' }}>Account Holder Name</label>
               <input 
                 type="text" 
                 value={bankDetails.accountHolderName}
                 onChange={e => setBankDetails({...bankDetails, accountHolderName: e.target.value})}
                 placeholder="As per bank records"
-                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '1rem' }}>
               <div>
-                <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '8px' }}>Account Number</label>
+                <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', display: 'block', marginBottom: '8px' }}>Account Number</label>
                 <input 
                   type="text" 
                   value={bankDetails.accountNumber}
                   onChange={e => setBankDetails({...bankDetails, accountNumber: e.target.value})}
                   placeholder="Account number"
-                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
                 />
               </div>
               <div>
-                <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '8px' }}>IFSC Code</label>
+                <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', display: 'block', marginBottom: '8px' }}>IFSC Code</label>
                 <input 
                   type="text" 
                   value={bankDetails.ifscCode}
                   onChange={e => setBankDetails({...bankDetails, ifscCode: e.target.value})}
                   placeholder="IFSC code"
-                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                  style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
                 />
               </div>
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#64748b', display: 'block', marginBottom: '8px' }}>Bank Name (Optional)</label>
+              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', display: 'block', marginBottom: '8px' }}>Bank Name (Optional)</label>
               <input 
                 type="text" 
                 value={bankDetails.bankName}
                 onChange={e => setBankDetails({...bankDetails, bankName: e.target.value})}
                 placeholder="Bank name"
-                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #e2e8f0', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
+                style={{ width: '100%', padding: '12px', borderRadius: '10px', border: '1.5px solid #DCEFB8', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }}
               />
             </div>
             <div style={{ display: 'flex', gap: '10px' }}>
@@ -298,7 +298,7 @@ export default function PartnerWallet({ data }) {
                 Cancel
               </button>
             </div>
-            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '1rem', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.75rem', color: '#98A2B3', marginTop: '1rem', textAlign: 'center' }}>
               Withdrawal will be processed within 3 business days
             </p>
           </div>
@@ -313,8 +313,8 @@ export default function PartnerWallet({ data }) {
                 {s.icon}
               </div>
               <div>
-                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#64748b', marginBottom: '4px' }}>{s.label}</div>
-                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#111' }}>{s.value}</div>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', marginBottom: '4px' }}>{s.label}</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: '800', color: '#161616' }}>{s.value}</div>
               </div>
             </div>
             <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8' }}>{s.sub}</div>
@@ -322,8 +322,8 @@ export default function PartnerWallet({ data }) {
         ))}
       </div>
 
-      <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
-        <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+        <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #EEF2E6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
            <div style={{ display: 'flex', gap: '1rem' }}>
               <select style={filterSelect}>
                 <option>All Dates</option>
@@ -338,7 +338,7 @@ export default function PartnerWallet({ data }) {
         </div>
 
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead style={{ background: '#f8fafc', borderBottom: '1.5px solid #f1f5f9' }}>
+          <thead style={{ background: '#F8FAF7', borderBottom: '1.5px solid #EEF2E6' }}>
             <tr>
               <th style={thStyle}>Date & Time</th>
               <th style={thStyle}>Description</th>
@@ -351,7 +351,7 @@ export default function PartnerWallet({ data }) {
           </thead>
           <tbody>
             {filteredTransactions.length > 0 ? filteredTransactions.map((t, i) => (
-              <tr key={t.id} style={{ borderBottom: i < filteredTransactions.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+              <tr key={t.id} style={{ borderBottom: i < filteredTransactions.length - 1 ? '1px solid #EEF2E6' : 'none' }}>
                 <td style={tdStyle}>
                   <div style={{ fontWeight: '700', fontSize: '0.85rem' }}>{t.date}</div>
                   <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500' }}>{t.time}</div>
@@ -360,8 +360,8 @@ export default function PartnerWallet({ data }) {
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                     <div style={{
                       width: '32px', height: '32px', borderRadius: '50%',
-                      background: t.type === 'Credit' ? '#f0fdf4' : '#fff1f2',
-                      color: t.type === 'Credit' ? '#1ebe74' : '#ef4444',
+                      background: t.type === 'Credit' ? '#DCEFB8' : '#fff1f2',
+                      color: t.type === 'Credit' ? '#CEF17B' : '#ef4444',
                       display: 'flex', alignItems: 'center', justifyContent: 'center'
                     }}>
                       {t.type === 'Credit' ? <ArrowDownCircle size={16} /> : <ArrowUpCircle size={16} />}
@@ -375,12 +375,12 @@ export default function PartnerWallet({ data }) {
                 <td style={tdStyle}>
                   <span style={{
                     padding: '4px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: '800',
-                    background: t.type === 'Credit' ? '#f0fdf4' : '#fff1f2',
-                    color: t.type === 'Credit' ? '#1ebe74' : '#ef4444'
+                    background: t.type === 'Credit' ? '#DCEFB8' : '#fff1f2',
+                    color: t.type === 'Credit' ? '#CEF17B' : '#ef4444'
                   }}>{t.type.toUpperCase()}</span>
                 </td>
                 <td style={tdStyle}>
-                  <div style={{ fontWeight: '800', fontSize: '0.9rem', color: t.amount > 0 ? '#1ebe74' : '#ef4444' }}>
+                  <div style={{ fontWeight: '800', fontSize: '0.9rem', color: t.amount > 0 ? '#CEF17B' : '#ef4444' }}>
                     {t.amount > 0 ? '+' : '-'}Rs.{Math.abs(t.amount).toLocaleString()}
                   </div>
                 </td>
@@ -388,7 +388,7 @@ export default function PartnerWallet({ data }) {
                   <div style={{ fontWeight: '700', fontSize: '0.9rem' }}>Rs.{t.balance.toLocaleString()}</div>
                 </td>
                 <td style={tdStyle}>
-                  <span style={{ background: '#f0fdf4', color: '#1ebe74', padding: '4px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: '800' }}>{t.status.toUpperCase()}</span>
+                  <span style={{ background: '#DCEFB8', color: '#CEF17B', padding: '4px 10px', borderRadius: '8px', fontSize: '0.7rem', fontWeight: '800' }}>{t.status.toUpperCase()}</span>
                 </td>
                 <td style={tdStyle}>
                   <button style={iconBtn}><MoreVertical size={16} /></button>
@@ -402,11 +402,11 @@ export default function PartnerWallet({ data }) {
           </tbody>
         </table>
 
-        <div style={{ padding: '1.2rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#f8fafc' }}>
-           <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '600' }}>Showing {filteredTransactions.length} of {transactions.length} transactions</div>
+        <div style={{ padding: '1.2rem 1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#F8FAF7' }}>
+           <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '600' }}>Showing {filteredTransactions.length} of {transactions.length} transactions</div>
            <div style={{ display: 'flex', gap: '6px' }}>
               <button style={pageBtn}><ChevronLeft size={16} /></button>
-              <button style={{ ...pageBtn, background: '#1ebe74', color: 'white', border: 'none' }}>1</button>
+              <button style={{ ...pageBtn, background: '#CEF17B', color: '#084734', border: 'none' }}>1</button>
               <button style={pageBtn}><ChevronRight size={16} /></button>
            </div>
         </div>
@@ -416,30 +416,30 @@ export default function PartnerWallet({ data }) {
 }
 
 const statCard = {
-  background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #f1f5f9'
+  background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6'
 };
 
 const btnPrimary = {
-  background: '#1ebe74', color: 'white', border: 'none', padding: '12px 24px',
+  background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px',
   borderRadius: '12px', fontWeight: '800', fontSize: '0.9rem', display: 'flex',
   alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)'
 };
 
 const btnSecondary = {
-  background: 'white', color: '#111', border: '1.5px solid #f1f5f9', padding: '12px 24px',
+  background: 'white', color: '#161616', border: '1.5px solid #EEF2E6', padding: '12px 24px',
   borderRadius: '12px', fontWeight: '700', fontSize: '0.9rem', display: 'flex',
   alignItems: 'center', gap: '8px', cursor: 'pointer'
 };
 
 const filterSelect = {
-  padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #f1f5f9',
-  fontSize: '0.85rem', fontWeight: '600', color: '#111', outline: 'none', background: 'white'
+  padding: '10px 15px', borderRadius: '12px', border: '1.5px solid #EEF2E6',
+  fontSize: '0.85rem', fontWeight: '600', color: '#161616', outline: 'none', background: 'white'
 };
 
 const filterBtn = {
   display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 15px',
-  borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.85rem',
-  fontWeight: '600', color: '#64748b', cursor: 'pointer', background: 'white'
+  borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.85rem',
+  fontWeight: '600', color: '#98A2B3', cursor: 'pointer', background: 'white'
 };
 
 const thStyle = {
@@ -452,12 +452,12 @@ const tdStyle = {
 };
 
 const iconBtn = {
-  background: 'none', border: '1.5px solid #f1f5f9', padding: '6px',
-  borderRadius: '8px', color: '#64748b', cursor: 'pointer'
+  background: 'none', border: '1.5px solid #EEF2E6', padding: '6px',
+  borderRadius: '8px', color: '#98A2B3', cursor: 'pointer'
 };
 
 const pageBtn = {
-  width: '32px', height: '32px', borderRadius: '8px', border: '1.5px solid #f1f5f9',
+  width: '32px', height: '32px', borderRadius: '8px', border: '1.5px solid #EEF2E6',
   background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center',
   fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer'
 };

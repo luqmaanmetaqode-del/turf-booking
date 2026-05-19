@@ -37,19 +37,19 @@ export default function Login() {
 
   const inputStyle = {
     width: '100%', padding: '16px 20px', borderRadius: '14px',
-    border: '1.5px solid #f1f5f9', fontSize: '1rem',
+    border: '1.5px solid #EEF2E6', fontSize: '1rem',
     outline: 'none', boxSizing: 'border-box',
-    fontWeight: '600', background: '#f8fafc', color: '#111',
+    fontWeight: '600', background: '#F8FAF7', color: '#161616',
     transition: 'border-color 0.2s',
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#fafafa' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: '#F8FAF7' }}>
       {/* LEFT — Branding */}
       <div style={{
         flex: 1, display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center', padding: '3rem',
-        background: 'linear-gradient(135deg, #0a3d2e 0%, #1ebe74 100%)',
+        background: 'linear-gradient(135deg, #084734 0%, #CEF17B 100%)',
         color: 'white', position: 'relative', overflow: 'hidden',
       }}>
         <img src={logo} alt="TurfX" style={{ height: '100px', marginBottom: '2.5rem' }} />
@@ -67,10 +67,10 @@ export default function Login() {
         flexDirection: 'column', justifyContent: 'center',
         padding: '4rem', boxShadow: '-10px 0 40px rgba(0,0,0,0.02)',
       }}>
-        <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#111', marginBottom: '0.5rem', letterSpacing: '-0.7px' }}>
+        <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#161616', marginBottom: '0.5rem', letterSpacing: '-0.7px' }}>
           Welcome Back
         </h2>
-        <p style={{ color: '#64748b', fontWeight: '500', marginBottom: '2.5rem' }}>
+        <p style={{ color: '#98A2B3', fontWeight: '500', marginBottom: '2.5rem' }}>
           Access your TurfX account to continue
         </p>
 
@@ -90,8 +90,8 @@ export default function Login() {
             <div style={{ display: 'flex', gap: '10px' }}>
               <div style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                padding: '16px 18px', borderRadius: '14px', border: '1.5px solid #f1f5f9',
-                background: '#f8fafc', fontSize: '1rem', fontWeight: '700', color: '#111',
+                padding: '16px 18px', borderRadius: '14px', border: '1.5px solid #EEF2E6',
+                background: '#F8FAF7', fontSize: '1rem', fontWeight: '700', color: '#161616',
                 minWidth: '68px',
               }}>+91</div>
               <input
@@ -121,7 +121,7 @@ export default function Login() {
             type="submit"
             disabled={loading}
             style={{
-              width: '100%', background: loading ? '#94d3b2' : '#1ebe74',
+              width: '100%', background: loading ? '#94d3b2' : '#CEF17B',
               color: 'white', border: 'none', padding: '18px',
               borderRadius: '14px', cursor: loading ? 'not-allowed' : 'pointer',
               fontWeight: '800', fontSize: '1.1rem',
@@ -134,18 +134,18 @@ export default function Login() {
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-          <p style={{ color: '#64748b', fontSize: '0.95rem', fontWeight: '500' }}>
+          <p style={{ color: '#98A2B3', fontSize: '0.95rem', fontWeight: '500' }}>
             New to TurfX?{' '}
-            <Link to="/register" style={{ color: '#1ebe74', textDecoration: 'none', fontWeight: '700' }}>
+            <Link to="/register" style={{ color: '#CEF17B', textDecoration: 'none', fontWeight: '700' }}>
               Create an account
             </Link>
           </p>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '1rem', paddingTop: '1.5rem', borderTop: '1px solid #f1f5f9' }}>
+        <div style={{ textAlign: 'center', marginTop: '1rem', paddingTop: '1.5rem', borderTop: '1px solid #EEF2E6' }}>
           <p style={{ color: '#94a3b8', fontSize: '0.9rem', fontWeight: '600' }}>
             Venue owner?{' '}
-            <Link to="/partner/login" style={{ color: '#1ebe74', textDecoration: 'none', fontWeight: '700' }}>
+            <Link to="/partner/login" style={{ color: '#CEF17B', textDecoration: 'none', fontWeight: '700' }}>
               Partner Portal
             </Link>
           </p>
@@ -157,5 +157,5 @@ export default function Login() {
 
 const labelStyle = {
   display: 'block', fontSize: '0.8rem', fontWeight: '800',
-  color: '#64748b', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px',
+  color: '#98A2B3', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px',
 };

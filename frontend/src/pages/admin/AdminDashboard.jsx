@@ -46,7 +46,7 @@ function PieChart({ slices, size = 220 }) {
         ))}
         {/* Donut hole */}
         <circle cx={cx} cy={cy} r={r * 0.45} fill="white" />
-        <text x={cx} y={cy - 8} textAnchor="middle" fontSize="11" fontWeight="800" fill="#64748b">TOTAL</text>
+        <text x={cx} y={cy - 8} textAnchor="middle" fontSize="11" fontWeight="800" fill="#98A2B3">TOTAL</text>
         <text x={cx} y={cy + 10} textAnchor="middle" fontSize="13" fontWeight="900" fill="#0f172a">₹{total.toLocaleString()}</text>
       </svg>
       {/* Legend */}
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
   if (loading) return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: colors.background }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ width: '48px', height: '48px', border: `4px solid ${colors.border}`, borderTop: '4px solid #1ebe74', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }} />
+        <div style={{ width: '48px', height: '48px', border: `4px solid ${colors.border}`, borderTop: '4px solid #CEF17B', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 1rem' }} />
         <p style={{ color: colors.textSecondary, fontWeight: '700' }}>Loading admin data...</p>
       </div>
     </div>
@@ -159,9 +159,9 @@ export default function AdminDashboard() {
           {tabs.map(t => (
             <div key={t.id} onClick={() => setTab(t.id)} style={{
               display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 24px',
-              cursor: 'pointer', color: tab === t.id ? '#1ebe74' : '#64748b',
-              background: tab === t.id ? '#f0fdf4' : 'transparent',
-              borderLeft: `4px solid ${tab === t.id ? '#1ebe74' : 'transparent'}`,
+              cursor: 'pointer', color: tab === t.id ? '#CEF17B' : '#98A2B3',
+              background: tab === t.id ? '#DCEFB8' : 'transparent',
+              borderLeft: `4px solid ${tab === t.id ? '#CEF17B' : 'transparent'}`,
               fontWeight: tab === t.id ? '700' : '500', fontSize: '0.95rem',
               transition: '0.2s all'
             }}>
@@ -171,8 +171,8 @@ export default function AdminDashboard() {
         </div>
 
         <div style={{ padding: '0 24px' }}>
-          <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '1.5rem' }}>
-            <div style={{ color: '#111', fontSize: '0.8rem', fontWeight: '700', marginBottom: '4px' }}>{user?.name}</div>
+          <div style={{ borderTop: '1px solid #EEF2E6', paddingTop: '1.5rem' }}>
+            <div style={{ color: '#161616', fontSize: '0.8rem', fontWeight: '700', marginBottom: '4px' }}>{user?.name}</div>
             <div style={{ color: '#94a3b8', fontSize: '0.75rem', fontWeight: '600', marginBottom: '1rem' }}>Administrator</div>
             <div onClick={() => { logout(); navigate('/'); }} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#94a3b8', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}>
               <LogOut size={16} /> Logout
@@ -184,9 +184,9 @@ export default function AdminDashboard() {
       {/* MAIN */}
       <div style={{ flex: 1, marginLeft: '260px' }}>
         {/* TOP BAR */}
-        <div style={{ background: 'white', padding: '1rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1.5px solid #f1f5f9', position: 'sticky', top: 0, zIndex: 90 }}>
+        <div style={{ background: 'white', padding: '1rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1.5px solid #EEF2E6', position: 'sticky', top: 0, zIndex: 90 }}>
           <div>
-            <h1 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#111' }}>
+            <h1 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#161616' }}>
               {tab === 'overview' && 'Revenue Overview'}
               {tab === 'monthly' && 'Monthly Breakdown'}
               {tab === 'turfs' && 'Revenue Per Venue'}
@@ -210,7 +210,7 @@ export default function AdminDashboard() {
             <div>
               {/* TOP STAT CARDS */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
-                <StatCard label="Total Platform Revenue" value={`₹${s.totalRevenue?.toLocaleString()}`} sub={`${s.totalBookings} confirmed bookings`} icon={<IndianRupee size={22} />} color="#1ebe74" />
+                <StatCard label="Total Platform Revenue" value={`₹${s.totalRevenue?.toLocaleString()}`} sub={`${s.totalBookings} confirmed bookings`} icon={<IndianRupee size={22} />} color="#CEF17B" />
                 <StatCard label="Platform Fees Collected" value={`₹${s.totalPlatformFee?.toLocaleString()}`} sub={`₹${s.platformFeePerBooking} × ${s.totalBookings} bookings`} icon={<Receipt size={22} />} color="#3b82f6" />
                 <StatCard label="GST Collected" value={`₹${s.totalGST?.toLocaleString()}`} sub={`18% on platform fee`} icon={<Percent size={22} />} color="#f59e0b" />
                 <StatCard label="Gross Booking Value" value={`₹${s.totalGMV?.toLocaleString()}`} sub="Total money transacted" icon={<TrendingUp size={22} />} color="#8b5cf6" />
@@ -223,12 +223,12 @@ export default function AdminDashboard() {
               </div>
 
               {/* FEE BREAKDOWN BOX */}
-              <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9', padding: '2rem', marginBottom: '2rem' }}>
+              <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', padding: '2rem', marginBottom: '2rem' }}>
                 <h3 style={{ fontWeight: '800', fontSize: '1rem', marginBottom: '1.5rem', color: '#0f172a' }}>Fee Structure (Per Booking)</h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
                   <FeeBox label="Platform Fee" amount={`₹${s.platformFeePerBooking}`} desc="Flat fee charged per booking" color="#3b82f6" />
                   <FeeBox label="GST (18%)" amount={`₹${s.gstPerBooking}`} desc="18% GST on platform fee" color="#f59e0b" />
-                  <FeeBox label="Total per Booking" amount={`₹${s.totalFeePerBooking}`} desc="TurfX earns this per booking" color="#1ebe74" highlight />
+                  <FeeBox label="Total per Booking" amount={`₹${s.totalFeePerBooking}`} desc="TurfX earns this per booking" color="#CEF17B" highlight />
                 </div>
               </div>
 
@@ -236,10 +236,10 @@ export default function AdminDashboard() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
 
                 {/* PIE CHART — Monthly Revenue Split */}
-                <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9', padding: '2rem' }}>
+                <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', padding: '2rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                     <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0f172a' }}>Monthly Revenue (Pie)</h3>
-                    <span onClick={() => setTab('monthly')} style={{ color: '#1ebe74', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}>View Table →</span>
+                    <span onClick={() => setTab('monthly')} style={{ color: '#CEF17B', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}>View Table →</span>
                   </div>
                   {monthly.length > 0 ? (
                     <PieChart
@@ -247,7 +247,7 @@ export default function AdminDashboard() {
                       slices={monthly.slice(0, 6).reverse().map((m, i) => ({
                         label: new Date(m.month + '-01').toLocaleDateString('en-IN', { month: 'short', year: '2-digit' }),
                         value: m.revenue,
-                        color: ['#1ebe74','#3b82f6','#f59e0b','#8b5cf6','#ec4899','#06b6d4'][i % 6],
+                        color: ['#CEF17B','#3b82f6','#f59e0b','#8b5cf6','#ec4899','#06b6d4'][i % 6],
                       }))}
                     />
                   ) : (
@@ -256,7 +256,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* PIE CHART — Revenue Breakdown (Fee vs GST vs Court) */}
-                <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9', padding: '2rem' }}>
+                <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', padding: '2rem' }}>
                   <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0f172a', marginBottom: '1.5rem' }}>Revenue Composition</h3>
                   <PieChart
                     size={200}
@@ -265,8 +265,8 @@ export default function AdminDashboard() {
                       { label: 'GST Collected', value: s.totalGST || 0, color: '#f59e0b' },
                     ]}
                   />
-                  <div style={{ marginTop: '1rem', padding: '12px', background: '#f0fdf4', borderRadius: '12px', border: '1px solid #dcfce7' }}>
-                    <div style={{ fontSize: '0.75rem', color: '#166534', fontWeight: '700' }}>
+                  <div style={{ marginTop: '1rem', padding: '12px', background: '#DCEFB8', borderRadius: '12px', border: '1px solid #DCEFB8' }}>
+                    <div style={{ fontSize: '0.75rem', color: '#084734', fontWeight: '700' }}>
                       Total TurfX Revenue = Platform Fee + GST = <strong>₹{s.totalRevenue?.toLocaleString()}</strong>
                     </div>
                   </div>
@@ -277,9 +277,9 @@ export default function AdminDashboard() {
 
           {/* ── MONTHLY TAB ── */}
           {tab === 'monthly' && (
-            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead style={{ background: '#f8fafc' }}>
+                <thead style={{ background: '#F8FAF7' }}>
                   <tr>
                     {['Month', 'Bookings', 'Gross Value (GMV)', 'Platform Fee', 'GST Collected', 'Total Revenue', ''].map(h => (
                       <th key={h} style={thStyle}>{h}</th>
@@ -288,7 +288,7 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {monthly.length > 0 ? monthly.map((m, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <tr key={i} style={{ borderBottom: '1px solid #EEF2E6' }}>
                       <td style={tdStyle}>
                         <div style={{ fontWeight: '800', color: '#0f172a' }}>
                           {new Date(m.month + '-01').toLocaleDateString('en-IN', { month: 'long', year: 'numeric' })}
@@ -298,10 +298,10 @@ export default function AdminDashboard() {
                       <td style={tdStyle}><span style={{ fontWeight: '700', color: '#8b5cf6' }}>₹{m.gmv.toLocaleString()}</span></td>
                       <td style={tdStyle}><span style={{ fontWeight: '700', color: '#3b82f6' }}>₹{m.platformFee.toLocaleString()}</span></td>
                       <td style={tdStyle}><span style={{ fontWeight: '700', color: '#f59e0b' }}>₹{m.gst.toLocaleString()}</span></td>
-                      <td style={tdStyle}><span style={{ fontWeight: '900', color: '#1ebe74', fontSize: '1rem' }}>₹{m.revenue.toLocaleString()}</span></td>
+                      <td style={tdStyle}><span style={{ fontWeight: '900', color: '#CEF17B', fontSize: '1rem' }}>₹{m.revenue.toLocaleString()}</span></td>
                       <td style={tdStyle}>
-                        <div style={{ width: '80px', height: '8px', background: '#f1f5f9', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{ height: '100%', width: `${Math.min((m.revenue / (monthly[monthly.length - 1]?.revenue || 1)) * 100, 100)}%`, background: '#1ebe74', borderRadius: '4px' }} />
+                        <div style={{ width: '80px', height: '8px', background: '#EEF2E6', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${Math.min((m.revenue / (monthly[monthly.length - 1]?.revenue || 1)) * 100, 100)}%`, background: '#CEF17B', borderRadius: '4px' }} />
                         </div>
                       </td>
                     </tr>
@@ -310,14 +310,14 @@ export default function AdminDashboard() {
                   )}
                 </tbody>
                 {monthly.length > 0 && (
-                  <tfoot style={{ background: '#f0fdf4', borderTop: '2px solid #dcfce7' }}>
+                  <tfoot style={{ background: '#DCEFB8', borderTop: '2px solid #DCEFB8' }}>
                     <tr>
                       <td style={{ ...tdStyle, fontWeight: '900', color: '#0f172a' }}>TOTAL</td>
-                      <td style={tdStyle}><span style={{ ...numBadge, background: '#dcfce7', color: '#166534' }}>{s.totalBookings}</span></td>
+                      <td style={tdStyle}><span style={{ ...numBadge, background: '#DCEFB8', color: '#084734' }}>{s.totalBookings}</span></td>
                       <td style={{ ...tdStyle, fontWeight: '900', color: '#8b5cf6' }}>₹{s.totalGMV?.toLocaleString()}</td>
                       <td style={{ ...tdStyle, fontWeight: '900', color: '#3b82f6' }}>₹{s.totalPlatformFee?.toLocaleString()}</td>
                       <td style={{ ...tdStyle, fontWeight: '900', color: '#f59e0b' }}>₹{s.totalGST?.toLocaleString()}</td>
-                      <td style={{ ...tdStyle, fontWeight: '900', color: '#1ebe74', fontSize: '1.1rem' }}>₹{s.totalRevenue?.toLocaleString()}</td>
+                      <td style={{ ...tdStyle, fontWeight: '900', color: '#CEF17B', fontSize: '1.1rem' }}>₹{s.totalRevenue?.toLocaleString()}</td>
                       <td style={tdStyle} />
                     </tr>
                   </tfoot>
@@ -328,9 +328,9 @@ export default function AdminDashboard() {
 
           {/* ── PER TURF TAB ── */}
           {tab === 'turfs' && (
-            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
+            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead style={{ background: '#f8fafc' }}>
+                <thead style={{ background: '#F8FAF7' }}>
                   <tr>
                     {['#', 'Venue Name', 'Bookings', 'Gross Value', 'Platform Fee', 'GST', 'Revenue'].map(h => (
                       <th key={h} style={thStyle}>{h}</th>
@@ -339,7 +339,7 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {perTurf.length > 0 ? perTurf.map((t, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <tr key={i} style={{ borderBottom: '1px solid #EEF2E6' }}>
                       <td style={{ ...tdStyle, color: '#94a3b8', fontWeight: '700' }}>{i + 1}</td>
                       <td style={tdStyle}>
                         <div style={{ fontWeight: '800', color: '#0f172a' }}>{t.turfName}</div>
@@ -348,7 +348,7 @@ export default function AdminDashboard() {
                       <td style={{ ...tdStyle, fontWeight: '700', color: '#8b5cf6' }}>₹{t.gmv.toLocaleString()}</td>
                       <td style={{ ...tdStyle, fontWeight: '700', color: '#3b82f6' }}>₹{t.platformFee.toLocaleString()}</td>
                       <td style={{ ...tdStyle, fontWeight: '700', color: '#f59e0b' }}>₹{t.gst.toLocaleString()}</td>
-                      <td style={{ ...tdStyle, fontWeight: '900', color: '#1ebe74' }}>₹{t.revenue.toLocaleString()}</td>
+                      <td style={{ ...tdStyle, fontWeight: '900', color: '#CEF17B' }}>₹{t.revenue.toLocaleString()}</td>
                     </tr>
                   )) : (
                     <tr><td colSpan="7" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>No data yet</td></tr>
@@ -360,13 +360,13 @@ export default function AdminDashboard() {
 
           {/* ── TRANSACTIONS TAB ── */}
           {tab === 'transactions' && (
-            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #f1f5f9', overflow: 'hidden' }}>
-              <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+              <div style={{ padding: '1.5rem', borderBottom: '1.5px solid #EEF2E6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ fontWeight: '800', color: '#0f172a' }}>Recent {transactions.length} Transactions</div>
                 <button onClick={handleExportCSV} style={btnPrimary}><Download size={16} /> Export CSV</button>
               </div>
               <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead style={{ background: '#f8fafc' }}>
+                <thead style={{ background: '#F8FAF7' }}>
                   <tr>
                     {['Booking ID', 'Customer', 'Phone', 'Venue', 'Date', 'Time', 'Court Amt', 'Platform Fee', 'GST', 'Total'].map(h => (
                       <th key={h} style={thStyle}>{h}</th>
@@ -375,15 +375,15 @@ export default function AdminDashboard() {
                 </thead>
                 <tbody>
                   {transactions.length > 0 ? transactions.map((t, i) => (
-                    <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <tr key={i} style={{ borderBottom: '1px solid #EEF2E6' }}>
                       <td style={tdStyle}>
-                        <span style={{ fontFamily: 'monospace', fontWeight: '800', color: '#1ebe74', background: '#f0fdf4', padding: '3px 8px', borderRadius: '6px', fontSize: '0.8rem' }}>
+                        <span style={{ fontFamily: 'monospace', fontWeight: '800', color: '#CEF17B', background: '#DCEFB8', padding: '3px 8px', borderRadius: '6px', fontSize: '0.8rem' }}>
                           #{t.bookingRef}
                         </span>
                       </td>
                       <td style={{ ...tdStyle, fontWeight: '700', color: '#0f172a' }}>{t.userName}</td>
                       <td style={tdStyle}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#64748b', fontWeight: '600', fontSize: '0.85rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '5px', color: '#98A2B3', fontWeight: '600', fontSize: '0.85rem' }}>
                           <Phone size={13} /> {t.userPhone}
                         </div>
                       </td>
@@ -421,9 +421,9 @@ export default function AdminDashboard() {
 
 function StatCard({ label, value, sub, icon, color }) {
   return (
-    <div style={{ background: 'white', padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #f1f5f9', animation: 'fadeIn 0.4s ease-out' }}>
+    <div style={{ background: 'white', padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #EEF2E6', animation: 'fadeIn 0.4s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-        <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#64748b' }}>{label}</div>
+        <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3' }}>{label}</div>
         <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: `${color}15`, color, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           {icon}
         </div>
@@ -436,8 +436,8 @@ function StatCard({ label, value, sub, icon, color }) {
 
 function FeeBox({ label, amount, desc, color, highlight }) {
   return (
-    <div style={{ padding: '1.5rem', borderRadius: '16px', background: highlight ? '#f0fdf4' : '#f8fafc', border: `1.5px solid ${highlight ? '#bbf7d0' : '#f1f5f9'}` }}>
-      <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#64748b', marginBottom: '8px' }}>{label}</div>
+    <div style={{ padding: '1.5rem', borderRadius: '16px', background: highlight ? '#DCEFB8' : '#F8FAF7', border: `1.5px solid ${highlight ? '#DCEFB8' : '#EEF2E6'}` }}>
+      <div style={{ fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', marginBottom: '8px' }}>{label}</div>
       <div style={{ fontSize: '2rem', fontWeight: '900', color, marginBottom: '6px' }}>{amount}</div>
       <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8' }}>{desc}</div>
     </div>
@@ -450,16 +450,16 @@ const thStyle = {
 };
 const tdStyle = { padding: '1rem 1.2rem', verticalAlign: 'middle' };
 const numBadge = {
-  background: '#f1f5f9', color: '#374151', padding: '3px 10px',
+  background: '#EEF2E6', color: '#374151', padding: '3px 10px',
   borderRadius: '8px', fontWeight: '800', fontSize: '0.85rem'
 };
 const btnPrimary = {
-  background: '#1ebe74', color: 'white', border: 'none', padding: '10px 18px',
+  background: '#CEF17B', color: '#084734', border: 'none', padding: '10px 18px',
   borderRadius: '10px', fontWeight: '800', fontSize: '0.85rem',
   display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'
 };
 const btnSecondary = {
-  background: 'white', color: '#374151', border: '1.5px solid #e2e8f0', padding: '10px 18px',
+  background: 'white', color: '#374151', border: '1.5px solid #DCEFB8', padding: '10px 18px',
   borderRadius: '10px', fontWeight: '700', fontSize: '0.85rem',
   display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer'
 };

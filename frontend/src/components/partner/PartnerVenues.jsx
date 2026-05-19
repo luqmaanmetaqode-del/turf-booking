@@ -34,7 +34,7 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
   const todayRevenue = todayBookings.reduce((sum, b) => sum + (b.total_price || 0), 0);
 
   const stats = [
-    { label: 'Total Venues', value: data?.turfs?.length || 0, icon: <MapPin size={20} />, sub: 'Active venues', color: '#1ebe74' },
+    { label: 'Total Venues', value: data?.turfs?.length || 0, icon: <MapPin size={20} />, sub: 'Active venues', color: '#CEF17B' },
     { label: 'Total Sports', value: totalSports, icon: <TrendingUp size={20} />, sub: 'Across all venues', color: '#3b82f6' },
     { label: 'Today Bookings', value: todayBookings.length, icon: <Calendar size={20} />, sub: 'Today', color: '#f59e0b' },
     { label: 'Today Revenue', value: `₹${todayRevenue.toLocaleString()}`, icon: <TrendingUp size={20} />, sub: 'Today', color: '#8b5cf6' },
@@ -53,9 +53,9 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
           marginBottom: '1.5rem',
           padding: '12px 16px',
           borderRadius: '12px',
-          border: `1.5px solid ${seedMessage.type === 'success' ? '#bbf7d0' : '#fecaca'}`,
-          background: seedMessage.type === 'success' ? '#f0fdf4' : '#fff1f2',
-          color: seedMessage.type === 'success' ? '#166534' : '#991b1b',
+          border: `1.5px solid ${seedMessage.type === 'success' ? '#DCEFB8' : '#fecaca'}`,
+          background: seedMessage.type === 'success' ? '#DCEFB8' : '#fff1f2',
+          color: seedMessage.type === 'success' ? '#084734' : '#991b1b',
           fontWeight: '700',
           fontSize: '0.9rem'
         }}>
@@ -65,22 +65,22 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
 
       {/* NO VENUES STATE */}
       {(!data?.turfs || data.turfs.length === 0) && (
-        <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', padding: '4rem', textAlign: 'center' }}>
+        <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '4rem', textAlign: 'center' }}>
           <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🏟️</div>
-          <h3 style={{ fontWeight: '800', fontSize: '1.5rem', color: '#111', marginBottom: '12px' }}>No Venues Yet</h3>
-          <p style={{ color: '#64748b', fontWeight: '500', marginBottom: '2.5rem', lineHeight: 1.6 }}>
+          <h3 style={{ fontWeight: '800', fontSize: '1.5rem', color: '#161616', marginBottom: '12px' }}>No Venues Yet</h3>
+          <p style={{ color: '#98A2B3', fontWeight: '500', marginBottom: '2.5rem', lineHeight: 1.6 }}>
             Get started by adding your first venue or load sample venues to test the platform.
           </p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
             <button onClick={onAddClick} style={{ 
-              background: '#1ebe74', color: 'white', border: 'none', padding: '14px 28px', 
+              background: '#CEF17B', color: '#084734', border: 'none', padding: '14px 28px', 
               borderRadius: '12px', fontWeight: '800', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px',
               cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)'
             }}>
               <Plus size={20} /> Add Your First Venue
             </button>
             <button onClick={handleSeedVenues} disabled={seeding} style={{ 
-              background: 'white', color: '#111', border: '1.5px solid #f1f5f9', padding: '14px 28px', 
+              background: 'white', color: '#161616', border: '1.5px solid #EEF2E6', padding: '14px 28px', 
               borderRadius: '12px', fontWeight: '800', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px',
               cursor: seeding ? 'not-allowed' : 'pointer', opacity: seeding ? 0.6 : 1
             }}>
@@ -95,20 +95,20 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
         <>
       {/* TABS */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-        <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #f1f5f9', paddingBottom: '10px' }}>
+        <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #EEF2E6', paddingBottom: '10px' }}>
           {['All Venues', 'Add New Venue'].map((tab, i) => (
             <div key={tab} onClick={() => { if (tab === 'Add New Venue') onAddClick(); else setActiveTab(tab); }} style={{ 
               fontWeight: '700', fontSize: '0.95rem', cursor: 'pointer',
-              color: activeTab === tab ? '#1ebe74' : '#64748b',
+              color: activeTab === tab ? '#CEF17B' : '#98A2B3',
               position: 'relative', padding: '0 10px'
             }}>
               {tab}
-              {activeTab === tab && <div style={{ position: 'absolute', bottom: '-11.5px', left: 0, width: '100%', height: '3px', background: '#1ebe74', borderRadius: '10px' }} />}
+              {activeTab === tab && <div style={{ position: 'absolute', bottom: '-11.5px', left: 0, width: '100%', height: '3px', background: '#CEF17B', borderRadius: '10px' }} />}
             </div>
           ))}
         </div>
         <button onClick={onAddClick} style={{ 
-          background: '#1ebe74', color: 'white', border: 'none', padding: '12px 24px', 
+          background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px', 
           borderRadius: '12px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px',
           cursor: 'pointer', transition: '0.3s', boxShadow: '0 8px 20px rgba(30,190,116,0.2)'
         }}>
@@ -120,7 +120,7 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
         {stats.map((s, i) => (
           <div key={i} style={{ 
-            background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #f1f5f9',
+            background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6',
             display: 'flex', alignItems: 'center', gap: '20px'
           }}>
             <div style={{ 
@@ -130,9 +130,9 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
               {s.icon}
             </div>
             <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#64748b', marginBottom: '4px' }}>{s.label}</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#111' }}>{s.value}</div>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#1ebe74', marginTop: '2px' }}>{s.sub}</div>
+              <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#98A2B3', marginBottom: '4px' }}>{s.label}</div>
+              <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#161616' }}>{s.value}</div>
+              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#CEF17B', marginTop: '2px' }}>{s.sub}</div>
             </div>
           </div>
         ))}
@@ -148,7 +148,7 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{ 
-              width: '100%', padding: '16px 20px 16px 56px', borderRadius: '16px', border: '1.5px solid #f1f5f9',
+              width: '100%', padding: '16px 20px 16px 56px', borderRadius: '16px', border: '1.5px solid #EEF2E6',
               fontSize: '0.95rem', fontWeight: '600', outline: 'none', transition: '0.2s',
               boxSizing: 'border-box'
             }} 
@@ -240,13 +240,13 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
 
   return (
     <div style={{ 
-      background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', overflow: 'hidden',
+      background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', overflow: 'hidden',
       transition: '0.3s all'
     }}>
       <div style={{ padding: '1.5rem', display: 'flex', gap: '2rem' }}>
         <div style={{ width: '280px', height: '180px', borderRadius: '16px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
           <img src={turf.images?.[0] || '/images/football.png'} alt={turf.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', top: '12px', left: '12px', background: isActive ? '#1ebe74' : '#64748b', color: 'white', fontSize: '0.7rem', fontWeight: '800', padding: '4px 10px', borderRadius: '6px' }}>{isActive ? 'ACTIVE' : 'INACTIVE'}</div>
+          <div style={{ position: 'absolute', top: '12px', left: '12px', background: isActive ? '#CEF17B' : '#98A2B3', color: 'white', fontSize: '0.7rem', fontWeight: '800', padding: '4px 10px', borderRadius: '6px' }}>{isActive ? 'ACTIVE' : 'INACTIVE'}</div>
           <div style={{ position: 'absolute', bottom: '12px', left: '12px', background: 'rgba(0,0,0,0.6)', color: 'white', fontSize: '0.7rem', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
             <Eye size={12} /> {turf.images?.length || 0}
           </div>
@@ -263,7 +263,7 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
               <input type="number" value={editData.price_per_hour} onChange={e => setEditData({...editData, price_per_hour: e.target.value})} style={editInputStyle} placeholder="Price per hour" />
               <textarea value={editData.description} onChange={e => setEditData({...editData, description: e.target.value})} style={{ ...editInputStyle, height: '80px', resize: 'none' }} placeholder="Description" />
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={handleSaveEdit} disabled={saving} style={{ ...actionBtnStyle, background: '#1ebe74', color: 'white', border: 'none' }}>{saving ? 'Saving...' : 'Save Changes'}</button>
+                <button onClick={handleSaveEdit} disabled={saving} style={{ ...actionBtnStyle, background: '#CEF17B', color: '#084734', border: 'none' }}>{saving ? 'Saving...' : 'Save Changes'}</button>
                 <button onClick={() => setEditMode(false)} style={actionBtnStyle}>Cancel</button>
               </div>
             </div>
@@ -272,17 +272,17 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#111' }}>{turf.name}</h3>
-                <span style={{ background: '#f0fdf4', color: '#1ebe74', fontSize: '0.75rem', fontWeight: '700', padding: '4px 10px', borderRadius: '6px' }}>Featured</span>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#161616' }}>{turf.name}</h3>
+                <span style={{ background: '#DCEFB8', color: '#CEF17B', fontSize: '0.75rem', fontWeight: '700', padding: '4px 10px', borderRadius: '6px' }}>Featured</span>
               </div>
-              <p style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.9rem', fontWeight: '500' }}>
+              <p style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#98A2B3', fontSize: '0.9rem', fontWeight: '500' }}>
                 <MapPin size={16} /> {turf.location}, {turf.city}
               </p>
               
               <div style={{ display: 'flex', gap: '8px', marginTop: '1rem' }}>
                 <span style={tagStyle}>{turf.sport || 'Multi-sport'}</span>
                 {turf.amenities?.slice(0, 2).map((a, i) => (
-                  <span key={i} style={{ ...tagStyle, background: '#f1f5f9', color: '#64748b' }}>{a}</span>
+                  <span key={i} style={{ ...tagStyle, background: '#EEF2E6', color: '#98A2B3' }}>{a}</span>
                 ))}
               </div>
             </div>
@@ -295,28 +295,28 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
                  <div style={dropdownStyle}>
                    <div onClick={() => { onTabChange?.('slots'); setActionMenu(null); }} style={dropdownItem}>Manage Slots</div>
                    <div onClick={() => { onTabChange?.('pricing'); setActionMenu(null); }} style={dropdownItem}>Update Pricing</div>
-                   <div onClick={handleToggleStatus} style={{ ...dropdownItem, color: isActive ? '#ef4444' : '#1ebe74' }}>
+                   <div onClick={handleToggleStatus} style={{ ...dropdownItem, color: isActive ? '#ef4444' : '#CEF17B' }}>
                      {statusUpdating ? 'Updating...' : isActive ? 'Mark as Inactive' : 'Mark as Active'}
                    </div>
-                   <div style={{ borderTop: '1px solid #f1f5f9', margin: '4px 0' }}></div>
+                   <div style={{ borderTop: '1px solid #EEF2E6', margin: '4px 0' }}></div>
                    <div onClick={handleDelete} style={{ ...dropdownItem, color: '#ef4444' }}>
                      Delete Venue
                    </div>
                  </div>
                )}
 
-               <button onClick={onToggle} style={{ ...actionBtnStyle, background: isExpanded ? '#f1f5f9' : 'transparent' }}>
+               <button onClick={onToggle} style={{ ...actionBtnStyle, background: isExpanded ? '#EEF2E6' : 'transparent' }}>
                  {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
                </button>
             </div>
           </div>
 
           <div style={{ marginTop: '1.5rem', display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>
               <Clock size={16} /> Open {turf.openTime || '6:00 AM'} - {turf.closeTime || '11:00 PM'}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#111', fontSize: '0.85rem', fontWeight: '800' }}>
-              <span style={{ color: '#64748b' }}>₹</span> {turf.price_per_hour?.toLocaleString()} <span style={{ color: '#64748b', fontWeight: '500' }}>per hour</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#161616', fontSize: '0.85rem', fontWeight: '800' }}>
+              <span style={{ color: '#98A2B3' }}>₹</span> {turf.price_per_hour?.toLocaleString()} <span style={{ color: '#98A2B3', fontWeight: '500' }}>per hour</span>
             </div>
           </div>
             </>
@@ -325,29 +325,29 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
       </div>
 
       {isExpanded && (
-        <div style={{ borderTop: '1.5px solid #f1f5f9', background: 'white' }}>
+        <div style={{ borderTop: '1.5px solid #EEF2E6', background: 'white' }}>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '1.5rem 2rem', gap: '2rem' }}>
              <OverviewCard label="Today's Overview" stats={[
                { label: 'Bookings', value: todayB.length.toString(), icon: <Calendar size={14} /> },
-               { label: 'Revenue', value: `₹${todayRev.toLocaleString()}`, icon: <TrendingUp size={14} />, color: '#1ebe74' },
+               { label: 'Revenue', value: `₹${todayRev.toLocaleString()}`, icon: <TrendingUp size={14} />, color: '#CEF17B' },
              ]} />
              <OverviewCard label="Weekly Overview" stats={[
                { label: 'Bookings', value: weeklyB.length.toString(), icon: <Calendar size={14} /> },
-               { label: 'Revenue', value: `₹${weeklyRev.toLocaleString()}`, icon: <TrendingUp size={14} />, color: '#1ebe74' },
+               { label: 'Revenue', value: `₹${weeklyRev.toLocaleString()}`, icon: <TrendingUp size={14} />, color: '#CEF17B' },
              ]} />
-             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #f1f5f9', background: '#f8fafc' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#111', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Venue Status</div>
+             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6', background: '#F8FAF7' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Venue Status</div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: isActive ? '#1ebe74' : '#64748b' }}></div>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: isActive ? '#CEF17B' : '#98A2B3' }}></div>
                     <div>
-                       <div style={{ fontSize: '0.9rem', fontWeight: '800', color: isActive ? '#1ebe74' : '#64748b' }}>{isActive ? 'Active' : 'Inactive'}</div>
-                       <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: '500' }}>{isActive ? 'Listed on TurfX' : 'Hidden from search'}</div>
+                       <div style={{ fontSize: '0.9rem', fontWeight: '800', color: isActive ? '#CEF17B' : '#98A2B3' }}>{isActive ? 'Active' : 'Inactive'}</div>
+                       <div style={{ fontSize: '0.75rem', color: '#98A2B3', fontWeight: '500' }}>{isActive ? 'Listed on TurfX' : 'Hidden from search'}</div>
                     </div>
                   </div>
                   <div 
                     onClick={handleToggleStatus}
-                    style={{ width: '44px', height: '24px', background: isActive ? '#1ebe74' : '#e2e8f0', borderRadius: '20px', padding: '2px', cursor: 'pointer', position: 'relative', transition: '0.3s' }}>
+                    style={{ width: '44px', height: '24px', background: isActive ? '#CEF17B' : '#DCEFB8', borderRadius: '20px', padding: '2px', cursor: 'pointer', position: 'relative', transition: '0.3s' }}>
                     <div style={{ position: 'absolute', top: '2px', right: isActive ? '2px' : 'auto', left: isActive ? 'auto' : '2px', width: '20px', height: '20px', background: 'white', borderRadius: '50%', transition: '0.3s' }}></div>
                   </div>
                 </div>
@@ -355,9 +355,9 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
           </div>
 
           <div style={{ padding: '0 2rem 2rem' }}>
-            <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #f1f5f9', paddingBottom: '12px', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #EEF2E6', paddingBottom: '12px', marginBottom: '2rem' }}>
               {['Overview', 'Photos', 'Sports', 'Slots', 'Pricing', 'Amenities', 'Reviews', 'Bookings'].map((sub, i) => (
-                <div key={sub} style={{ fontSize: '0.85rem', fontWeight: '700', color: i === 0 ? '#1ebe74' : '#64748b', cursor: 'pointer' }}>{sub}</div>
+                <div key={sub} style={{ fontSize: '0.85rem', fontWeight: '700', color: i === 0 ? '#CEF17B' : '#98A2B3', cursor: 'pointer' }}>{sub}</div>
               ))}
             </div>
 
@@ -373,8 +373,8 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
                   <InfoItem label="Address" value={`${turf.location}, ${turf.city}`} />
                </div>
                <div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase', marginBottom: '8px' }}>Description</div>
-                  <p style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500', lineHeight: 1.6 }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase', marginBottom: '8px' }}>Description</div>
+                  <p style={{ fontSize: '0.85rem', color: '#98A2B3', fontWeight: '500', lineHeight: 1.6 }}>
                     {turf.description || turf.shortDescription || 'No description available.'}
                   </p>
                </div>
@@ -388,15 +388,15 @@ function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange })
 
 function OverviewCard({ label, stats }) {
   return (
-    <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #f1f5f9', background: '#f8fafc' }}>
-      <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#111', marginBottom: '1.5rem', textTransform: 'uppercase' }}>{label}</div>
+    <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6', background: '#F8FAF7' }}>
+      <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', textTransform: 'uppercase' }}>{label}</div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         {stats.map((s, i) => (
           <div key={i}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#64748b', fontSize: '0.75rem', fontWeight: '600', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#98A2B3', fontSize: '0.75rem', fontWeight: '600', marginBottom: '6px' }}>
               {s.icon} {s.label}
             </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: s.color || '#111' }}>{s.value}</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: s.color || '#161616' }}>{s.value}</div>
           </div>
         ))}
       </div>
@@ -407,43 +407,43 @@ function OverviewCard({ label, stats }) {
 function InfoItem({ label, value }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr' }}>
-      <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>{label}</span>
-      <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#111' }}>{value}</span>
+      <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>{label}</span>
+      <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#161616' }}>{value}</span>
     </div>
   );
 }
 
 const filterBtnStyle = {
   display: 'flex', alignItems: 'center', gap: '8px', padding: '0 20px',
-  borderRadius: '16px', border: '1.5px solid #f1f5f9', background: 'white',
-  fontSize: '0.9rem', fontWeight: '600', color: '#111', cursor: 'pointer'
+  borderRadius: '16px', border: '1.5px solid #EEF2E6', background: 'white',
+  fontSize: '0.9rem', fontWeight: '600', color: '#161616', cursor: 'pointer'
 };
 
 const editInputStyle = {
-  width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #e2e8f0',
+  width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #DCEFB8',
   fontSize: '0.9rem', fontWeight: '600', outline: 'none', background: 'white', boxSizing: 'border-box'
 };
 
 const tagStyle = {
-  background: '#f8fafc', border: '1.5px solid #f1f5f9', color: '#64748b',
+  background: '#F8FAF7', border: '1.5px solid #EEF2E6', color: '#98A2B3',
   padding: '4px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700'
 };
 
 const actionBtnStyle = {
-  background: 'white', border: '1.5px solid #f1f5f9', padding: '8px 16px',
-  borderRadius: '12px', fontSize: '0.85rem', fontWeight: '700', color: '#111',
+  background: 'white', border: '1.5px solid #EEF2E6', padding: '8px 16px',
+  borderRadius: '12px', fontSize: '0.85rem', fontWeight: '700', color: '#161616',
   cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: '0.2s'
 };
 
 const dropdownStyle = {
   position: 'absolute', top: '100%', right: 0, width: '180px',
-  background: 'white', borderRadius: '12px', border: '1.5px solid #f1f5f9',
+  background: 'white', borderRadius: '12px', border: '1.5px solid #EEF2E6',
   boxShadow: '0 8px 30px rgba(0,0,0,0.08)', zIndex: 1000,
   padding: '8px', marginTop: '8px', overflow: 'hidden'
 };
 
 const dropdownItem = {
-  padding: '10px 14px', fontSize: '0.85rem', fontWeight: '700', color: '#64748b',
+  padding: '10px 14px', fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3',
   cursor: 'pointer', borderRadius: '8px', transition: '0.2s', display: 'flex',
   alignItems: 'center', gap: '10px'
 };

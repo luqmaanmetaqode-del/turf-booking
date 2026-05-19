@@ -47,14 +47,14 @@ export default function PartnerOffers({ data, token, onChange }) {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>Offers & Promotions</h2>
-          <p style={{ color: '#64748b', fontWeight: '500' }}>Offers attached to your venues</p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>Offers & Promotions</h2>
+          <p style={{ color: '#98A2B3', fontWeight: '500' }}>Offers attached to your venues</p>
         </div>
         <button onClick={() => setShowForm(!showForm)} style={btnPrimary}><Plus size={18} /> Create New Offer</button>
       </div>
 
       {showForm && (
-        <form onSubmit={createOffer} style={{ background: 'white', padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #f1f5f9', marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+        <form onSubmit={createOffer} style={{ background: 'white', padding: '1.5rem', borderRadius: '20px', border: '1.5px solid #EEF2E6', marginBottom: '2rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
           <input required value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} placeholder="Offer title" style={inputStyle} />
           <input required value={form.discount} onChange={e => setForm({ ...form, discount: e.target.value })} placeholder="Discount, e.g. 20% OFF" style={inputStyle} />
           <select required value={form.turf_id} onChange={e => setForm({ ...form, turf_id: e.target.value })} style={inputStyle}>
@@ -73,18 +73,18 @@ export default function PartnerOffers({ data, token, onChange }) {
              const expired = o.valid_until && new Date(o.valid_until) < now;
              const status = expired ? 'Expired' : 'Active';
              return (
-               <div key={o._id} style={{ background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #f1f5f9', position: 'relative', overflow: 'hidden' }}>
-                  <div style={{ position: 'absolute', top: 0, right: 0, padding: '8px 15px', background: status === 'Active' ? '#f0fdf4' : '#f1f5f9', color: status === 'Active' ? '#1ebe74' : '#64748b', fontSize: '0.7rem', fontWeight: '800', borderRadius: '0 0 0 16px' }}>
+               <div key={o._id} style={{ background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6', position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ position: 'absolute', top: 0, right: 0, padding: '8px 15px', background: status === 'Active' ? '#DCEFB8' : '#EEF2E6', color: status === 'Active' ? '#CEF17B' : '#98A2B3', fontSize: '0.7rem', fontWeight: '800', borderRadius: '0 0 0 16px' }}>
                      {status.toUpperCase()}
                   </div>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f0fdf4', color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#DCEFB8', color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                      <Percent size={24} />
                   </div>
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: '#111', marginBottom: '4px' }}>{o.title}</h3>
-                  <p style={{ fontSize: '1rem', fontWeight: '800', color: '#1ebe74', marginBottom: '10px' }}>{o.discount || 'Offer'}</p>
-                  <p style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500', marginBottom: '1.5rem' }}>{o.description || 'No description added'}</p>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: '900', color: '#161616', marginBottom: '4px' }}>{o.title}</h3>
+                  <p style={{ fontSize: '1rem', fontWeight: '800', color: '#CEF17B', marginBottom: '10px' }}>{o.discount || 'Offer'}</p>
+                  <p style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500', marginBottom: '1.5rem' }}>{o.description || 'No description added'}</p>
 
-                  <div style={{ borderTop: '1.5px solid #f1f5f9', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ borderTop: '1.5px solid #EEF2E6', paddingTop: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                      <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8' }}>
                        {o.turf_id?.name || 'All venues'}{o.valid_until ? ` | Valid until ${new Date(o.valid_until).toLocaleDateString('en-IN')}` : ''}
                      </div>
@@ -98,27 +98,27 @@ export default function PartnerOffers({ data, token, onChange }) {
            })}
         </div>
       ) : (
-        <div style={{ background: 'white', padding: '4rem', borderRadius: '24px', border: '1.5px solid #f1f5f9', textAlign: 'center', color: '#94a3b8', fontWeight: '700', marginBottom: '2.5rem' }}>
+        <div style={{ background: 'white', padding: '4rem', borderRadius: '24px', border: '1.5px solid #EEF2E6', textAlign: 'center', color: '#94a3b8', fontWeight: '700', marginBottom: '2.5rem' }}>
           No offers have been created for your venues yet.
         </div>
       )}
 
-      <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9', display: 'flex', gap: '2rem', alignItems: 'center' }}>
-         <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#f0fdf4', color: '#1ebe74', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+      <div style={{ background: 'white', padding: '2rem', borderRadius: '24px', border: '1.5px solid #EEF2E6', display: 'flex', gap: '2rem', alignItems: 'center' }}>
+         <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#DCEFB8', color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
             <Tag size={28} />
          </div>
          <div style={{ flex: 1 }}>
             <h4 style={{ fontSize: '1.1rem', fontWeight: '800', marginBottom: '4px' }}>Grow your business with smart offers</h4>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', fontWeight: '500', lineHeight: 1.5 }}>
+            <p style={{ fontSize: '0.85rem', color: '#98A2B3', fontWeight: '500', lineHeight: 1.5 }}>
                Offers saved in the backend will appear here for the venues owned by this account.
             </p>
          </div>
-         <button style={{ ...btnPrimary, background: 'white', color: '#1ebe74', border: '1.5px solid #1ebe74', boxShadow: 'none' }}>Learn More</button>
+         <button style={{ ...btnPrimary, background: 'white', color: '#CEF17B', border: '1.5px solid #CEF17B', boxShadow: 'none' }}>Learn More</button>
       </div>
     </div>
   );
 }
 
-const btnPrimary = { background: '#1ebe74', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '12px', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)' };
+const btnPrimary = { background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px', borderRadius: '12px', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)' };
 const iconBtn = { background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer' };
-const inputStyle = { padding: '12px 14px', borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.9rem', fontWeight: '600', outline: 'none' };
+const inputStyle = { padding: '12px 14px', borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.9rem', fontWeight: '600', outline: 'none' };

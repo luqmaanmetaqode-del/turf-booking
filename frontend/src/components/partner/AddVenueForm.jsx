@@ -149,7 +149,7 @@ export default function AddVenueForm({ onCancel, onComplete }) {
   return (
     <div style={{ maxWidth: '1100px', margin: '0 auto', animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '3rem' }}>
-        <button onClick={onCancel} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '700' }}>
+        <button onClick={onCancel} style={{ background: 'none', border: 'none', color: '#98A2B3', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: '700' }}>
           <ChevronLeft size={20} /> Back to Venues
         </button>
         <h2 style={{ fontSize: '1.5rem', fontWeight: '800', marginLeft: '1.5rem' }}>Add New Venue</h2>
@@ -157,26 +157,26 @@ export default function AddVenueForm({ onCancel, onComplete }) {
 
       {/* STEPPER */}
       <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', marginBottom: '4rem', padding: '0 20px' }}>
-        <div style={{ position: 'absolute', top: '15px', left: '40px', right: '40px', height: '2px', background: '#f1f5f9', zIndex: 1 }}></div>
+        <div style={{ position: 'absolute', top: '15px', left: '40px', right: '40px', height: '2px', background: '#EEF2E6', zIndex: 1 }}></div>
         {steps.map((s, i) => (
           <div key={s.id} style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
             <div style={{ 
               width: '32px', height: '32px', borderRadius: '50%', 
-              background: step > s.id ? '#1ebe74' : step === s.id ? '#1ebe74' : 'white',
-              border: `2px solid ${step >= s.id ? '#1ebe74' : '#f1f5f9'}`,
+              background: step > s.id ? '#CEF17B' : step === s.id ? '#CEF17B' : 'white',
+              border: `2px solid ${step >= s.id ? '#CEF17B' : '#EEF2E6'}`,
               color: step > s.id ? 'white' : step === s.id ? 'white' : '#94a3b8',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontWeight: '800', fontSize: '0.85rem', transition: '0.3s'
             }}>
               {step > s.id ? <Check size={18} /> : s.id}
             </div>
-            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: step >= s.id ? '#111' : '#94a3b8' }}>{s.label}</span>
+            <span style={{ fontSize: '0.75rem', fontWeight: '700', color: step >= s.id ? '#161616' : '#94a3b8' }}>{s.label}</span>
           </div>
         ))}
       </div>
 
       {/* FORM CONTENT */}
-      <div style={{ background: 'white', borderRadius: '24px', padding: '3.5rem', border: '1.5px solid #f1f5f9', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
+      <div style={{ background: 'white', borderRadius: '24px', padding: '3.5rem', border: '1.5px solid #EEF2E6', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
         {step === 1 && <BasicDetails formData={formData} setFormData={setFormData} />}
         {step === 2 && <VenueInfo formData={formData} setFormData={setFormData} />}
         {step === 3 && <SlotsPricing formData={formData} setFormData={setFormData} />}
@@ -191,17 +191,17 @@ export default function AddVenueForm({ onCancel, onComplete }) {
         )}
 
         {/* FOOTER ACTIONS */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3.5rem', borderTop: '1.5px solid #f1f5f9', paddingTop: '2.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3.5rem', borderTop: '1.5px solid #EEF2E6', paddingTop: '2.5rem' }}>
            <button 
              onClick={handlePrev} 
-             style={{ visibility: step === 1 ? 'hidden' : 'visible', padding: '14px 32px', borderRadius: '12px', border: '1.5px solid #f1f5f9', background: 'white', fontWeight: '700', cursor: 'pointer', color: '#64748b' }}
+             style={{ visibility: step === 1 ? 'hidden' : 'visible', padding: '14px 32px', borderRadius: '12px', border: '1.5px solid #EEF2E6', background: 'white', fontWeight: '700', cursor: 'pointer', color: '#98A2B3' }}
            >
              Previous Step
            </button>
            <button 
              onClick={step === 6 ? handleSubmit : handleNext}
              disabled={submitting}
-             style={{ padding: '14px 45px', borderRadius: '12px', border: 'none', background: submitting ? '#94d3b2' : '#1ebe74', color: 'white', fontWeight: '800', cursor: submitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 8px 25px rgba(30,190,116,0.2)' }}
+             style={{ padding: '14px 45px', borderRadius: '12px', border: 'none', background: submitting ? '#CEF17B' : '#CEF17B', color: '#084734', fontWeight: '800', cursor: submitting ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 8px 25px rgba(30,190,116,0.2)' }}
            >
              {step === 6 ? (submitting ? 'Submitting...' : 'Submit Venue') : 'Save & Continue'} {!submitting && <ChevronRight size={18} />}
            </button>
@@ -250,9 +250,9 @@ function BasicDetails({ formData, setFormData }) {
                       onClick={() => handleSportToggle(sport)}
                       style={{ 
                         padding: '10px 18px', borderRadius: '10px', border: '1.5px solid',
-                        borderColor: formData.sports.includes(sport) ? '#1ebe74' : '#e2e8f0',
-                        background: formData.sports.includes(sport) ? '#f0fdf4' : 'white',
-                        color: formData.sports.includes(sport) ? '#1ebe74' : '#64748b',
+                        borderColor: formData.sports.includes(sport) ? '#CEF17B' : '#DCEFB8',
+                        background: formData.sports.includes(sport) ? '#DCEFB8' : 'white',
+                        color: formData.sports.includes(sport) ? '#CEF17B' : '#98A2B3',
                         fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer', transition: '0.2s'
                       }}
                     >
@@ -265,13 +265,13 @@ function BasicDetails({ formData, setFormData }) {
              <Field label="Venue Type *">
                 <div style={{ display: 'flex', gap: '2.5rem' }}>
                    {['Outdoor', 'Indoor', 'Indoor + Outdoor'].map(t => (
-                     <label key={t} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '0.95rem', fontWeight: '600', color: '#111' }}>
+                     <label key={t} style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', fontSize: '0.95rem', fontWeight: '600', color: '#161616' }}>
                        <input 
                          type="radio" 
                          name="type" 
                          checked={formData.type === t} 
                          onChange={() => setFormData({...formData, type: t})} 
-                         style={{ accentColor: '#1ebe74', width: '18px', height: '18px' }} 
+                         style={{ accentColor: '#CEF17B', width: '18px', height: '18px' }} 
                        /> {t}
                      </label>
                    ))}
@@ -318,8 +318,8 @@ function BasicDetails({ formData, setFormData }) {
        </div>
 
        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div style={{ background: '#f8fafc', borderRadius: '24px', border: '1.5px solid #f1f5f9', flex: 1, minHeight: '400px', display: 'flex', flexDirection: 'column', padding: '1.5rem', overflow: 'hidden' }}>
-             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#166534', background: '#f0fdf4', padding: '12px 16px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: '700', marginBottom: '1.5rem' }}>
+          <div style={{ background: '#F8FAF7', borderRadius: '24px', border: '1.5px solid #EEF2E6', flex: 1, minHeight: '400px', display: 'flex', flexDirection: 'column', padding: '1.5rem', overflow: 'hidden' }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#084734', background: '#DCEFB8', padding: '12px 16px', borderRadius: '12px', fontSize: '0.85rem', fontWeight: '700', marginBottom: '1.5rem' }}>
                <MapPin size={18} /> Map Preview
              </div>
              <div style={{ flex: 1, borderRadius: '16px', overflow: 'hidden', position: 'relative' }}>
@@ -333,16 +333,16 @@ function BasicDetails({ formData, setFormData }) {
                     allowFullScreen
                   ></iframe>
                 ) : (
-                  <div style={{ width: '100%', height: '100%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontWeight: '700', textAlign: 'center', padding: '2rem' }}>
+                  <div style={{ width: '100%', height: '100%', background: '#DCEFB8', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#94a3b8', fontWeight: '700', textAlign: 'center', padding: '2rem' }}>
                     Select state and city to <br/> preview location on map
                   </div>
                 )}
              </div>
           </div>
           
-          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', padding: '1.5rem' }}>
-             <h4 style={{ fontSize: '0.9rem', fontWeight: '800', marginBottom: '1rem', color: '#111' }}>Pro Tip</h4>
-             <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, fontWeight: '500' }}>
+          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '1.5rem' }}>
+             <h4 style={{ fontSize: '0.9rem', fontWeight: '800', marginBottom: '1rem', color: '#161616' }}>Pro Tip</h4>
+             <p style={{ fontSize: '0.85rem', color: '#98A2B3', lineHeight: 1.6, fontWeight: '500' }}>
                Venues with accurate location details and landmarks get **30% more bookings** as it helps players find you easily.
              </p>
           </div>
@@ -408,7 +408,7 @@ function VenueInfo({ formData, setFormData }) {
        </div>
 
        <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', padding: '2rem' }}>
+          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '2rem' }}>
              <SectionHeader icon={<ShieldCheck size={20} />} title="Operational Policies" small />
              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
                 {[
@@ -419,13 +419,13 @@ function VenueInfo({ formData, setFormData }) {
                   const isEnabled = formData[policy.key] || false;
                   return (
                     <div key={policy.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                       <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#64748b' }}>{policy.label}</span>
+                       <span style={{ fontSize: '0.9rem', fontWeight: '600', color: '#98A2B3' }}>{policy.label}</span>
                        <div 
                          onClick={() => setFormData({...formData, [policy.key]: !isEnabled})}
                          style={{ 
                            width: '40px', 
                            height: '22px', 
-                           background: isEnabled ? '#1ebe74' : '#e2e8f0', 
+                           background: isEnabled ? '#CEF17B' : '#DCEFB8', 
                            borderRadius: '20px', 
                            padding: '2px', 
                            cursor: 'pointer', 
@@ -449,12 +449,12 @@ function VenueInfo({ formData, setFormData }) {
              </div>
           </div>
           
-          <div style={{ background: '#f0fdf4', borderRadius: '24px', padding: '2rem', border: '1.5px solid #dcfce7' }}>
-             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '1rem', color: '#166534' }}>
+          <div style={{ background: '#DCEFB8', borderRadius: '24px', padding: '2rem', border: '1.5px solid #DCEFB8' }}>
+             <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: '1rem', color: '#084734' }}>
                 <Star size={20} />
                 <h4 style={{ fontWeight: '800', fontSize: '1rem' }}>Success Rating</h4>
              </div>
-             <p style={{ fontSize: '0.85rem', color: '#166534', fontWeight: '600', lineHeight: 1.6 }}>
+             <p style={{ fontSize: '0.85rem', color: '#084734', fontWeight: '600', lineHeight: 1.6 }}>
                Venues with detailed descriptions and clear policies get **45% fewer cancellations**.
              </p>
           </div>
@@ -472,7 +472,7 @@ function SlotsPricing({ formData, setFormData }) {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2.5rem' }}>
              <Field label="Base Price per Hour (₹) *">
                 <div style={{ position: 'relative' }}>
-                  <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: '#111' }}>₹</span>
+                  <span style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontWeight: '800', color: '#161616' }}>₹</span>
                   <input 
                     type="number" 
                     placeholder="e.g. 1200" 
@@ -491,11 +491,11 @@ function SlotsPricing({ formData, setFormData }) {
           </div>
 
           <div style={{ marginBottom: '2rem' }}>
-             <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#111', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Operational Hours</div>
-             <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #f1f5f9' }}>
+             <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Operational Hours</div>
+             <div style={{ background: '#F8FAF7', padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6' }}>
                 {['Monday - Friday', 'Saturday - Sunday'].map(days => (
                   <div key={days} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: days === 'Monday - Friday' ? '1rem' : '0' }}>
-                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#111' }}>{days}</span>
+                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#161616' }}>{days}</span>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
                        <select style={{ ...inputSmallStyle }}>
                           <option>06:00 AM</option>
@@ -525,20 +525,20 @@ function SlotsPricing({ formData, setFormData }) {
        </div>
 
        <div>
-          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', padding: '2rem' }}>
+          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '2rem' }}>
              <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem' }}>Pricing Preview</h4>
              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px dashed #e2e8f0' }}>
-                   <span style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '600' }}>Hourly Rate</span>
-                   <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#111' }}>₹ {formData.price || '0'}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px dashed #DCEFB8' }}>
+                   <span style={{ fontSize: '0.9rem', color: '#98A2B3', fontWeight: '600' }}>Hourly Rate</span>
+                   <span style={{ fontSize: '1.1rem', fontWeight: '800', color: '#161616' }}>₹ {formData.price || '0'}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px dashed #e2e8f0' }}>
-                   <span style={{ fontSize: '0.9rem', color: '#64748b', fontWeight: '600' }}>Platform Fee (5%)</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px dashed #DCEFB8' }}>
+                   <span style={{ fontSize: '0.9rem', color: '#98A2B3', fontWeight: '600' }}>Platform Fee (5%)</span>
                    <span style={{ fontSize: '0.9rem', fontWeight: '700', color: '#ef4444' }}>- ₹ {formData.price ? Math.round(parseFloat(formData.price) * 0.05) : '0'}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', background: '#f0fdf4', padding: '1rem', borderRadius: '12px', border: '1.5px solid #dcfce7' }}>
-                   <span style={{ fontSize: '0.95rem', fontWeight: '800', color: '#111' }}>You Receive</span>
-                   <span style={{ fontSize: '1.2rem', fontWeight: '900', color: '#1ebe74' }}>₹ {formData.price ? Math.round(parseFloat(formData.price) * 0.95) : '0'}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', background: '#DCEFB8', padding: '1rem', borderRadius: '12px', border: '1.5px solid #DCEFB8' }}>
+                   <span style={{ fontSize: '0.95rem', fontWeight: '800', color: '#161616' }}>You Receive</span>
+                   <span style={{ fontSize: '1.2rem', fontWeight: '900', color: '#CEF17B' }}>₹ {formData.price ? Math.round(parseFloat(formData.price) * 0.95) : '0'}</span>
                 </div>
              </div>
              <p style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '1.5rem', textAlign: 'center', fontWeight: '500' }}>
@@ -577,7 +577,7 @@ function AmenitiesSection({ formData, setFormData }) {
        <div>
           <SectionHeader icon={<ShieldCheck size={20} />} title="Amenities" subtitle="Select the amenities available at your venue" />
           
-          <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#111', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Popular Amenities</div>
+          <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Popular Amenities</div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '15px', marginBottom: '2.5rem' }}>
              {popular.map(a => (
                <div 
@@ -585,15 +585,15 @@ function AmenitiesSection({ formData, setFormData }) {
                  onClick={() => toggleAmenity(a.id)}
                  style={{ 
                    padding: '1.5rem 10px', borderRadius: '16px', border: '1.5px solid',
-                   borderColor: formData.amenities.includes(a.id) ? '#1ebe74' : '#e2e8f0',
-                   background: formData.amenities.includes(a.id) ? '#f0fdf4' : 'white',
+                   borderColor: formData.amenities.includes(a.id) ? '#CEF17B' : '#DCEFB8',
+                   background: formData.amenities.includes(a.id) ? '#DCEFB8' : 'white',
                    cursor: 'pointer', textAlign: 'center', transition: '0.2s',
                    position: 'relative'
                  }}
                >
-                 <div style={{ color: formData.amenities.includes(a.id) ? '#1ebe74' : '#94a3b8', marginBottom: '10px', display: 'flex', justifyContent: 'center' }}>{a.icon}</div>
-                 <div style={{ fontSize: '0.75rem', fontWeight: '800', color: formData.amenities.includes(a.id) ? '#1ebe74' : '#64748b' }}>{a.label}</div>
-                 <div style={{ position: 'absolute', top: '10px', right: '10px', width: '16px', height: '16px', borderRadius: '4px', border: '1.5px solid #e2e8f0', background: formData.amenities.includes(a.id) ? '#1ebe74' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                 <div style={{ color: formData.amenities.includes(a.id) ? '#CEF17B' : '#94a3b8', marginBottom: '10px', display: 'flex', justifyContent: 'center' }}>{a.icon}</div>
+                 <div style={{ fontSize: '0.75rem', fontWeight: '800', color: formData.amenities.includes(a.id) ? '#CEF17B' : '#98A2B3' }}>{a.label}</div>
+                 <div style={{ position: 'absolute', top: '10px', right: '10px', width: '16px', height: '16px', borderRadius: '4px', border: '1.5px solid #DCEFB8', background: formData.amenities.includes(a.id) ? '#CEF17B' : 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     {formData.amenities.includes(a.id) && <Check size={12} color="white" strokeWidth={4} />}
                  </div>
                </div>
@@ -603,31 +603,31 @@ function AmenitiesSection({ formData, setFormData }) {
           <Field label="Additional Amenities (Optional)">
              <div style={{ display: 'flex', gap: '12px' }}>
                 <input type="text" placeholder="Enter amenity and press Add" style={inputStyle} />
-                <button style={{ padding: '0 25px', borderRadius: '12px', border: 'none', background: '#1ebe74', color: 'white', fontWeight: '800', cursor: 'pointer' }}>+ Add</button>
+                <button style={{ padding: '0 25px', borderRadius: '12px', border: 'none', background: '#CEF17B', color: '#084734', fontWeight: '800', cursor: 'pointer' }}>+ Add</button>
              </div>
           </Field>
        </div>
 
        <div>
-          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', padding: '2rem', marginBottom: '2rem' }}>
+          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '2rem', marginBottom: '2rem' }}>
              <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem' }}>Amenities Preview</h4>
              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 {formData.amenities.length > 0 ? formData.amenities.map(id => (
-                  <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#1ebe74', fontSize: '0.85rem', fontWeight: '700' }}>
+                  <div key={id} style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#CEF17B', fontSize: '0.85rem', fontWeight: '700' }}>
                      <Check size={16} /> {popular.find(p => p.id === id)?.label}
                   </div>
                 )) : <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontStyle: 'italic' }}>No amenities selected</div>}
              </div>
           </div>
 
-          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #f1f5f9', padding: '2rem' }}>
+          <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '2rem' }}>
              <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-               <Star size={18} color="#1ebe74" /> Why Amenities Matter?
+               <Star size={18} color="#CEF17B" /> Why Amenities Matter?
              </h4>
              <ul style={{ padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <li style={whyItemStyle}><Check size={16} color="#1ebe74" /> Helps players filter by facilities</li>
-                <li style={whyItemStyle}><Check size={16} color="#1ebe74" /> Increases trust and professional image</li>
-                <li style={whyItemStyle}><Check size={16} color="#1ebe74" /> Justifies higher pricing for better facilities</li>
+                <li style={whyItemStyle}><Check size={16} color="#CEF17B" /> Helps players filter by facilities</li>
+                <li style={whyItemStyle}><Check size={16} color="#CEF17B" /> Increases trust and professional image</li>
+                <li style={whyItemStyle}><Check size={16} color="#CEF17B" /> Justifies higher pricing for better facilities</li>
              </ul>
           </div>
        </div>
@@ -749,11 +749,11 @@ function PhotosUpload({ formData, setFormData }) {
        
        {/* PHOTOS SECTION */}
        <div style={{ marginBottom: '3rem' }}>
-         <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', color: '#111' }}>Photos</h4>
+         <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', color: '#161616' }}>Photos</h4>
          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
             {/* Upload Button */}
             <label style={{ 
-              aspectRatio: '1', borderRadius: '24px', border: '2.5px dashed #e2e8f0', background: '#f8fafc',
+              aspectRatio: '1', borderRadius: '24px', border: '2.5px dashed #DCEFB8', background: '#F8FAF7',
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px',
               cursor: 'pointer', transition: '0.2s', padding: '2rem'
             }}>
@@ -764,11 +764,11 @@ function PhotosUpload({ formData, setFormData }) {
                  onChange={(e) => handleFileUpload(e, 'image')}
                  style={{ display: 'none' }}
                />
-               <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#1ebe74', boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}>
+               <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#CEF17B', boxShadow: '0 8px 20px rgba(0,0,0,0.06)' }}>
                   <Upload size={24} />
                </div>
                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#1ebe74' }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: '800', color: '#CEF17B' }}>
                     {uploading ? 'Uploading...' : 'Click to upload'}
                   </div>
                   <div style={{ fontSize: '0.75rem', fontWeight: '600', color: '#94a3b8', marginTop: '6px' }}>JPG, PNG up to 5MB</div>
@@ -777,7 +777,7 @@ function PhotosUpload({ formData, setFormData }) {
             
             {/* Uploaded Images */}
             {(formData.images || []).map((img, i) => (
-              <div key={i} style={{ aspectRatio: '1', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #f1f5f9', position: 'relative' }}>
+              <div key={i} style={{ aspectRatio: '1', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #EEF2E6', position: 'relative' }}>
                  <img src={img.url} alt={`Venue ${i+1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                  <div 
                    onClick={() => removeFile(i, 'image')}
@@ -792,11 +792,11 @@ function PhotosUpload({ formData, setFormData }) {
        
        {/* VIDEOS SECTION */}
        <div style={{ marginBottom: '2.5rem' }}>
-         <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', color: '#111' }}>Videos (Optional)</h4>
+         <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem', color: '#161616' }}>Videos (Optional)</h4>
          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '1.5rem' }}>
             {/* Upload Button */}
             <label style={{ 
-              aspectRatio: '16/9', borderRadius: '24px', border: '2.5px dashed #e2e8f0', background: '#f8fafc',
+              aspectRatio: '16/9', borderRadius: '24px', border: '2.5px dashed #DCEFB8', background: '#F8FAF7',
               display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '15px',
               cursor: 'pointer', transition: '0.2s', padding: '2rem'
             }}>
@@ -820,7 +820,7 @@ function PhotosUpload({ formData, setFormData }) {
             
             {/* Uploaded Videos */}
             {(formData.videos || []).map((video, i) => (
-              <div key={i} style={{ aspectRatio: '16/9', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #f1f5f9', position: 'relative', background: '#000' }}>
+              <div key={i} style={{ aspectRatio: '16/9', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #EEF2E6', position: 'relative', background: '#000' }}>
                  <video 
                    src={video.url} 
                    style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
@@ -840,8 +840,8 @@ function PhotosUpload({ formData, setFormData }) {
          </div>
        </div>
 
-       <div style={{ background: '#f8fafc', padding: '2rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
-          <h4 style={{ fontWeight: '800', fontSize: '1rem', marginBottom: '1rem', color: '#111' }}>Upload Guidelines</h4>
+       <div style={{ background: '#F8FAF7', padding: '2rem', borderRadius: '24px', border: '1.5px solid #EEF2E6' }}>
+          <h4 style={{ fontWeight: '800', fontSize: '1rem', marginBottom: '1rem', color: '#161616' }}>Upload Guidelines</h4>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '2rem' }}>
              <GuideItem text="Upload 3-5 photos (max 5)" />
              <GuideItem text="Include photos of the turf, entrance & amenities" />
@@ -857,8 +857,8 @@ function PhotosUpload({ formData, setFormData }) {
 
 function GuideItem({ text }) {
   return (
-    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>
-       <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#1ebe74' }}></div> {text}
+    <div style={{ display: 'flex', gap: '10px', alignItems: 'center', color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>
+       <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#CEF17B' }}></div> {text}
     </div>
   );
 }
@@ -890,19 +890,19 @@ function ReviewSubmit({ formData, onEdit }) {
           <ReviewCard title="Amenities" step={4} onEdit={onEdit}>
              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                 {formData.amenities.map(a => (
-                  <span key={a} style={{ background: '#f1f5f9', padding: '6px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', color: '#64748b' }}>
+                  <span key={a} style={{ background: '#EEF2E6', padding: '6px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3' }}>
                     {popular[a]}
                   </span>
                 ))}
              </div>
           </ReviewCard>
 
-          <div style={{ background: '#f0fdf4', borderRadius: '24px', padding: '2rem', border: '1.5px solid #dcfce7', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
-             <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#1ebe74', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
+          <div style={{ background: '#DCEFB8', borderRadius: '24px', padding: '2rem', border: '1.5px solid #DCEFB8', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+             <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#CEF17B', color: '#084734', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                 <Check size={32} strokeWidth={3} />
              </div>
              <h4 style={{ fontWeight: '900', fontSize: '1.2rem', marginBottom: '8px' }}>Ready to Go Live!</h4>
-             <p style={{ fontSize: '0.85rem', color: '#166534', fontWeight: '600' }}>
+             <p style={{ fontSize: '0.85rem', color: '#084734', fontWeight: '600' }}>
                 Once submitted, our team will review and approve your venue within 24 hours.
              </p>
           </div>
@@ -913,10 +913,10 @@ function ReviewSubmit({ formData, onEdit }) {
 
 function ReviewCard({ title, children, step, onEdit }) {
   return (
-    <div style={{ background: '#f8fafc', borderRadius: '24px', padding: '2rem', border: '1.5px solid #f1f5f9' }}>
+    <div style={{ background: '#F8FAF7', borderRadius: '24px', padding: '2rem', border: '1.5px solid #EEF2E6' }}>
        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-          <h4 style={{ fontWeight: '800', fontSize: '1rem', color: '#111' }}>{title}</h4>
-          <button onClick={() => onEdit(step)} style={{ background: 'none', border: 'none', color: '#1ebe74', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}>Edit</button>
+          <h4 style={{ fontWeight: '800', fontSize: '1rem', color: '#161616' }}>{title}</h4>
+          <button onClick={() => onEdit(step)} style={{ background: 'none', border: 'none', color: '#CEF17B', fontWeight: '800', fontSize: '0.85rem', cursor: 'pointer' }}>Edit</button>
        </div>
        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>{children}</div>
     </div>
@@ -927,10 +927,10 @@ function SectionHeader({ icon, title, subtitle, small }) {
   return (
     <div style={{ marginBottom: small ? '1.5rem' : '3rem' }}>
        <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '6px' }}>
-          <div style={{ color: '#1ebe74' }}>{icon}</div>
-          <h3 style={{ fontSize: small ? '1.1rem' : '1.5rem', fontWeight: '900', color: '#111' }}>{title}</h3>
+          <div style={{ color: '#CEF17B' }}>{icon}</div>
+          <h3 style={{ fontSize: small ? '1.1rem' : '1.5rem', fontWeight: '900', color: '#161616' }}>{title}</h3>
        </div>
-       {subtitle && <p style={{ fontSize: '0.95rem', color: '#64748b', fontWeight: '600' }}>{subtitle}</p>}
+       {subtitle && <p style={{ fontSize: '0.95rem', color: '#98A2B3', fontWeight: '600' }}>{subtitle}</p>}
     </div>
   );
 }
@@ -938,7 +938,7 @@ function SectionHeader({ icon, title, subtitle, small }) {
 function Field({ label, children }) {
   return (
     <div style={{ width: '100%' }}>
-       <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '800', color: '#64748b', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</label>
+       <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: '800', color: '#98A2B3', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</label>
        {children}
     </div>
   );
@@ -948,21 +948,21 @@ function InfoItem({ label, value }) {
   return (
     <div>
        <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', marginBottom: '4px' }}>{label}</div>
-       <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#111' }}>{value || '--'}</div>
+       <div style={{ fontSize: '0.95rem', fontWeight: '800', color: '#161616' }}>{value || '--'}</div>
     </div>
   );
 }
 
 const inputStyle = {
-  width: '100%', padding: '16px 20px', borderRadius: '14px', border: '1.5px solid #e2e8f0',
+  width: '100%', padding: '16px 20px', borderRadius: '14px', border: '1.5px solid #DCEFB8',
   fontSize: '1rem', fontWeight: '600', outline: 'none', background: 'white',
-  boxSizing: 'border-box', color: '#111', transition: '0.2s border-color'
+  boxSizing: 'border-box', color: '#161616', transition: '0.2s border-color'
 };
 
 const inputSmallStyle = {
-  padding: '10px 15px', borderRadius: '10px', border: '1.5px solid #e2e8f0',
+  padding: '10px 15px', borderRadius: '10px', border: '1.5px solid #DCEFB8',
   fontSize: '0.85rem', fontWeight: '700', outline: 'none', background: 'white',
   cursor: 'pointer'
 };
 
-const whyItemStyle = { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: '#64748b', fontWeight: '500' };
+const whyItemStyle = { display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.85rem', color: '#98A2B3', fontWeight: '500' };

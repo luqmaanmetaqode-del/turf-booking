@@ -71,8 +71,8 @@ export default function PartnerSettings({ user, data }) {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#111', marginBottom: '8px' }}>Settings</h2>
-          <p style={{ color: '#64748b', fontWeight: '500' }}>Manage your account settings and preferences</p>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>Settings</h2>
+          <p style={{ color: '#98A2B3', fontWeight: '500' }}>Manage your account settings and preferences</p>
         </div>
         <button onClick={activeSection === 'security' ? handleChangePassword : handleSaveGeneral} disabled={saving} style={btnPrimary}>
           {saved ? <><Check size={18} /> Saved!</> : saving ? 'Saving...' : <><Save size={18} /> Save Changes</>}
@@ -90,14 +90,14 @@ export default function PartnerSettings({ user, data }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
            {sections.map(s => (
              <div key={s.id} onClick={() => { setActiveSection(s.id); setError(''); }} style={{ 
-               padding: '1.2rem', borderRadius: '16px', border: '1.5px solid #f1f5f9',
-               background: s.id === activeSection ? '#f0fdf4' : 'white',
-               borderColor: s.id === activeSection ? '#1ebe74' : '#f1f5f9',
+               padding: '1.2rem', borderRadius: '16px', border: '1.5px solid #EEF2E6',
+               background: s.id === activeSection ? '#DCEFB8' : 'white',
+               borderColor: s.id === activeSection ? '#CEF17B' : '#EEF2E6',
                cursor: 'pointer', transition: '0.2s'
              }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '4px' }}>
-                   <div style={{ color: s.id === activeSection ? '#1ebe74' : '#64748b' }}>{s.icon}</div>
-                   <div style={{ fontWeight: '800', color: s.id === activeSection ? '#111' : '#64748b', fontSize: '0.95rem' }}>{s.label}</div>
+                   <div style={{ color: s.id === activeSection ? '#CEF17B' : '#98A2B3' }}>{s.icon}</div>
+                   <div style={{ fontWeight: '800', color: s.id === activeSection ? '#161616' : '#98A2B3', fontSize: '0.95rem' }}>{s.label}</div>
                 </div>
                 <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: '500' }}>{s.sub}</div>
              </div>
@@ -105,7 +105,7 @@ export default function PartnerSettings({ user, data }) {
         </div>
 
         {/* CONTENT AREA */}
-        <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', border: '1.5px solid #f1f5f9' }}>
+        <div style={{ background: 'white', padding: '2.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6' }}>
            {activeSection === 'general' && (
              <>
                <h3 style={{ fontSize: '1.2rem', fontWeight: '900', marginBottom: '2rem' }}>General Settings</h3>
@@ -131,14 +131,14 @@ export default function PartnerSettings({ user, data }) {
                      </select>
                   </div>
 
-                  <div style={{ borderTop: '1.5px solid #f1f5f9', paddingTop: '2rem', marginTop: '1rem' }}>
+                  <div style={{ borderTop: '1.5px solid #EEF2E6', paddingTop: '2rem', marginTop: '1rem' }}>
                      <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1.5rem' }}>Account Status</h4>
-                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderRadius: '16px', background: '#f8fafc', border: '1.5px solid #f1f5f9' }}>
+                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.5rem', borderRadius: '16px', background: '#F8FAF7', border: '1.5px solid #EEF2E6' }}>
                         <div>
                            <div style={{ fontWeight: '800', fontSize: '0.95rem' }}>Your account is verified</div>
-                           <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500' }}>Last check: {lastCheck}{primaryTurf ? ` for ${primaryTurf.name}` : ''}</div>
+                           <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500' }}>Last check: {lastCheck}{primaryTurf ? ` for ${primaryTurf.name}` : ''}</div>
                         </div>
-                        <div style={{ background: '#f0fdf4', color: '#1ebe74', padding: '6px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800' }}>VERIFIED</div>
+                        <div style={{ background: '#DCEFB8', color: '#CEF17B', padding: '6px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800' }}>VERIFIED</div>
                      </div>
                   </div>
                </div>
@@ -161,9 +161,9 @@ export default function PartnerSettings({ user, data }) {
                      <label style={labelStyle}>Confirm New Password</label>
                      <input type="password" style={inputStyle} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="Confirm new password" />
                   </div>
-                  <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #f1f5f9' }}>
+                  <div style={{ background: '#F8FAF7', padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6' }}>
                      <div style={{ fontWeight: '800', fontSize: '0.9rem', marginBottom: '8px' }}>Password Requirements</div>
-                     <ul style={{ margin: 0, paddingLeft: '1.2rem', color: '#64748b', fontSize: '0.85rem', fontWeight: '500', lineHeight: 2 }}>
+                     <ul style={{ margin: 0, paddingLeft: '1.2rem', color: '#98A2B3', fontSize: '0.85rem', fontWeight: '500', lineHeight: 2 }}>
                         <li>Minimum 6 characters</li>
                         <li>Use a mix of letters and numbers for better security</li>
                      </ul>
@@ -182,12 +182,12 @@ export default function PartnerSettings({ user, data }) {
                    { label: 'Review Notifications', sub: 'Get notified when a player leaves a review' },
                    { label: 'Payout Notifications', sub: 'Get notified when a payout is processed' },
                  ].map((n, i) => (
-                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem', borderRadius: '14px', border: '1.5px solid #f1f5f9' }}>
+                   <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.2rem', borderRadius: '14px', border: '1.5px solid #EEF2E6' }}>
                      <div>
                        <div style={{ fontWeight: '700', fontSize: '0.95rem' }}>{n.label}</div>
-                       <div style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: '500', marginTop: '4px' }}>{n.sub}</div>
+                       <div style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '500', marginTop: '4px' }}>{n.sub}</div>
                      </div>
-                     <div style={{ width: '44px', height: '24px', background: '#1ebe74', borderRadius: '20px', padding: '2px', cursor: 'pointer', position: 'relative' }}>
+                     <div style={{ width: '44px', height: '24px', background: '#CEF17B', borderRadius: '20px', padding: '2px', cursor: 'pointer', position: 'relative' }}>
                        <div style={{ position: 'absolute', top: '2px', right: '2px', width: '20px', height: '20px', background: 'white', borderRadius: '50%' }}></div>
                      </div>
                    </div>
@@ -209,7 +209,7 @@ export default function PartnerSettings({ user, data }) {
   );
 }
 
-const btnPrimary = { background: '#1ebe74', color: 'white', border: 'none', padding: '12px 24px', borderRadius: '12px', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)' };
+const btnPrimary = { background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px', borderRadius: '12px', fontWeight: '800', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)' };
 const inputGroup = { display: 'flex', flexDirection: 'column', gap: '10px' };
-const labelStyle = { fontSize: '0.85rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' };
-const inputStyle = { padding: '14px 18px', borderRadius: '12px', border: '1.5px solid #f1f5f9', fontSize: '0.95rem', fontWeight: '600', outline: 'none', background: 'white' };
+const labelStyle = { fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' };
+const inputStyle = { padding: '14px 18px', borderRadius: '12px', border: '1.5px solid #EEF2E6', fontSize: '0.95rem', fontWeight: '600', outline: 'none', background: 'white' };

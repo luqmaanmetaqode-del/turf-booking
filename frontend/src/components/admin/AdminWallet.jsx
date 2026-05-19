@@ -52,7 +52,7 @@ export default function AdminWallet({ bookings = [] }) {
     background: 'white',
     borderRadius: '16px',
     padding: '1.5rem',
-    border: '1px solid #f1f5f9',
+    border: '1px solid #EEF2E6',
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
   };
 
@@ -64,7 +64,7 @@ export default function AdminWallet({ bookings = [] }) {
   };
 
   const btnPrimary = {
-    background: '#1ebe74',
+    background: '#CEF17B',
     color: 'white',
     border: 'none',
     padding: '12px 24px',
@@ -101,10 +101,10 @@ export default function AdminWallet({ bookings = [] }) {
     <div style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#111', marginBottom: '0.5rem' }}>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: '800', color: '#161616', marginBottom: '0.5rem' }}>
             Platform Wallet
           </h2>
-          <p style={{ color: '#64748b', fontSize: '0.95rem' }}>
+          <p style={{ color: '#98A2B3', fontSize: '0.95rem' }}>
             Track platform fees and revenue collected from bookings
           </p>
         </div>
@@ -138,7 +138,7 @@ export default function AdminWallet({ bookings = [] }) {
             <h3 style={{ fontSize: '1.5rem', fontWeight: '800', marginBottom: '1rem' }}>
               Withdraw Platform Funds
             </h3>
-            <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>
+            <p style={{ color: '#98A2B3', marginBottom: '1.5rem' }}>
               Available Balance: ₹{walletData.totalRevenue.toLocaleString('en-IN')}
             </p>
 
@@ -155,7 +155,7 @@ export default function AdminWallet({ bookings = [] }) {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '12px',
-                  border: '1.5px solid #e2e8f0',
+                  border: '1.5px solid #DCEFB8',
                   fontSize: '1rem',
                   fontWeight: '600',
                 }}
@@ -175,7 +175,7 @@ export default function AdminWallet({ bookings = [] }) {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '12px',
-                  border: '1.5px solid #e2e8f0',
+                  border: '1.5px solid #DCEFB8',
                   fontSize: '1rem',
                 }}
               />
@@ -194,7 +194,7 @@ export default function AdminWallet({ bookings = [] }) {
                   width: '100%',
                   padding: '12px',
                   borderRadius: '12px',
-                  border: '1.5px solid #e2e8f0',
+                  border: '1.5px solid #DCEFB8',
                   fontSize: '1rem',
                 }}
               />
@@ -217,8 +217,8 @@ export default function AdminWallet({ bookings = [] }) {
                 onClick={() => setShowWithdraw(false)}
                 style={{
                   ...btnPrimary,
-                  background: '#f1f5f9',
-                  color: '#64748b',
+                  background: '#EEF2E6',
+                  color: '#98A2B3',
                   flex: 1,
                   justifyContent: 'center',
                 }}
@@ -234,12 +234,12 @@ export default function AdminWallet({ bookings = [] }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
         <div style={statCardStyle}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>Total Revenue</span>
-            <div style={{ background: '#f0fdf4', padding: '8px', borderRadius: '8px' }}>
+            <span style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>Total Revenue</span>
+            <div style={{ background: '#DCEFB8', padding: '8px', borderRadius: '8px' }}>
               <Wallet size={18} color="#16a34a" />
             </div>
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#111' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#161616' }}>
             ₹{walletData.totalRevenue.toLocaleString('en-IN')}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#16a34a', fontWeight: '600' }}>
@@ -249,12 +249,12 @@ export default function AdminWallet({ bookings = [] }) {
 
         <div style={statCardStyle}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>Platform Fees</span>
+            <span style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>Platform Fees</span>
             <div style={{ background: '#eff6ff', padding: '8px', borderRadius: '8px' }}>
               <DollarSign size={18} color="#2563eb" />
             </div>
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#111' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#161616' }}>
             ₹{walletData.totalPlatformFees.toLocaleString('en-IN')}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#2563eb', fontWeight: '600' }}>
@@ -264,12 +264,12 @@ export default function AdminWallet({ bookings = [] }) {
 
         <div style={statCardStyle}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>GST Collected</span>
+            <span style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>GST Collected</span>
             <div style={{ background: '#fef3c7', padding: '8px', borderRadius: '8px' }}>
               <TrendingUp size={18} color="#d97706" />
             </div>
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#111' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#161616' }}>
             ₹{walletData.totalGST.toLocaleString('en-IN')}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#d97706', fontWeight: '600' }}>
@@ -279,12 +279,12 @@ export default function AdminWallet({ bookings = [] }) {
 
         <div style={statCardStyle}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: '600' }}>Avg per Booking</span>
+            <span style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>Avg per Booking</span>
             <div style={{ background: '#f3e8ff', padding: '8px', borderRadius: '8px' }}>
               <IndianRupee size={18} color="#9333ea" />
             </div>
           </div>
-          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#111' }}>
+          <div style={{ fontSize: '1.75rem', fontWeight: '900', color: '#161616' }}>
             ₹{walletData.totalBookings > 0 ? Math.round(walletData.totalRevenue / walletData.totalBookings) : 0}
           </div>
           <div style={{ fontSize: '0.8rem', color: '#9333ea', fontWeight: '600' }}>
@@ -295,22 +295,22 @@ export default function AdminWallet({ bookings = [] }) {
 
       {/* Transactions Table */}
       <div style={cardStyle}>
-        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#111', marginBottom: '1.5rem' }}>
+        <h3 style={{ fontSize: '1.25rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem' }}>
           Recent Transactions
         </h3>
 
         <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr style={{ borderBottom: '2px solid #f1f5f9' }}>
-                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Date</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Booking ID</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Venue</th>
-                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Partner</th>
-                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Booking Amount</th>
-                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Platform Fee</th>
-                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>GST</th>
-                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#64748b', textTransform: 'uppercase' }}>Net Revenue</th>
+              <tr style={{ borderBottom: '2px solid #EEF2E6' }}>
+                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Date</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Booking ID</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Venue</th>
+                <th style={{ padding: '12px', textAlign: 'left', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Partner</th>
+                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Booking Amount</th>
+                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Platform Fee</th>
+                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>GST</th>
+                <th style={{ padding: '12px', textAlign: 'right', fontSize: '0.8rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>Net Revenue</th>
               </tr>
             </thead>
             <tbody>
@@ -322,11 +322,11 @@ export default function AdminWallet({ bookings = [] }) {
                 </tr>
               ) : (
                 walletData.transactions.slice(0, 20).map((transaction) => (
-                  <tr key={transaction.id} style={{ borderBottom: '1px solid #f8fafc' }}>
+                  <tr key={transaction.id} style={{ borderBottom: '1px solid #F8FAF7' }}>
                     <td style={{ padding: '12px', fontSize: '0.9rem', color: '#475569' }}>
                       {transaction.date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}
                     </td>
-                    <td style={{ padding: '12px', fontSize: '0.9rem', fontWeight: '600', color: '#111' }}>
+                    <td style={{ padding: '12px', fontSize: '0.9rem', fontWeight: '600', color: '#161616' }}>
                       #{transaction.bookingId}
                     </td>
                     <td style={{ padding: '12px', fontSize: '0.9rem', color: '#475569' }}>
@@ -335,7 +335,7 @@ export default function AdminWallet({ bookings = [] }) {
                     <td style={{ padding: '12px', fontSize: '0.9rem', color: '#475569' }}>
                       {transaction.partnerName}
                     </td>
-                    <td style={{ padding: '12px', fontSize: '0.9rem', fontWeight: '600', color: '#111', textAlign: 'right' }}>
+                    <td style={{ padding: '12px', fontSize: '0.9rem', fontWeight: '600', color: '#161616', textAlign: 'right' }}>
                       ₹{transaction.totalAmount.toLocaleString('en-IN')}
                     </td>
                     <td style={{ padding: '12px', fontSize: '0.9rem', fontWeight: '600', color: '#2563eb', textAlign: 'right' }}>
