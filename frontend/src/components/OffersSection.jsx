@@ -3,52 +3,128 @@ import axios from 'axios';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
+// Fallback offers if API returns empty
+const FALLBACK_OFFERS = [
+  {
+    _id: '1',
+    discount: '15% OFF',
+    title: 'Morning Saver',
+    description: 'Discount for early morning football bookings. Get on the field before the crowd does.',
+    color: '#084734',
+  },
+  {
+    _id: '2',
+    discount: '10% OFF',
+    title: 'Cricket Weekday Deal',
+    description: 'Special weekday discount for cricket slots. More savings for your practice sessions.',
+    color: '#161616',
+  },
+];
+
 export default function OffersSection() {
   const [offers, setOffers] = useState([]);
 
   useEffect(() => {
     axios.get(`${API}/offers`)
-      .then(res => setOffers(res.data))
-      .catch(() => {});
+      .then(res => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        setOffers(data.length > 0 ? data : FALLBACK_OFFERS);
+      })
+      .catch(() => setOffers(FALLBACK_OFFERS));
   }, []);
 
-  if (offers.length === 0) return null;
+  const displayOffers = offers.length > 0 ? offers : FALLBACK_OFFERS;
 
   return (
-    <section style={{ padding: '4rem 2rem' }}>
-      <h2 style={{ fontSize: '2.2rem', fontWeight: '900', marginBottom: '0.75rem', color: '#161616', letterSpacing: '-0.5px' }}>Exclusive Offers</h2>
-      <p style={{ color: '#666', marginBottom: '3rem', fontSize: '1rem', fontWeight: '500' }}>Limited time deals for our regular players</p>
+    <section style={{ padding: '4rem 0' }}>
+      {/* Section Header */}
+      <div style={{ marginBottom: '2.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
+          <span style={{ display: 'inline-block', width: '28px', height: '2px', background: '#CEF17B' }}></span>
+          <span style={{ fontSize: '0.72rem', fontWeight: '700', color: '#084734', textTransform: 'uppercase', letterSpacing: '2px' }}>
+            Save more
+          </span>
+        </div>
+        <h2 style={{
+          fontSize: '2.2rem', fontWeight: '800', color: '#161616', marginBottom: '8px',
+          fontFamily: "'Sora', sans-serif",
+        }}>
+          Exclusive <span style={{ color: '#084734' }}>Offers</span>
+        </h2>
+        <p style={{ color: '#98A2B3', fontSize: '0.95rem', fontFamily: "'DM Sans', sans-serif" }}>
+          Limited time deals for our regular players
+        </p>
+      </div>
+
+      {/* Offer Cards */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-        gap: '2rem',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(420px, 1fr))',
+        gap: '1.5rem',
       }}>
-        {offers.map(offer => (
-          <div key={offer.id} style={{
-            background: 'linear-gradient(135deg, #084734, #CEF17B)',
-            borderRadius: '24px', padding: '2rem',
-            color: 'white', position: 'relative', overflow: 'hidden',
-            boxShadow: '0 10px 25px rgba(30,190,116,0.2)',
+        {displayOffers.map((offer, index) => (
+          <div key={offer._id || index} style={{
+            background: index % 2 === 0 ? '#084734' : '#161616',
+            borderRadius: '20px',
+            padding: '2.5rem',
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: '200px',
           }}>
+            {/* Decorative circle */}
             <div style={{
-              position: 'absolute', top: '1.25rem', right: '1.25rem',
-              background: 'white', color: '#084734',
-              borderRadius: '12px', padding: '6px 16px',
-              fontWeight: '800', fontSize: '0.9rem',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-            }}>{offer.discount}</div>
-            <h3 style={{ marginBottom: '0.75rem', fontSize: '1.3rem', fontWeight: '800' }}>{offer.title}</h3>
-            <p style={{ fontSize: '0.95rem', opacity: 0.9, lineHeight: 1.6, fontWeight: '500' }}>{offer.description}</p>
+              position: 'absolute', bottom: '-40px', right: '-40px',
+              width: '180px', height: '180px', borderRadius: '50%',
+              background: 'rgba(255,255,255,0.04)',
+            }} />
+            <div style={{
+              position: 'absolute', bottom: '20px', right: '20px',
+              width: '100px', height: '100px', borderRadius: '50%',
+              background: 'rgba(255,255,255,0.03)',
+            }} />
+
+            {/* Discount badge */}
+            <div style={{
+              display: 'inline-block',
+              background: '#CEF17B', color: '#084734',
+              borderRadius: '20px', padding: '5px 14px',
+              fontWeight: '800', fontSize: '0.78rem',
+              marginBottom: '1.25rem',
+              fontFamily: "'DM Sans', sans-serif",
+            }}>
+              {offer.discount || offer.discount_value || '15% OFF'}
+            </div>
+
+            <h3 style={{
+              fontSize: '1.5rem', fontWeight: '800', color: 'white',
+              marginBottom: '10px', fontFamily: "'Sora', sans-serif",
+            }}>
+              {offer.title}
+            </h3>
+
+            <p style={{
+              fontSize: '0.9rem', color: 'rgba(255,255,255,0.65)',
+              lineHeight: 1.6, marginBottom: '1.75rem',
+              maxWidth: '380px', fontFamily: "'DM Sans', sans-serif",
+            }}>
+              {offer.description}
+            </p>
+
             <button style={{
-              marginTop: '1.5rem', background: 'white', color: '#084734',
-              border: 'none', padding: '12px 28px', borderRadius: '12px',
-              cursor: 'pointer', fontWeight: '800', fontSize: '0.95rem',
+              background: 'transparent',
+              color: '#CEF17B',
+              border: '1.5px solid #CEF17B',
+              padding: '10px 24px', borderRadius: '50px',
+              cursor: 'pointer', fontWeight: '700',
+              fontSize: '0.88rem',
+              display: 'flex', alignItems: 'center', gap: '6px',
               transition: 'all 0.2s',
+              fontFamily: "'DM Sans', sans-serif",
             }}
-              onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
-              onMouseLeave={e => e.target.style.transform = 'scale(1)'}
+              onMouseEnter={e => { e.currentTarget.style.background = '#CEF17B'; e.currentTarget.style.color = '#084734'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#CEF17B'; }}
             >
-              Claim Offer
+              Claim Offer →
             </button>
           </div>
         ))}
