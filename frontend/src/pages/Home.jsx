@@ -52,7 +52,7 @@ export default function Home() {
   const filtered = sport === 'All' ? turfsList : turfsList.filter(t => t.sport === sport);
 
   return (
-    <div style={{ background: '#F8FAF7', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ background: '#F8FAF7', fontFamily: "'DM Sans', sans-serif" }}>
 
       {/* HERO */}
       <div style={{
@@ -68,10 +68,20 @@ export default function Home() {
         alignItems: 'center',
         justifyContent: 'center',
       }}>
-        {/* Subtle background pattern */}
+        {/* Grid pattern - ONLY in hero */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle at 15% 50%, rgba(206,241,123,0.08) 0%, transparent 50%), radial-gradient(circle at 85% 30%, rgba(206,241,123,0.06) 0%, transparent 50%)',
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+          pointerEvents: 'none',
+        }} />
+        {/* Radial glow overlay */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'radial-gradient(ellipse at center, rgba(8,71,52,0.3) 0%, rgba(8,71,52,0.9) 70%)',
           pointerEvents: 'none',
         }} />
 
@@ -90,6 +100,7 @@ export default function Home() {
           fontSize: '4.5rem', fontWeight: '900',
           marginBottom: '0.5rem', lineHeight: 1.05,
           letterSpacing: '-2px', color: 'white',
+          fontFamily: "'Sora', sans-serif",
         }}>
           Book. Play.
         </h1>
@@ -97,6 +108,7 @@ export default function Home() {
           fontSize: '4.5rem', fontWeight: '900',
           marginBottom: '1.5rem', lineHeight: 1.05,
           letterSpacing: '-2px', color: '#CEF17B',
+          fontFamily: "'Sora', sans-serif",
         }}>
           Enjoy.
         </h1>
