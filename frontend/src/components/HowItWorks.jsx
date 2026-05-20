@@ -8,44 +8,74 @@ export default function HowItWorks() {
 
   return (
     <section style={{ background: '#084734', padding: '5rem 2rem' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#CEF17B', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px' }}>
+          <div style={{ fontSize: '0.72rem', fontWeight: '700', color: '#CEF17B', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px', fontFamily: "'DM Sans', sans-serif" }}>
             Simple process
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: 'white', marginBottom: '8px' }}>
+          <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: 'white', marginBottom: '8px', fontFamily: "'Sora', sans-serif" }}>
             Simplified Booking Process
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1rem' }}>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1rem', fontFamily: "'DM Sans', sans-serif" }}>
             Get on the field in 4 quick steps
           </p>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+        {/* Steps Grid - NO connector line */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '1.5rem',
+        }}>
           {steps.map((step, i) => (
             <div key={i} style={{
               background: 'rgba(255,255,255,0.06)',
               border: '1px solid rgba(255,255,255,0.1)',
-              borderRadius: '20px', padding: '2.5rem 2rem',
-              textAlign: 'center', transition: 'all 0.3s',
+              borderRadius: '20px',
+              padding: '2.5rem 1.5rem',
+              textAlign: 'center',
+              transition: 'all 0.3s',
             }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(206,241,123,0.1)'; e.currentTarget.style.borderColor = 'rgba(206,241,123,0.3)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(206,241,123,0.08)';
+                e.currentTarget.style.borderColor = 'rgba(206,241,123,0.25)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'rgba(255,255,255,0.06)';
+                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+              }}
             >
+              {/* Number circle - standalone, no line */}
               <div style={{
-                width: '56px', height: '56px',
-                background: '#CEF17B', color: '#084734',
-                borderRadius: '50%', display: 'flex',
-                alignItems: 'center', justifyContent: 'center',
-                fontSize: '1.4rem', fontWeight: '900',
+                width: '52px', height: '52px',
+                background: '#CEF17B',
+                color: '#084734',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.3rem',
+                fontWeight: '900',
                 margin: '0 auto 1.5rem',
+                fontFamily: "'Sora', sans-serif",
+                flexShrink: 0,
               }}>
                 {step.num}
               </div>
-              <h3 style={{ fontSize: '1.1rem', fontWeight: '700', color: 'white', marginBottom: '10px' }}>
+
+              <h3 style={{
+                fontSize: '1rem', fontWeight: '700',
+                color: 'white', marginBottom: '10px',
+                fontFamily: "'Sora', sans-serif",
+              }}>
                 {step.title}
               </h3>
-              <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem', lineHeight: 1.6 }}>
+              <p style={{
+                color: 'rgba(255,255,255,0.55)',
+                fontSize: '0.88rem', lineHeight: 1.6,
+                fontFamily: "'DM Sans', sans-serif",
+              }}>
                 {step.desc}
               </p>
             </div>

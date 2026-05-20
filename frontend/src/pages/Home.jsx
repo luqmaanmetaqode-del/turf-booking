@@ -72,16 +72,10 @@ export default function Home() {
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
           `,
           backgroundSize: '60px 60px',
-          pointerEvents: 'none',
-        }} />
-        {/* Radial glow overlay */}
-        <div style={{
-          position: 'absolute', inset: 0,
-          background: 'radial-gradient(ellipse at center, rgba(8,71,52,0.3) 0%, rgba(8,71,52,0.9) 70%)',
           pointerEvents: 'none',
         }} />
 
