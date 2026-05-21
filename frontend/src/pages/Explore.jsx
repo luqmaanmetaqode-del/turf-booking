@@ -213,9 +213,9 @@ export default function Explore() {
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {SPORT_FILTERS.map(s => (
               <button key={s.value} onClick={() => setSport(s.value)} style={{
-                background: sport === s.value ? '#161616' : 'white',
+                background: sport === s.value ? '#161616' : '#F0F0F0',
                 color: sport === s.value ? 'white' : '#161616',
-                border: `1.5px solid ${sport === s.value ? '#161616' : '#e5e7eb'}`,
+                border: `1.5px solid ${sport === s.value ? '#161616' : '#E5E5E5'}`,
                 padding: '9px 20px', borderRadius: '50px',
                 fontSize: '0.88rem', fontWeight: '600', cursor: 'pointer',
                 transition: 'all 0.2s', fontFamily: "'DM Sans', sans-serif",

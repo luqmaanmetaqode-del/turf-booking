@@ -241,9 +241,9 @@ export default function Home() {
         <div style={{ display: 'flex', gap: '10px', marginBottom: '2rem', flexWrap: 'wrap' }}>
           {FILTER_SPORTS.map(s => (
             <button key={s} onClick={() => setSport(s)} style={{
-              background: sport === s ? '#161616' : 'white',
+              background: sport === s ? '#161616' : '#F0F0F0',
               color: sport === s ? 'white' : '#161616',
-              border: `1.5px solid ${sport === s ? '#161616' : '#e5e7eb'}`,
+              border: `1.5px solid ${sport === s ? '#161616' : '#E5E5E5'}`,
               padding: '8px 20px', borderRadius: '50px',
               fontSize: '0.88rem', fontWeight: '600', cursor: 'pointer',
               transition: 'all 0.2s',
