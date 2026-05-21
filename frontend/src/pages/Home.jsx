@@ -189,7 +189,7 @@ export default function Home() {
             <span style={{ display: 'inline-block', width: '20px', height: '2px', background: '#CEF17B' }}></span>
             Find your field
           </div>
-          <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#161616', marginBottom: '8px', fontFamily: "'Sora', sans-serif" }}>Popular Cities</h2>
+          <h2 style={{ fontSize: '2.2rem', fontWeight: '800', color: '#161616', marginBottom: '8px', fontFamily: "'Sora', sans-serif" }}>Popular <span style={{ color: '#084734' }}>Cities</span></h2>
           <p style={{ color: '#98A2B3', fontSize: '1rem', fontFamily: "'DM Sans', sans-serif" }}>Book turfs across India's top sports cities</p>
         </div>
         <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
