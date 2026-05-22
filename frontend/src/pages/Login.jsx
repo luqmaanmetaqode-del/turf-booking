@@ -76,7 +76,7 @@ export default function Login() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: '#F8FAF7', fontFamily: "'Inter', sans-serif" }}>
+    <div style={{ minHeight: '100vh', display: 'flex', background: '#F8FAF7', fontFamily: "'Inter', sans-serif", overflow: 'hidden' }}>
       {/* ── LEFT PANEL ── */}
       <div style={{
         flex: 1,
@@ -84,6 +84,7 @@ export default function Login() {
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
         padding: '3rem', position: 'relative', overflow: 'hidden',
+        minHeight: '100vh',
       }}>
         {/* grid overlay */}
         <div style={{
@@ -173,7 +174,7 @@ export default function Login() {
       <div style={{
         width: 500, background: 'white',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
-        padding: '3rem 3.5rem',
+        padding: '2rem 3.5rem',
         boxShadow: '-4px 0 40px rgba(0,0,0,0.06)',
         overflowY: 'auto',
       }}>
