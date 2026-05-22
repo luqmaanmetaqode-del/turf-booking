@@ -231,7 +231,12 @@ export default function Login() {
               </div>
 
               <button type="submit" disabled={loginLoading} style={submitBtn(loginLoading)}>
-                {loginLoading ? 'Logging in...' : '→ Login'}
+                {loginLoading ? 'Logging in...' : (
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '1.2rem' }}>→]</span>
+                    <span>Login</span>
+                  </span>
+                )}
               </button>
             </form>
 
@@ -441,12 +446,20 @@ const eyeBtn = {
 };
 
 const submitBtn = (loading) => ({
-  width: '100%', background: loading ? '#a8d87a' : '#084734',
-  color: 'white', border: 'none', padding: '16px',
-  borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer',
-  fontWeight: 800, fontSize: '1rem',
-  boxShadow: loading ? 'none' : '0 6px 20px rgba(8,71,52,0.3)',
-  marginTop: '0.3rem', transition: 'all 0.2s',
+  width: '100%',
+  background: loading ? '#0a3d26' : '#0a3d26',
+  color: '#CEF17B',
+  border: 'none',
+  padding: '17px',
+  borderRadius: '12px',
+  cursor: loading ? 'not-allowed' : 'pointer',
+  fontWeight: 800,
+  fontSize: '1.1rem',
+  letterSpacing: '0.3px',
+  boxShadow: loading ? 'none' : '0 6px 24px rgba(8,71,52,0.35)',
+  marginTop: '0.3rem',
+  transition: 'all 0.2s',
+  opacity: loading ? 0.7 : 1,
 });
 
 const linkStyle = {
