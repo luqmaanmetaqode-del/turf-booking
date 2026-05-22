@@ -85,11 +85,14 @@ export default function Login() {
         justifyContent: 'center', alignItems: 'center',
         padding: '3rem', position: 'relative', overflow: 'hidden',
       }}>
-        {/* subtle grid overlay */}
+        {/* grid overlay */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(206,241,123,0.06) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
         }} />
 
         {/* Logo circle */}
