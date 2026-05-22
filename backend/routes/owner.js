@@ -1,5 +1,18 @@
 const express = require('express');
 const Booking = require('../models/Booking');
+
+function timeAgo(date) {
+  const diff = Date.now() - new Date(date).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'Just now';
+  if (mins < 60) return `${mins} minute${mins > 1 ? 's' : ''} ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs} hour${hrs > 1 ? 's' : ''} ago`;
+  const days = Math.floor(hrs / 24);
+  if (days === 1) return 'Yesterday';
+  return `${days} days ago`;
+}
+
 const Turf = require('../models/Turf');
 const Review = require('../models/Review');
 const Offer = require('../models/Offer');
@@ -41,9 +54,46 @@ router.get('/dashboard', auth, ownerOnly, async (req, res) => {
       : 0;
 
     const today = new Date().toISOString().split('T')[0];
+
+    // Upcoming = confirmed future bookings
     const upcomingBookings = bookings.filter(b => b.date >= today && b.status === 'confirmed');
     const upcomingBookingsCount = upcomingBookings.length;
     const totalBookings = bookings.length;
+
+    // Pending approvals = pending status bookings
+    const pendingApprovals = bookings.filter(b => b.status === 'pending');
+
+    // Recent activity feed (last 10 events across bookings + reviews)
+    const recentActivity = [];
+
+    bookings.slice(0, 10).forEach(b => {
+      if (b.status === 'confirmed') {
+        recentActivity.push({
+          type: 'booking',
+          message: `New booking from ${b.user_id?.name || 'Player'} — ${b.turf_id?.name}, ${b.date}`,
+          time: timeAgo(b.createdAt),
+          createdAt: b.createdAt,
+        });
+      } else if (b.status === 'cancelled') {
+        recentActivity.push({
+          type: 'cancel',
+          message: `Booking cancelled by ${b.user_id?.name || 'Player'} — ${b.turf_id?.name}, ${b.date}`,
+          time: timeAgo(b.createdAt),
+          createdAt: b.createdAt,
+        });
+      }
+    });
+
+    reviews.slice(0, 5).forEach(r => {
+      recentActivity.push({
+        type: 'review',
+        message: `${r.rating}★ review received on ${r.turf_id?.name} from ${r.user_id?.name || 'Player'}`,
+        time: timeAgo(r.createdAt),
+        createdAt: r.createdAt,
+      });
+    });
+
+    recentActivity.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
     // Notification count: new bookings in last 24h + unread reviews in last 48h
     const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
@@ -63,6 +113,8 @@ router.get('/dashboard', auth, ownerOnly, async (req, res) => {
       totalBookings, 
       upcomingBookingsCount,
       upcomingBookings: upcomingBookings.slice(0, 5),
+      pendingApprovals: pendingApprovals.slice(0, 4),
+      recentActivity: recentActivity.slice(0, 5),
       notificationCount,
     });
   } catch (err) {

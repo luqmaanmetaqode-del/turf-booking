@@ -260,10 +260,10 @@ export default function PartnerDashboard() {
               {/* STAT CARDS */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.2rem', marginBottom: '2rem' }}>
                 {[
-                  { label: 'Total Bookings',   value: data.totalBookings || 0,                         trend: '+12% vs last month', up: true,  icon: '📅', color: '#3B82F6' },
-                  { label: 'Total Earnings',   value: `₹${((data.totalEarnings||0)/100000).toFixed(1)}L`, trend: '+8.4% vs last month', up: true,  icon: '₹',  color: '#10B981' },
-                  { label: 'Upcoming Bookings',value: data.upcomingBookingsCount || 0,                  trend: '+3 vs last month',   up: true,  icon: '🕐', color: '#F59E0B' },
-                  { label: 'Total Venues',     value: data.turfs?.length || 0,                         trend: 'No change vs last month', up: null, icon: '📍', color: '#8B5CF6' },
+                  { label: 'Total Bookings',   value: data.totalBookings || 0,                         trend: 'Total all time',          up: true,  icon: '📅', color: '#3B82F6' },
+                  { label: 'Total Earnings',   value: (data.totalEarnings||0) >= 100000 ? `₹${((data.totalEarnings||0)/100000).toFixed(1)}L` : `₹${(data.totalEarnings||0).toLocaleString()}`, trend: 'Confirmed bookings', up: true, icon: '₹', color: '#10B981' },
+                  { label: 'Upcoming Bookings',value: data.upcomingBookingsCount || 0,                  trend: 'Confirmed & future',      up: true,  icon: '🕐', color: '#F59E0B' },
+                  { label: 'Total Venues',     value: data.turfs?.length || 0,                         trend: 'Active venues',           up: null,  icon: '📍', color: '#8B5CF6' },
                 ].map((s, i) => (
                   <div key={i} style={{
                     background: '#fff', padding: '1.4rem', borderRadius: '16px',
@@ -306,7 +306,7 @@ export default function PartnerDashboard() {
                         <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>{icon}</div>
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.user_id?.name || 'Player'}</div>
-                          <div style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '2px' }}>{b.turf_id?.name} · {b.time_slot}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '2px' }}>{b.turf_id?.name} · {Array.isArray(b.time_slots) ? b.time_slots[0] : b.time_slot}</div>
                         </div>
                         <div style={{ textAlign: 'right', flexShrink: 0 }}>
                           <span style={{ background: statusColor.bg, color: statusColor.text, fontSize: '0.68rem', fontWeight: '700', padding: '3px 8px', borderRadius: '6px', textTransform: 'uppercase' }}>{b.status}</span>
@@ -393,7 +393,7 @@ export default function PartnerDashboard() {
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontWeight: '700', fontSize: '0.82rem', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.user_id?.name}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>{b.turf_id?.sport} · {b.time_slot}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>{b.turf_id?.sport} · {Array.isArray(b.time_slots) ? b.time_slots[0] : b.time_slot} · {b.turf_id?.name}</div>
                       </div>
                       <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
                         <button onClick={() => switchTab('approvals')} style={{ width: '28px', height: '28px', borderRadius: '7px', background: ACCENT_DARK, color: ACCENT, border: 'none', cursor: 'pointer', fontWeight: '800', fontSize: '0.85rem' }}>✓</button>
