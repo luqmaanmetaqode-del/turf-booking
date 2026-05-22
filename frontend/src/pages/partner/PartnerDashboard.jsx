@@ -30,8 +30,8 @@ import PartnerOffers from '../../components/partner/PartnerOffers';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
-const SIDEBAR_BG = '#0D1F0F';
-const SIDEBAR_ACTIVE = 'rgba(206,241,123,0.12)';
+const SIDEBAR_BG = '#1C2B1E';
+const SIDEBAR_ACTIVE = '#2D3F2F';
 const ACCENT = '#CEF17B';
 const ACCENT_DARK = '#1A3A1F';
 
@@ -127,12 +127,14 @@ export default function PartnerDashboard() {
         display: 'flex', flexDirection: 'column', zIndex: 100, overflowY: 'auto',
       }}>
         {/* Logo */}
-        <div style={{ padding: '1.5rem 1.5rem 1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <img src={logo} alt="TurfX" style={{ height: '34px', filter: 'brightness(0) invert(1)' }} />
+        <div style={{ padding: '1.5rem 1.5rem 1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <div style={{ background: '#2D4A30', borderRadius: '10px', padding: '6px', display: 'flex', alignItems: 'center' }}>
+            <img src={logo} alt="TurfX" style={{ height: '30px' }} />
+          </div>
           <span style={{
-            background: 'rgba(206,241,123,0.15)', color: ACCENT,
-            fontWeight: '800', fontSize: '0.7rem', letterSpacing: '1.5px',
-            padding: '3px 8px', borderRadius: '5px',
+            border: `1.5px solid ${ACCENT}`, color: ACCENT,
+            fontWeight: '800', fontSize: '0.72rem', letterSpacing: '1.5px',
+            padding: '3px 10px', borderRadius: '6px', background: 'transparent',
           }}>PARTNER</span>
         </div>
 
@@ -149,31 +151,33 @@ export default function PartnerDashboard() {
                 const Icon = item.icon;
                 const active = tab === item.id;
                 const badge = item.badge ? getBadgeCount(item.badge) : null;
+                const badgeBg = item.id === 'approvals' ? '#E8526A' : '#3A5C3D';
+                const badgeText = item.id === 'approvals' ? '#fff' : ACCENT;
                 return (
                   <div
                     key={item.id}
                     onClick={() => switchTab(item.id)}
                     style={{
                       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                      padding: '10px 1.5rem', cursor: 'pointer',
+                      padding: '10px 12px', margin: '1px 10px', cursor: 'pointer',
                       background: active ? SIDEBAR_ACTIVE : 'transparent',
-                      borderLeft: `3px solid ${active ? ACCENT : 'transparent'}`,
+                      borderRadius: '10px',
                       transition: '0.15s all',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <Icon size={18} color={active ? ACCENT : 'rgba(255,255,255,0.55)'} />
+                      <Icon size={18} color={active ? ACCENT : 'rgba(255,255,255,0.45)'} />
                       <span style={{
-                        fontSize: '0.88rem', fontWeight: active ? '700' : '500',
-                        color: active ? ACCENT : 'rgba(255,255,255,0.7)',
+                        fontSize: '0.9rem', fontWeight: active ? '700' : '500',
+                        color: active ? ACCENT : 'rgba(255,255,255,0.65)',
                       }}>{item.label}</span>
                     </div>
                     {badge > 0 && (
                       <span style={{
-                        background: active ? ACCENT : 'rgba(206,241,123,0.2)',
-                        color: active ? ACCENT_DARK : ACCENT,
-                        fontSize: '0.7rem', fontWeight: '800',
-                        padding: '2px 7px', borderRadius: '20px', minWidth: '20px', textAlign: 'center',
+                        background: badgeBg,
+                        color: badgeText,
+                        fontSize: '0.72rem', fontWeight: '800',
+                        padding: '2px 8px', borderRadius: '20px', minWidth: '22px', textAlign: 'center',
                       }}>{badge}</span>
                     )}
                   </div>
