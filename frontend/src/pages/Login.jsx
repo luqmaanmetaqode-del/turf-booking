@@ -80,7 +80,7 @@ export default function Login() {
       {/* ── LEFT PANEL ── */}
       <div style={{
         flex: 1,
-        background: 'linear-gradient(160deg, #0a3d26 0%, #0d5c38 40%, #1a7a4a 70%, #2d9e5f 100%)',
+        background: '#084734',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
         padding: '3rem', position: 'relative', overflow: 'hidden',
@@ -90,10 +90,11 @@ export default function Login() {
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
           `,
-          backgroundSize: '80px 80px',
+          backgroundSize: '60px 60px',
+          pointerEvents: 'none',
         }} />
 
         {/* Logo with concentric circle effect */}
