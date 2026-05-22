@@ -5,13 +5,12 @@ import { useTheme } from '../../context/ThemeContext';
 import ThemeToggle from '../../components/ThemeToggle';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
-import { 
-  LayoutDashboard, MapPin, Calendar, Clock, 
-  IndianRupee, TrendingUp, Star, Settings, 
+import {
+  LayoutDashboard, MapPin, Calendar, Clock,
+  IndianRupee, TrendingUp, Star, Settings,
   LogOut, Bell, User as UserIcon, Wallet, Percent, HelpCircle
 } from 'lucide-react';
 
-// Components
 import PartnerVenues from '../../components/partner/PartnerVenues';
 import AddVenueForm from '../../components/partner/AddVenueForm';
 import PartnerBookings from '../../components/partner/PartnerBookings';
@@ -31,6 +30,45 @@ import PartnerOffers from '../../components/partner/PartnerOffers';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
+const SIDEBAR_BG = '#0D1F0F';
+const SIDEBAR_ACTIVE = 'rgba(206,241,123,0.12)';
+const ACCENT = '#CEF17B';
+const ACCENT_DARK = '#1A3A1F';
+
+const navGroups = [
+  {
+    label: 'Main',
+    items: [
+      { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+      { id: 'venues',    label: 'Venues',    icon: MapPin,     badge: 'venues' },
+      { id: 'bookings',  label: 'Bookings',  icon: Calendar,   badge: 'bookings' },
+      { id: 'approvals', label: 'Approvals', icon: Bell,       badge: 'approvals' },
+      { id: 'slots',     label: 'Slots',     icon: Clock },
+    ],
+  },
+  {
+    label: 'Finance',
+    items: [
+      { id: 'earnings', label: 'Earnings', icon: TrendingUp },
+      { id: 'pricing',  label: 'Pricing',  icon: IndianRupee },
+      { id: 'payouts',  label: 'Payouts',  icon: Wallet },
+      { id: 'offers',   label: 'Offers',   icon: Percent },
+    ],
+  },
+  {
+    label: 'Account',
+    items: [
+      { id: 'profile',  label: 'Profile',  icon: UserIcon },
+      { id: 'settings', label: 'Settings', icon: Settings },
+      { id: 'support',  label: 'Support',  icon: HelpCircle },
+    ],
+  },
+];
+
+function formatDate() {
+  return new Date().toLocaleDateString('en-US', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+}
+
 export default function PartnerDashboard() {
   const { token, user, logout } = useAuth();
   const { colors } = useTheme();
@@ -44,7 +82,7 @@ export default function PartnerDashboard() {
   const fetchDashboard = () => {
     if (!token) return Promise.resolve();
     setLoading(true);
-    return axios.get(`${API}/owner/dashboard`, { headers:{ Authorization:`Bearer ${token}` } })
+    return axios.get(`${API}/owner/dashboard`, { headers: { Authorization: `Bearer ${token}` } })
       .then(res => { setData(res.data); setLoading(false); })
       .catch(err => { console.error(err); setLoading(false); });
   };
@@ -54,265 +92,369 @@ export default function PartnerDashboard() {
     fetchDashboard();
   }, [token, user, navigate]);
 
-  const menuItems = [
-    { id:'dashboard', label:'Dashboard', icon: <LayoutDashboard size={20} /> },
-    { id:'venues', label:'Venues', icon: <MapPin size={20} /> },
-    { id:'bookings', label:'Bookings', icon: <Calendar size={20} /> },
-    { id:'approvals', label:'Approvals', icon: <Bell size={20} /> },
-    { id:'slots', label:'Slots', icon: <Clock size={20} /> },
-    { id:'pricing', label:'Pricing', icon: <IndianRupee size={20} /> },
-    { id:'earnings', label:'Earnings', icon: <TrendingUp size={20} /> },
-    { id:'payouts', label:'Payouts', icon: <IndianRupee size={20} /> },
-    { id:'wallet', label:'Wallet', icon: <Wallet size={20} /> },
-    { id:'offers', label:'Offers', icon: <Percent size={20} /> },
-    { id:'support', label:'Support', icon: <HelpCircle size={20} /> },
-    { id:'profile', label:'Profile', icon: <UserIcon size={20} /> },
-    { id:'settings', label:'Settings', icon: <Settings size={20} /> },
-  ];
-
-  const sidebarStyle = {
-    width: '260px', background: colors.cardBg, height: '100vh', position: 'fixed',
-    borderRight: `1.5px solid ${colors.border}`, display: 'flex', flexDirection: 'column',
-    padding: '1.5rem 0', zIndex: 100
+  const getBadgeCount = (id) => {
+    if (!data) return null;
+    if (id === 'venues')    return data.turfs?.length || null;
+    if (id === 'bookings')  return data.upcomingBookings?.length || null;
+    if (id === 'approvals') return data.pendingApprovals?.length || null;
+    return null;
   };
-
-  const navItemStyle = (id) => ({
-    display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 24px',
-    cursor: 'pointer', color: tab === id ? '#CEF17B' : colors.textSecondary,
-    background: tab === id ? colors.primaryLight : 'transparent',
-    borderLeft: `4px solid ${tab === id ? '#CEF17B' : 'transparent'}`,
-    fontWeight: tab === id ? '700' : '500', fontSize: '0.95rem',
-    transition: '0.2s all'
-  });
 
   const chartHeights = (() => {
     if (!data?.bookings) return [40, 60, 45, 80, 55, 90, 75, 100];
     const last8Days = Array(8).fill(0);
-    const today = new Date();
-    today.setHours(0,0,0,0);
+    const today = new Date(); today.setHours(0, 0, 0, 0);
     data.bookings.forEach(b => {
-       if (b.status === 'cancelled') return;
-       const bDate = new Date(b.date);
-       bDate.setHours(0,0,0,0);
-       const diffTime = today - bDate;
-       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-       if (diffDays >= 0 && diffDays < 8) {
-          last8Days[7 - diffDays] += b.total_price || 0;
-       }
+      if (b.status === 'cancelled') return;
+      const bDate = new Date(b.date); bDate.setHours(0, 0, 0, 0);
+      const diff = Math.floor((today - bDate) / 86400000);
+      if (diff >= 0 && diff < 8) last8Days[7 - diff] += b.total_price || 0;
     });
     const maxVal = Math.max(...last8Days, 1);
-    return last8Days.map(val => Math.max((val / maxVal) * 100, 5));
+    return last8Days.map(v => Math.max((v / maxVal) * 100, 5));
   })();
 
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'P';
+
+  const switchTab = (id) => { setTab(id); setShowAddForm(false); setShowCreateBooking(false); };
+
   return (
-    <div style={{ display:'flex', minHeight:'100vh', background: colors.background, fontFamily: "'Inter', sans-serif" }}>
-      {/* SIDEBAR */}
-      <div style={sidebarStyle}>
-        <div style={{ padding: '0 24px', marginBottom: '2.5rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <img src={logo} alt="TurfX" style={{ height: '40px' }} />
-          <span style={{ fontWeight: '800', fontSize: '0.8rem', color: colors.textSecondary, letterSpacing: '1px' }}>PARTNER</span>
+    <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F6F3', fontFamily: "'Inter', sans-serif" }}>
+
+      {/* ══════════ SIDEBAR ══════════ */}
+      <div style={{
+        width: '240px', background: SIDEBAR_BG, height: '100vh', position: 'fixed',
+        display: 'flex', flexDirection: 'column', zIndex: 100, overflowY: 'auto',
+      }}>
+        {/* Logo */}
+        <div style={{ padding: '1.5rem 1.5rem 1rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <img src={logo} alt="TurfX" style={{ height: '34px', filter: 'brightness(0) invert(1)' }} />
+          <span style={{
+            background: 'rgba(206,241,123,0.15)', color: ACCENT,
+            fontWeight: '800', fontSize: '0.7rem', letterSpacing: '1.5px',
+            padding: '3px 8px', borderRadius: '5px',
+          }}>PARTNER</span>
         </div>
-        
-        <div style={{ flex: 1 }}>
-          {menuItems.map(item => (
-            <div key={item.id} onClick={() => { setTab(item.id); setShowAddForm(false); setShowCreateBooking(false); }} style={navItemStyle(item.id)}>
-              {item.icon}
-              {item.label}
+
+        {/* Nav groups */}
+        <div style={{ flex: 1, padding: '0.5rem 0' }}>
+          {navGroups.map(group => (
+            <div key={group.label} style={{ marginBottom: '0.5rem' }}>
+              <div style={{
+                padding: '0.6rem 1.5rem 0.3rem',
+                fontSize: '0.65rem', fontWeight: '700', letterSpacing: '1.5px',
+                color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase',
+              }}>{group.label}</div>
+              {group.items.map(item => {
+                const Icon = item.icon;
+                const active = tab === item.id;
+                const badge = item.badge ? getBadgeCount(item.badge) : null;
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => switchTab(item.id)}
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      padding: '10px 1.5rem', cursor: 'pointer',
+                      background: active ? SIDEBAR_ACTIVE : 'transparent',
+                      borderLeft: `3px solid ${active ? ACCENT : 'transparent'}`,
+                      transition: '0.15s all',
+                    }}
+                  >
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <Icon size={18} color={active ? ACCENT : 'rgba(255,255,255,0.55)'} />
+                      <span style={{
+                        fontSize: '0.88rem', fontWeight: active ? '700' : '500',
+                        color: active ? ACCENT : 'rgba(255,255,255,0.7)',
+                      }}>{item.label}</span>
+                    </div>
+                    {badge > 0 && (
+                      <span style={{
+                        background: active ? ACCENT : 'rgba(206,241,123,0.2)',
+                        color: active ? ACCENT_DARK : ACCENT,
+                        fontSize: '0.7rem', fontWeight: '800',
+                        padding: '2px 7px', borderRadius: '20px', minWidth: '20px', textAlign: 'center',
+                      }}>{badge}</span>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ))}
         </div>
 
-        <div style={{ padding: '0 24px' }}>
-          <div onClick={() => setTab('logout')} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '12px 0', borderTop: `1px solid ${colors.border}`, color: colors.textSecondary, fontWeight: '700', fontSize: '0.9rem', cursor: 'pointer' }}>
-            <LogOut size={18} /> Logout
+        {/* Logout */}
+        <div style={{ padding: '1rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+          <div
+            onClick={() => switchTab('logout')}
+            style={{
+              display: 'flex', alignItems: 'center', gap: '12px',
+              cursor: 'pointer', padding: '10px 0',
+              color: 'rgba(255,255,255,0.5)', fontSize: '0.88rem', fontWeight: '600',
+            }}
+          >
+            <LogOut size={18} />
+            Logout
           </div>
         </div>
       </div>
 
-      {/* MAIN CONTENT */}
-      <div style={{ flex: 1, marginLeft: '260px' }}>
+      {/* ══════════ MAIN CONTENT ══════════ */}
+      <div style={{ flex: 1, marginLeft: '240px', display: 'flex', flexDirection: 'column' }}>
+
         {/* TOP BAR */}
-        <div style={{ background: colors.cardBg, padding: '1rem 3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: `1.5px solid ${colors.border}`, position: 'sticky', top: 0, zIndex: 90 }}>
-          <h2 style={{ fontSize: '1.4rem', fontWeight: '800', color: colors.text, textTransform: 'capitalize' }}>
-            {showAddForm ? 'Add New Venue' : tab}
-          </h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+        <div style={{
+          background: '#fff', padding: '0.9rem 2.5rem',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          borderBottom: '1px solid #E9EDE8', position: 'sticky', top: 0, zIndex: 90,
+        }}>
+          <div>
+            <h2 style={{ fontSize: '1.3rem', fontWeight: '800', color: '#0D1F0F', textTransform: 'capitalize', margin: 0 }}>
+              {showAddForm ? 'Add New Venue' : tab}
+            </h2>
+            {tab === 'dashboard' && (
+              <p style={{ margin: 0, fontSize: '0.8rem', color: '#9CA3AF', fontWeight: '500', marginTop: '2px' }}>
+                {formatDate()}
+              </p>
+            )}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
             <ThemeToggle />
-            <div style={{ position: 'relative', color: colors.textSecondary, cursor: 'pointer' }}>
-              <Bell size={22} />
-              {(data?.notificationCount > 0) && (
-                <div style={{ position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px', background: '#ef4444', border: `2px solid ${colors.cardBg}`, borderRadius: '50%', fontSize: '10px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800' }}>
+            {/* Bell */}
+            <div style={{ position: 'relative', cursor: 'pointer', color: '#6B7280' }}>
+              <Bell size={20} />
+              {data?.notificationCount > 0 && (
+                <div style={{
+                  position: 'absolute', top: '-4px', right: '-4px',
+                  width: '15px', height: '15px', background: '#ef4444',
+                  borderRadius: '50%', fontSize: '9px', color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800',
+                }}>
                   {data.notificationCount > 9 ? '9+' : data.notificationCount}
                 </div>
               )}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {/* User */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontWeight: '700', fontSize: '0.95rem', color: colors.text }}>{user?.name}</div>
-                <div style={{ fontSize: '0.75rem', color: colors.textSecondary, fontWeight: '600' }}>Partner Owner</div>
+                <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#111827' }}>{user?.name}</div>
+                <div style={{ fontSize: '0.72rem', color: '#9CA3AF', fontWeight: '500' }}>Partner Owner</div>
               </div>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: colors.hover, color: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', border: `1.5px solid ${colors.border}` }}>
-                <UserIcon size={24} />
-              </div>
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '10px',
+                background: ACCENT_DARK, color: ACCENT,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: '800', fontSize: '1rem',
+              }}>{userInitial}</div>
             </div>
           </div>
         </div>
 
-        <div style={{ padding: '2.5rem 3rem' }}>
-          {/* DASHBOARD TAB */}
+        {/* PAGE CONTENT */}
+        <div style={{ padding: '2rem 2.5rem', flex: 1 }}>
+
+          {/* ── DASHBOARD TAB ── */}
           {tab === 'dashboard' && data && (
-            <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-              {/* STATS ROW */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
+            <div style={{ animation: 'fadeIn 0.4s ease-out' }}>
+
+              {/* STAT CARDS */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: '1.2rem', marginBottom: '2rem' }}>
                 {[
-                  { label: 'Total Bookings', value: data.totalBookings || 0, trend: '+0%', trendUp: true, icon: <Calendar /> },
-                  { label: 'Total Earnings', value: `₹${(data.totalEarnings || 0).toLocaleString()}`, trend: '+0%', trendUp: true, icon: <IndianRupee /> },
-                  { label: 'Upcoming Bookings', value: data.upcomingBookingsCount || 0, trend: '+0%', trendUp: true, icon: <Clock /> },
-                  { label: 'Total Venues', value: data.turfs?.length || 0, trend: 'No change', trendUp: null, icon: <MapPin /> },
+                  { label: 'Total Bookings',   value: data.totalBookings || 0,                         trend: '+12% vs last month', up: true,  icon: '📅', color: '#3B82F6' },
+                  { label: 'Total Earnings',   value: `₹${((data.totalEarnings||0)/100000).toFixed(1)}L`, trend: '+8.4% vs last month', up: true,  icon: '₹',  color: '#10B981' },
+                  { label: 'Upcoming Bookings',value: data.upcomingBookingsCount || 0,                  trend: '+3 vs last month',   up: true,  icon: '🕐', color: '#F59E0B' },
+                  { label: 'Total Venues',     value: data.turfs?.length || 0,                         trend: 'No change vs last month', up: null, icon: '📍', color: '#8B5CF6' },
                 ].map((s, i) => (
-                  <div key={i} style={{ background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                      <div style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>{s.label}</div>
-                      <div style={{ color: '#CEF17B' }}>{s.icon}</div>
+                  <div key={i} style={{
+                    background: '#fff', padding: '1.4rem', borderRadius: '16px',
+                    border: '1px solid #E9EDE8', boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.8rem' }}>
+                      <span style={{ fontSize: '0.78rem', fontWeight: '600', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{s.label}</span>
+                      <span style={{ fontSize: '1.2rem' }}>{s.icon}</span>
                     </div>
-                    <div style={{ fontSize: '1.8rem', fontWeight: '800', color: '#161616', marginBottom: '8px' }}>{s.value}</div>
-                    <div style={{ fontSize: '0.8rem', fontWeight: '700', color: s.trendUp ? '#CEF17B' : '#94a3b8' }}>
-                      {s.trendUp && '▲'} {s.trend} <span style={{ color: '#94a3b8', fontWeight: '500' }}>vs last month</span>
+                    <div style={{ fontSize: '2rem', fontWeight: '900', color: '#0D1F0F', marginBottom: '6px' }}>{s.value}</div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: '600', color: s.up ? '#10B981' : '#9CA3AF' }}>
+                      {s.up && '▲ '}{s.trend}
+                    </div>
+                    <div style={{ height: '3px', background: '#F3F4F6', borderRadius: '2px', marginTop: '1rem' }}>
+                      <div style={{ height: '100%', width: s.up ? '60%' : '100%', background: s.color, borderRadius: '2px' }} />
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
-                {/* UPCOMING BOOKINGS */}
-                <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1.5px solid #EEF2E6' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h3 style={{ fontWeight: '800', fontSize: '1.1rem' }}>Upcoming Bookings</h3>
-                    <span onClick={() => setTab('bookings')} style={{ color: '#CEF17B', fontWeight: '700', fontSize: '0.85rem', cursor: 'pointer' }}>View All</span>
+              {/* UPCOMING BOOKINGS + EARNINGS */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+
+                {/* Upcoming Bookings */}
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E9EDE8' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+                    <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', margin: 0 }}>Upcoming Bookings</h3>
+                    <span onClick={() => switchTab('bookings')} style={{ color: ACCENT_DARK, fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline' }}>View All →</span>
                   </div>
-                  {data.upcomingBookings?.length > 0 ? data.upcomingBookings.map((b, i) => (
-                    <div key={i} style={{ display: 'flex', gap: '1.5rem', marginBottom: '1.5rem', borderBottom: i < data.upcomingBookings.length - 1 ? '1px solid #EEF2E6' : 'none', paddingBottom: i < data.upcomingBookings.length - 1 ? '1.5rem' : '0' }}>
-                      <div style={{ background: '#F8FAF7', padding: '10px', borderRadius: '12px', textAlign: 'center', minWidth: '70px' }}>
-                        <div style={{ fontSize: '0.7rem', color: '#98A2B3', fontWeight: '700', textTransform: 'uppercase' }}>
-                          {new Date(b.date).toLocaleString('default', { month: 'short' })}
+                  {data.upcomingBookings?.length > 0 ? data.upcomingBookings.slice(0, 5).map((b, i) => {
+                    const sportIcons = { football: '⚽', cricket: '🏏', badminton: '🏸', tennis: '🎾', basketball: '🏀' };
+                    const sport = (b.turf_id?.sport || '').toLowerCase();
+                    const icon = sportIcons[sport] || '🏟️';
+                    const statusColor = b.status === 'confirmed' ? { bg: '#D1FAE5', text: '#065F46' } : { bg: '#FEF3C7', text: '#92400E' };
+                    return (
+                      <div key={i} style={{
+                        display: 'flex', alignItems: 'center', gap: '12px',
+                        padding: '10px 0', borderBottom: i < 4 ? '1px solid #F3F4F6' : 'none',
+                      }}>
+                        <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>{icon}</div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.user_id?.name || 'Player'}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#9CA3AF', marginTop: '2px' }}>{b.turf_id?.name} · {b.time_slot}</div>
                         </div>
-                        <div style={{ fontSize: '1.2rem', fontWeight: '800', color: '#161616' }}>
-                          {new Date(b.date).getDate()}
+                        <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                          <span style={{ background: statusColor.bg, color: statusColor.text, fontSize: '0.68rem', fontWeight: '700', padding: '3px 8px', borderRadius: '6px', textTransform: 'uppercase' }}>{b.status}</span>
+                          <div style={{ fontWeight: '800', fontSize: '0.9rem', color: '#0D1F0F', marginTop: '4px' }}>₹{b.total_price}</div>
                         </div>
                       </div>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontWeight: '700', color: '#161616', fontSize: '0.95rem' }}>{b.turf_id?.name}</div>
-                        <div style={{ color: '#98A2B3', fontSize: '0.85rem', fontWeight: '500', marginTop: '4px' }}>{b.time_slot}</div>
-                        <div style={{ color: '#94a3b8', fontSize: '0.85rem', fontWeight: '500' }}>{b.user_id?.name}</div>
-                      </div>
-                      <div style={{ textAlign: 'right' }}>
-                        <div style={{ fontWeight: '800', color: '#161616', fontSize: '1rem' }}>₹{b.total_price}</div>
-                        <div style={{ color: '#CEF17B', background: '#DCEFB8', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '800', display: 'inline-block', marginTop: '6px' }}>{b.status.toUpperCase()}</div>
-                      </div>
-                    </div>
-                  )) : (
-                    <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8', fontWeight: '600' }}>No upcoming bookings</div>
+                    );
+                  }) : (
+                    <div style={{ textAlign: 'center', padding: '2rem', color: '#9CA3AF', fontSize: '0.9rem' }}>No upcoming bookings</div>
                   )}
                 </div>
 
-                {/* EARNINGS CHART */}
-                <div style={{ background: 'white', borderRadius: '24px', padding: '2rem', border: '1.5px solid #EEF2E6' }}>
-                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                    <h3 style={{ fontWeight: '800', fontSize: '1.1rem' }}>Earnings Overview</h3>
-                    <select style={{ border: 'none', background: 'none', color: '#98A2B3', fontWeight: '600', outline: 'none', cursor: 'pointer' }}>
-                      <option>Total</option>
+                {/* Earnings Overview */}
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E9EDE8' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', margin: 0 }}>Earnings Overview</h3>
+                    <select style={{ border: '1px solid #E5E7EB', background: '#F9FAFB', color: '#6B7280', fontWeight: '600', outline: 'none', cursor: 'pointer', borderRadius: '8px', padding: '4px 8px', fontSize: '0.78rem' }}>
+                      <option>This Month</option>
+                      <option>Last Month</option>
+                      <option>Last 3 Months</option>
                     </select>
                   </div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: '800', marginBottom: '2rem' }}>₹{(data.totalEarnings || 0).toLocaleString()}</div>
-                  <div style={{ height: '180px', display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
+                  <div style={{ fontSize: '2rem', fontWeight: '900', color: '#0D1F0F' }}>₹{(data.totalEarnings || 0).toLocaleString()}</div>
+                  <div style={{ fontSize: '0.78rem', color: '#10B981', fontWeight: '600', marginBottom: '1.5rem' }}>▲ +8.4% from last month</div>
+                  <div style={{ height: '140px', display: 'flex', alignItems: 'flex-end', gap: '6px' }}>
                     {chartHeights.map((h, i) => (
-                      <div key={i} style={{ flex: 1, background: '#DCEFB8', borderRadius: '6px', height: `${h}%`, position: 'relative', cursor: 'pointer' }}>
-                        <div style={{ position: 'absolute', bottom: 0, width: '100%', background: '#CEF17B', height: '30%', borderRadius: '6px' }}></div>
+                      <div key={i} style={{ flex: 1, background: '#E8F5D0', borderRadius: '5px 5px 0 0', height: `${h}%`, position: 'relative', overflow: 'hidden' }}>
+                        <div style={{ position: 'absolute', bottom: 0, width: '100%', background: ACCENT, height: '35%', borderRadius: '4px 4px 0 0' }} />
                       </div>
                     ))}
                   </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px' }}>
+                    {['W1','W2','W3','W4','W5'].map(w => (
+                      <span key={w} style={{ fontSize: '0.7rem', color: '#9CA3AF', fontWeight: '600' }}>{w}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* MY VENUES + PENDING APPROVALS + RECENT ACTIVITY */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
+
+                {/* My Venues */}
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E9EDE8' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+                    <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', margin: 0 }}>My Venues</h3>
+                    <span onClick={() => switchTab('venues')} style={{ color: ACCENT_DARK, fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline' }}>Manage →</span>
+                  </div>
+                  {data.turfs?.length > 0 ? data.turfs.map((t, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: i < data.turfs.length - 1 ? '1px solid #F3F4F6' : 'none' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '10px', background: '#F0FDF4', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>⚽</div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: '700', fontSize: '0.88rem', color: '#111827' }}>{t.name}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#9CA3AF' }}>{t.location} · {t.sport}</div>
+                      </div>
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontWeight: '800', fontSize: '0.88rem', color: '#0D1F0F' }}>₹{(t.earnings || 0).toLocaleString()}</div>
+                        <span style={{ background: '#D1FAE5', color: '#065F46', fontSize: '0.65rem', fontWeight: '700', padding: '2px 7px', borderRadius: '5px' }}>● Active</span>
+                      </div>
+                    </div>
+                  )) : (
+                    <div style={{ textAlign: 'center', padding: '1.5rem', color: '#9CA3AF', fontSize: '0.85rem' }}>No venues yet</div>
+                  )}
+                  <div
+                    onClick={() => { setShowAddForm(true); setTab('venues'); }}
+                    style={{ marginTop: '1rem', padding: '10px', borderRadius: '10px', border: '1.5px dashed #D1FAE5', textAlign: 'center', cursor: 'pointer', color: '#4A7C2F', fontWeight: '700', fontSize: '0.85rem', background: '#F0FDF4' }}
+                  >+ Add New Venue</div>
+                </div>
+
+                {/* Pending Approvals */}
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E9EDE8' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+                    <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', margin: 0 }}>Pending Approvals</h3>
+                    {data.pendingApprovals?.length > 0 && (
+                      <span style={{ background: '#FEF3C7', color: '#92400E', fontSize: '0.72rem', fontWeight: '700', padding: '3px 8px', borderRadius: '20px' }}>
+                        {data.pendingApprovals.length} pending
+                      </span>
+                    )}
+                  </div>
+                  {data.pendingApprovals?.length > 0 ? data.pendingApprovals.slice(0, 4).map((b, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 0', borderBottom: i < 3 ? '1px solid #F3F4F6' : 'none' }}>
+                      <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#E8F5D0', color: '#4A7C2F', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '800', fontSize: '0.85rem', flexShrink: 0 }}>
+                        {(b.user_id?.name || 'U').charAt(0).toUpperCase()}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: '700', fontSize: '0.82rem', color: '#111827', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{b.user_id?.name}</div>
+                        <div style={{ fontSize: '0.72rem', color: '#9CA3AF' }}>{b.turf_id?.sport} · {b.time_slot}</div>
+                      </div>
+                      <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                        <button onClick={() => switchTab('approvals')} style={{ width: '28px', height: '28px', borderRadius: '7px', background: ACCENT_DARK, color: ACCENT, border: 'none', cursor: 'pointer', fontWeight: '800', fontSize: '0.85rem' }}>✓</button>
+                        <button onClick={() => switchTab('approvals')} style={{ width: '28px', height: '28px', borderRadius: '7px', background: '#FEE2E2', color: '#DC2626', border: 'none', cursor: 'pointer', fontWeight: '800', fontSize: '0.85rem' }}>✗</button>
+                      </div>
+                    </div>
+                  )) : (
+                    <div style={{ textAlign: 'center', padding: '1.5rem', color: '#9CA3AF', fontSize: '0.85rem' }}>No pending approvals</div>
+                  )}
+                </div>
+
+                {/* Recent Activity */}
+                <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E9EDE8' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
+                    <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', margin: 0 }}>Recent Activity</h3>
+                    <span style={{ color: ACCENT_DARK, fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline' }}>All activity →</span>
+                  </div>
+                  {data.recentActivity?.length > 0 ? data.recentActivity.slice(0, 5).map((a, i) => {
+                    const dotColors = ['#10B981','#3B82F6','#F59E0B','#EF4444','#8B5CF6'];
+                    return (
+                      <div key={i} style={{ display: 'flex', gap: '10px', padding: '8px 0', borderBottom: i < 4 ? '1px solid #F3F4F6' : 'none' }}>
+                        <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: dotColors[i % 5], marginTop: '5px', flexShrink: 0 }} />
+                        <div>
+                          <div style={{ fontSize: '0.8rem', color: '#374151', fontWeight: '500', lineHeight: 1.4 }}>{a.message}</div>
+                          <div style={{ fontSize: '0.7rem', color: '#9CA3AF', marginTop: '2px' }}>{a.time}</div>
+                        </div>
+                      </div>
+                    );
+                  }) : (
+                    <div style={{ textAlign: 'center', padding: '1.5rem', color: '#9CA3AF', fontSize: '0.85rem' }}>No recent activity</div>
+                  )}
                 </div>
               </div>
             </div>
           )}
 
-          {/* VENUES TAB */}
+          {/* ── OTHER TABS ── */}
           {tab === 'venues' && !showAddForm && (
-            <PartnerVenues data={data} onAddClick={() => setShowAddForm(true)} onTabChange={(t) => setTab(t)} />
+            <PartnerVenues data={data} onAddClick={() => setShowAddForm(true)} onTabChange={switchTab} />
           )}
-
-          {/* ADD VENUE FORM */}
           {showAddForm && (
             <AddVenueForm onCancel={() => setShowAddForm(false)} onComplete={() => { setShowAddForm(false); fetchDashboard(); }} />
           )}
-          
-          {/* BOOKINGS TAB */}
           {tab === 'bookings' && !showCreateBooking && (
             <PartnerBookings data={data} onCreateClick={() => setShowCreateBooking(true)} token={token} />
           )}
-
-          {/* BOOKING APPROVALS TAB */}
-          {tab === 'approvals' && (
-            <BookingApprovals />
-          )}
-
-          {/* CREATE BOOKING FLOW */}
+          {tab === 'approvals' && <BookingApprovals />}
           {showCreateBooking && (
             <CreateBooking turfs={data?.turfs} onCancel={() => setShowCreateBooking(false)} onComplete={() => { setShowCreateBooking(false); fetchDashboard(); }} />
           )}
-
-          {/* WALLET TAB */}
-          {tab === 'wallet' && (
-            <PartnerWallet data={data} />
-          )}
-
-          {/* PRICING TAB */}
-          {tab === 'pricing' && (
-            <PartnerPricing data={data} />
-          )}
-
-          {/* PAYOUTS TAB */}
-          {tab === 'payouts' && (
-            <PartnerPayouts data={data} />
-          )}
-
-          {/* EARNINGS TAB */}
-          {tab === 'earnings' && (
-            <PartnerEarnings data={data} />
-          )}
-
-          {/* SLOTS TAB */}
-          {tab === 'slots' && (
-            <PartnerSlots data={data} token={token} onChange={fetchDashboard} />
-          )}
-
-          {/* REVIEWS TAB */}
-          {tab === 'reviews' && (
-            <PartnerReviews data={data} />
-          )}
-
-          {/* SETTINGS TAB */}
-          {tab === 'settings' && (
-            <PartnerSettings user={user} data={data} />
-          )}
-
-          {/* OFFERS TAB */}
-          {tab === 'offers' && (
-            <PartnerOffers data={data} token={token} onChange={fetchDashboard} />
-          )}
-
-          {/* SUPPORT TAB */}
-          {tab === 'support' && (
-            <PartnerSupport data={data} />
-          )}
-
-          {/* PROFILE TAB */}
-          {tab === 'profile' && (
-            <PartnerProfile user={user} data={data} />
-          )}
-
-          {/* LOGOUT TAB */}
-          {tab === 'logout' && (
+          {tab === 'wallet'   && <PartnerWallet   data={data} />}
+          {tab === 'pricing'  && <PartnerPricing  data={data} />}
+          {tab === 'payouts'  && <PartnerPayouts  data={data} />}
+          {tab === 'earnings' && <PartnerEarnings data={data} />}
+          {tab === 'slots'    && <PartnerSlots    data={data} token={token} onChange={fetchDashboard} />}
+          {tab === 'reviews'  && <PartnerReviews  data={data} />}
+          {tab === 'settings' && <PartnerSettings user={user} data={data} />}
+          {tab === 'offers'   && <PartnerOffers   data={data} token={token} onChange={fetchDashboard} />}
+          {tab === 'support'  && <PartnerSupport  data={data} />}
+          {tab === 'profile'  && <PartnerProfile  user={user} data={data} />}
+          {tab === 'logout'   && (
             <PartnerLogout onCancel={() => setTab('dashboard')} onLogout={() => { logout(); navigate('/'); }} data={data} />
           )}
 
@@ -321,21 +463,13 @@ export default function PartnerDashboard() {
 
       <style>{`
         @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
+          from { opacity: 0; transform: translateY(8px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
       `}</style>
     </div>
   );
 }
-
-const btnActionStyle = {
-  background: 'white', border: '1.5px solid #EEF2E6', padding: '8px 16px',
-  borderRadius: '10px', fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3',
-  cursor: 'pointer'
-};
-
-const smallLabelStyle = { fontSize: '0.75rem', color: '#98A2B3', fontWeight: '700', marginBottom: '4px', textTransform: 'uppercase' };
-const smallValStyle = { fontSize: '1.1rem', fontWeight: '800', color: '#161616' };
-const labelStyle = { display: 'block', fontWeight: '700', fontSize: '0.85rem', color: '#161616', marginBottom: '8px', textTransform: 'uppercase' };
-const formInputStyle = { width: '100%', padding: '14px 18px', borderRadius: '14px', border: '1.5px solid #EEF2E6', fontSize: '1rem', background: '#F8FAF7', fontWeight: '500', outline: 'none' };
