@@ -95,15 +95,29 @@ export default function Login() {
           backgroundSize: '80px 80px',
         }} />
 
-        {/* Logo circle */}
-        <div style={{
-          width: 140, height: 140, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.08)',
-          border: '2px solid rgba(206,241,123,0.25)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          marginBottom: '2.5rem', position: 'relative', zIndex: 1,
-        }}>
-          <img src={logo} alt="TurfX" style={{ height: 90, objectFit: 'contain' }} />
+        {/* Logo with concentric circle effect */}
+        <div style={{ position: 'relative', marginBottom: '2.5rem', zIndex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          {/* Outer rings */}
+          {[280, 220, 170].map((size, i) => (
+            <div key={i} style={{
+              position: 'absolute',
+              width: size, height: size,
+              borderRadius: '50%',
+              border: `1px solid rgba(206,241,123,${0.08 - i * 0.02})`,
+              background: `rgba(206,241,123,${0.02 - i * 0.005})`,
+            }} />
+          ))}
+          {/* Logo circle */}
+          <div style={{
+            width: 140, height: 140, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.08)',
+            border: '2px solid rgba(206,241,123,0.3)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', zIndex: 2,
+            boxShadow: '0 0 40px rgba(206,241,123,0.15), 0 0 80px rgba(206,241,123,0.08)',
+          }}>
+            <img src={logo} alt="TurfX" style={{ height: 90, objectFit: 'contain' }} />
+          </div>
         </div>
 
         {/* Badge */}
