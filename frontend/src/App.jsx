@@ -46,8 +46,8 @@ export default function App() {
             <Route path="/" element={<MainLayout><Home /></MainLayout>} />
             <Route path="/explore" element={<MainLayout><Explore /></MainLayout>} />
             <Route path="/turf/:id" element={<MainLayout><TurfDetail /></MainLayout>} />
-            <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
-            <Route path="/register" element={<MainLayout><Register /></MainLayout>} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Login />} />
             <Route path="/checkout" element={
               <MainLayout><ProtectedRoute><Checkout /></ProtectedRoute></MainLayout>
             } />
