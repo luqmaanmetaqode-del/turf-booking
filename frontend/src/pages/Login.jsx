@@ -131,16 +131,16 @@ export default function Login() {
         </div>
 
         <h1 style={{
-          fontSize: '3.2rem', fontWeight: 900, color: 'white',
-          lineHeight: 1.1, textAlign: 'center', marginBottom: '0.3rem',
-          position: 'relative', zIndex: 1,
+          fontSize: '4.8rem', fontWeight: 900, color: 'white',
+          lineHeight: 1.05, textAlign: 'center', marginBottom: '0.2rem',
+          position: 'relative', zIndex: 1, letterSpacing: '-1px',
         }}>
           Elevate
         </h1>
         <h1 style={{
-          fontSize: '3.2rem', fontWeight: 900, color: '#CEF17B',
-          lineHeight: 1.1, textAlign: 'center', marginBottom: '1.5rem',
-          position: 'relative', zIndex: 1,
+          fontSize: '4.8rem', fontWeight: 900, color: '#CEF17B',
+          lineHeight: 1.05, textAlign: 'center', marginBottom: '1.5rem',
+          position: 'relative', zIndex: 1, letterSpacing: '-1px',
         }}>
           Your Game.
         </h1>
