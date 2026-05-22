@@ -129,15 +129,19 @@ export default function MyBookings() {
 
       {/* ── DARK GREEN HEADER ── */}
       <div style={{
-        background: 'linear-gradient(135deg, #0a3d26 0%, #0d5c38 60%, #1a7a4a 100%)',
+        background: '#084734',
         padding: '3rem 2rem 2.5rem',
         position: 'relative', overflow: 'hidden',
       }}>
-        {/* grid overlay */}
+        {/* grid overlay - same as home page */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(206,241,123,0.05) 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+          pointerEvents: 'none',
         }} />
 
         <div style={{ maxWidth: 1100, margin: '0 auto', position: 'relative', zIndex: 1 }}>
@@ -191,7 +195,7 @@ export default function MyBookings() {
       </div>
 
       {/* ── TAB BAR ── pill style */}
-      <div style={{ background: '#0d5c38', padding: '0 2rem 1.8rem' }}>
+      <div style={{ background: '#084734', padding: '0 2rem 1.8rem' }}>
         <div style={{ maxWidth: 1100, margin: '0 auto' }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center',
