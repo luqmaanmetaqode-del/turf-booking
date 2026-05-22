@@ -190,37 +190,46 @@ export default function MyBookings() {
         </div>
       </div>
 
-      {/* ── TAB BAR ── */}
-      <div style={{ background: 'white', borderBottom: '1.5px solid #EEF2E6' }}>
-        <div style={{ maxWidth: 1100, margin: '0 auto', padding: '0 2rem', display: 'flex', gap: '4px' }}>
-          {['upcoming', 'completed', 'cancelled'].map(t => {
-            const counts = { upcoming: upcoming.length, completed: completed.length, cancelled: cancelled.length };
-            return (
-              <button
-                key={t}
-                onClick={() => setActiveTab(t)}
-                style={{
-                  padding: '16px 20px', border: 'none', background: 'none',
-                  cursor: 'pointer', fontSize: '0.9rem', fontWeight: 700,
-                  color: activeTab === t ? '#084734' : '#98A2B3',
-                  borderBottom: activeTab === t ? '2.5px solid #084734' : '2.5px solid transparent',
-                  marginBottom: '-1.5px', transition: 'all 0.2s',
-                  display: 'flex', alignItems: 'center', gap: '8px',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {t.charAt(0).toUpperCase() + t.slice(1)}
-                <span style={{
-                  background: activeTab === t ? '#084734' : '#EEF2E6',
-                  color: activeTab === t ? 'white' : '#98A2B3',
-                  borderRadius: '999px', padding: '1px 8px',
-                  fontSize: '0.75rem', fontWeight: 800,
-                }}>
-                  {counts[t]}
-                </span>
-              </button>
-            );
-          })}
+      {/* ── TAB BAR ── pill style */}
+      <div style={{ background: '#0d5c38', padding: '0 2rem 1.8rem' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center',
+            background: 'white', borderRadius: '999px',
+            padding: '6px', gap: '4px',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.12)',
+          }}>
+            {['upcoming', 'completed', 'cancelled'].map(t => {
+              const counts = { upcoming: upcoming.length, completed: completed.length, cancelled: cancelled.length };
+              const isActive = activeTab === t;
+              return (
+                <button
+                  key={t}
+                  onClick={() => setActiveTab(t)}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '8px',
+                    padding: '10px 22px', borderRadius: '999px', border: 'none',
+                    cursor: 'pointer', transition: 'all 0.2s',
+                    background: isActive ? '#084734' : 'transparent',
+                    color: isActive ? '#CEF17B' : '#98A2B3',
+                    fontSize: '0.92rem', fontWeight: 800,
+                  }}
+                >
+                  {t.charAt(0).toUpperCase() + t.slice(1)}
+                  <span style={{
+                    background: isActive ? 'rgba(206,241,123,0.25)' : '#EEF2E6',
+                    color: isActive ? '#CEF17B' : '#6b7280',
+                    borderRadius: '999px',
+                    width: '22px', height: '22px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '0.72rem', fontWeight: 900,
+                  }}>
+                    {counts[t]}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
