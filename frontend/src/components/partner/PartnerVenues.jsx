@@ -1,449 +1,381 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Search, Filter, Plus, Eye, Edit2, MoreVertical, ChevronDown, ChevronUp, MapPin, Clock, TrendingUp, Calendar } from 'lucide-react';
+import { Search, Plus, Star, MapPin, Edit2, Settings } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
+const GREEN = '#084734';
+const LIME  = '#CEF17B';
+
+const SPORT_ICONS = {
+  football:   '⚽',
+  cricket:    '🏏',
+  badminton:  '🏸',
+  tennis:     '🎾',
+  basketball: '🏀',
+  volleyball: '🏐',
+};
+
+function sportIcon(sport) {
+  return SPORT_ICONS[(sport || '').toLowerCase()] || '🏟️';
+}
+
 export default function PartnerVenues({ data, onAddClick, onTabChange }) {
   const { token } = useAuth();
-  const [search, setSearch] = useState('');
-  const [expandedVenue, setExpandedVenue] = useState(null);
-  const [activeTab, setActiveTab] = useState('All Venues');
-  const [seeding, setSeeding] = useState(false);
-  const [seedMessage, setSeedMessage] = useState(null);
+  const [search, setSearch]       = useState('');
+  const [sportFilter, setSport]   = useState('All Sports');
+  const [statusFilter, setStatus] = useState('All Status');
+  const [activeTab, setActiveTab] = useState('All');
 
-  const handleSeedVenues = async () => {
-    setSeeding(true);
-    setSeedMessage(null);
-    try {
-      const res = await axios.get(`${API}/turfs/seed`, { headers: { Authorization: `Bearer ${token}` } });
-      setSeedMessage({ type: 'success', text: res.data.msg });
-      // Refresh the page after 2 seconds
-      setTimeout(() => window.location.reload(), 2000);
-    } catch (err) {
-      setSeedMessage({ type: 'error', text: err.response?.data?.msg || 'Failed to seed venues' });
-    } finally {
-      setSeeding(false);
-    }
-  };
+  const turfs = data?.turfs || [];
 
-  const totalSports = new Set(data?.turfs?.map(t => t.sport).filter(Boolean)).size || 1;
-  const today = new Date().toISOString().split('T')[0];
-  const todayBookings = data?.bookings?.filter(b => b.date === today && b.status !== 'cancelled') || [];
-  const todayRevenue = todayBookings.reduce((sum, b) => sum + (b.total_price || 0), 0);
+  /* ── filter helpers ── */
+  const filtered = turfs.filter(t => {
+    const matchSearch = !search ||
+      t.name.toLowerCase().includes(search.toLowerCase()) ||
+      (t.location || '').toLowerCase().includes(search.toLowerCase());
+    const matchSport  = sportFilter === 'All Sports' || (t.sport || '').toLowerCase() === sportFilter.toLowerCase();
+    const matchStatus = statusFilter === 'All Status' || (t.isActive !== false ? 'Active' : 'Inactive') === statusFilter;
+    const matchTab    = activeTab === 'All' ||
+      (activeTab === 'Active'  && t.isActive !== false) ||
+      (activeTab === 'Pending' && t.status === 'pending');
+    return matchSearch && matchSport && matchStatus && matchTab;
+  });
 
-  const stats = [
-    { label: 'Total Venues', value: data?.turfs?.length || 0, icon: <MapPin size={20} />, sub: 'Active venues', color: '#CEF17B' },
-    { label: 'Total Sports', value: totalSports, icon: <TrendingUp size={20} />, sub: 'Across all venues', color: '#3b82f6' },
-    { label: 'Today Bookings', value: todayBookings.length, icon: <Calendar size={20} />, sub: 'Today', color: '#f59e0b' },
-    { label: 'Today Revenue', value: `₹${todayRevenue.toLocaleString()}`, icon: <TrendingUp size={20} />, sub: 'Today', color: '#8b5cf6' },
-  ];
+  const activeCount  = turfs.filter(t => t.isActive !== false).length;
+  const pendingCount = turfs.filter(t => t.status === 'pending').length;
 
-  const filteredTurfs = data?.turfs?.filter(t => 
-    t.name.toLowerCase().includes(search.toLowerCase()) || 
-    t.location.toLowerCase().includes(search.toLowerCase())
-  );
+  /* ── empty state ── */
+  if (turfs.length === 0) {
+    return (
+      <div style={{ background: '#fff', borderRadius: '20px', border: '1.5px solid #E9EDE8', padding: '4rem', textAlign: 'center' }}>
+        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🏟️</div>
+        <h3 style={{ fontWeight: '800', fontSize: '1.5rem', color: '#0D1F0F', marginBottom: '12px' }}>No Venues Yet</h3>
+        <p style={{ color: '#9CA3AF', marginBottom: '2rem' }}>Add your first venue to start accepting bookings.</p>
+        <button onClick={onAddClick} style={btnPrimary}>
+          <Plus size={18} /> Add Your First Venue
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      {/* SEED MESSAGE */}
-      {seedMessage && (
-        <div style={{
-          marginBottom: '1.5rem',
-          padding: '12px 16px',
-          borderRadius: '12px',
-          border: `1.5px solid ${seedMessage.type === 'success' ? '#DCEFB8' : '#fecaca'}`,
-          background: seedMessage.type === 'success' ? '#DCEFB8' : '#fff1f2',
-          color: seedMessage.type === 'success' ? '#084734' : '#991b1b',
-          fontWeight: '700',
-          fontSize: '0.9rem'
-        }}>
-          {seedMessage.text}
-        </div>
-      )}
+    <div style={{ animation: 'fadeIn 0.4s ease-out' }}>
 
-      {/* NO VENUES STATE */}
-      {(!data?.turfs || data.turfs.length === 0) && (
-        <div style={{ background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', padding: '4rem', textAlign: 'center' }}>
-          <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🏟️</div>
-          <h3 style={{ fontWeight: '800', fontSize: '1.5rem', color: '#161616', marginBottom: '12px' }}>No Venues Yet</h3>
-          <p style={{ color: '#98A2B3', fontWeight: '500', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-            Get started by adding your first venue or load sample venues to test the platform.
+      {/* ── HEADER ── */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '2rem' }}>
+        <div>
+          <p style={{ fontSize: '0.75rem', fontWeight: '700', color: '#9CA3AF', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '4px' }}>
+            — MY PORTFOLIO
           </p>
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <button onClick={onAddClick} style={{ 
-              background: '#CEF17B', color: '#084734', border: 'none', padding: '14px 28px', 
-              borderRadius: '12px', fontWeight: '800', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px',
-              cursor: 'pointer', boxShadow: '0 8px 20px rgba(30,190,116,0.2)'
-            }}>
-              <Plus size={20} /> Add Your First Venue
-            </button>
-            <button onClick={handleSeedVenues} disabled={seeding} style={{ 
-              background: 'white', color: '#161616', border: '1.5px solid #EEF2E6', padding: '14px 28px', 
-              borderRadius: '12px', fontWeight: '800', fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '10px',
-              cursor: seeding ? 'not-allowed' : 'pointer', opacity: seeding ? 0.6 : 1
-            }}>
-              {seeding ? 'Loading...' : 'Load Sample Venues'}
-            </button>
-          </div>
+          <h2 style={{ fontSize: '1.8rem', fontWeight: '900', color: '#0D1F0F', margin: 0 }}>Your Venues</h2>
+          <p style={{ color: '#9CA3AF', fontSize: '0.88rem', marginTop: '4px' }}>
+            Manage, edit, and track all your listed sports venues
+          </p>
         </div>
-      )}
-
-      {/* SHOW NORMAL UI ONLY IF VENUES EXIST */}
-      {data?.turfs && data.turfs.length > 0 && (
-        <>
-      {/* TABS */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
-        <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #EEF2E6', paddingBottom: '10px' }}>
-          {['All Venues', 'Add New Venue'].map((tab, i) => (
-            <div key={tab} onClick={() => { if (tab === 'Add New Venue') onAddClick(); else setActiveTab(tab); }} style={{ 
-              fontWeight: '700', fontSize: '0.95rem', cursor: 'pointer',
-              color: activeTab === tab ? '#CEF17B' : '#98A2B3',
-              position: 'relative', padding: '0 10px'
-            }}>
-              {tab}
-              {activeTab === tab && <div style={{ position: 'absolute', bottom: '-11.5px', left: 0, width: '100%', height: '3px', background: '#CEF17B', borderRadius: '10px' }} />}
-            </div>
-          ))}
-        </div>
-        <button onClick={onAddClick} style={{ 
-          background: '#CEF17B', color: '#084734', border: 'none', padding: '12px 24px', 
-          borderRadius: '12px', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '8px',
-          cursor: 'pointer', transition: '0.3s', boxShadow: '0 8px 20px rgba(30,190,116,0.2)'
-        }}>
-          <Plus size={20} /> Add New Venue
+        <button onClick={onAddClick} style={btnPrimary}>
+          <Plus size={18} /> Add New Venue
         </button>
       </div>
 
-      {/* STATS */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem', marginBottom: '2.5rem' }}>
-        {stats.map((s, i) => (
-          <div key={i} style={{ 
-            background: 'white', padding: '1.5rem', borderRadius: '24px', border: '1.5px solid #EEF2E6',
-            display: 'flex', alignItems: 'center', gap: '20px'
-          }}>
-            <div style={{ 
-              width: '56px', height: '56px', borderRadius: '16px', background: `${s.color}10`, color: s.color,
-              display: 'flex', alignItems: 'center', justifyContent: 'center'
-            }}>
-              {s.icon}
-            </div>
-            <div>
-              <div style={{ fontSize: '0.85rem', fontWeight: '600', color: '#98A2B3', marginBottom: '4px' }}>{s.label}</div>
-              <div style={{ fontSize: '1.5rem', fontWeight: '800', color: '#161616' }}>{s.value}</div>
-              <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#CEF17B', marginTop: '2px' }}>{s.sub}</div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* SEARCH & FILTER */}
-      <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-        <div style={{ flex: 1, position: 'relative' }}>
-          <Search size={20} style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
-          <input 
-            type="text" 
-            placeholder="Search venues by name or location" 
+      {/* ── FILTERS ROW ── */}
+      <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+        {/* Search */}
+        <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+          <Search size={16} style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+          <input
+            type="text"
+            placeholder="Search venues..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ 
-              width: '100%', padding: '16px 20px 16px 56px', borderRadius: '16px', border: '1.5px solid #EEF2E6',
-              fontSize: '0.95rem', fontWeight: '600', outline: 'none', transition: '0.2s',
-              boxSizing: 'border-box'
-            }} 
+            onChange={e => setSearch(e.target.value)}
+            style={{
+              width: '100%', padding: '10px 14px 10px 40px', borderRadius: '12px',
+              border: '1.5px solid #E9EDE8', fontSize: '0.88rem', outline: 'none',
+              fontWeight: '500', boxSizing: 'border-box',
+            }}
           />
         </div>
-        <div style={filterBtnStyle}>All Status <ChevronDown size={18} /></div>
-        <div style={filterBtnStyle}><Filter size={18} /> Filters <ChevronDown size={18} /></div>
+
+        {/* Sport filter */}
+        <select value={sportFilter} onChange={e => setSport(e.target.value)} style={selectStyle}>
+          <option>All Sports</option>
+          <option>Football</option>
+          <option>Cricket</option>
+          <option>Badminton</option>
+          <option>Tennis</option>
+        </select>
+
+        {/* Status filter */}
+        <select value={statusFilter} onChange={e => setStatus(e.target.value)} style={selectStyle}>
+          <option>All Status</option>
+          <option>Active</option>
+          <option>Inactive</option>
+          <option>Pending</option>
+        </select>
+
+        {/* Tab pills */}
+        <div style={{ display: 'flex', gap: '6px', marginLeft: 'auto' }}>
+          {[
+            { label: `All (${turfs.length})`,       key: 'All' },
+            { label: `Active (${activeCount})`,      key: 'Active' },
+            { label: `Pending (${pendingCount})`,    key: 'Pending' },
+          ].map(t => (
+            <button
+              key={t.key}
+              onClick={() => setActiveTab(t.key)}
+              style={{
+                padding: '8px 16px', borderRadius: '10px', border: '1.5px solid',
+                borderColor: activeTab === t.key ? GREEN : '#E9EDE8',
+                background: activeTab === t.key ? GREEN : '#fff',
+                color: activeTab === t.key ? LIME : '#6B7280',
+                fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer',
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* VENUE LIST */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-        {filteredTurfs?.map((turf) => (
-          <VenueCard 
-            key={turf._id} 
-            turf={turf} 
-            isExpanded={expandedVenue === turf._id}
-            onToggle={() => setExpandedVenue(expandedVenue === turf._id ? null : turf._id)}
+      {/* ── VENUE CARDS GRID ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.5rem' }}>
+        {filtered.map(turf => (
+          <VenueCard
+            key={turf._id}
+            turf={turf}
             bookings={data?.bookings}
             token={token}
             onTabChange={onTabChange}
           />
         ))}
+
+        {/* Add new venue card */}
+        <div
+          onClick={onAddClick}
+          style={{
+            background: '#fff', borderRadius: '20px',
+            border: '2px dashed #D1D5DB', display: 'flex',
+            flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+            padding: '3rem 2rem', cursor: 'pointer', minHeight: '320px',
+            transition: 'border-color 0.2s',
+          }}
+        >
+          <div style={{
+            width: '64px', height: '64px', borderRadius: '50%',
+            background: '#F0FDF4', display: 'flex', alignItems: 'center',
+            justifyContent: 'center', marginBottom: '1rem',
+          }}>
+            <Plus size={28} color={GREEN} />
+          </div>
+          <h4 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', marginBottom: '8px' }}>Add a New Venue</h4>
+          <p style={{ color: '#9CA3AF', fontSize: '0.82rem', textAlign: 'center', lineHeight: 1.5, marginBottom: '1.5rem' }}>
+            List another sports venue and start earning from more bookings
+          </p>
+          <button style={btnPrimary}>+ Add Venue</button>
+        </div>
       </div>
-        </>
-      )}
     </div>
   );
 }
 
-function VenueCard({ turf, isExpanded, onToggle, bookings, token, onTabChange }) {
-  const [actionMenu, setActionMenu] = useState(null);
-  const [editMode, setEditMode] = useState(false);
-  const [editData, setEditData] = useState({ name: turf.name, location: turf.location, city: turf.city, price_per_hour: turf.price_per_hour, description: turf.description || '' });
-  const [saving, setSaving] = useState(false);
-  const [statusUpdating, setStatusUpdating] = useState(false);
-  const [isActive, setIsActive] = useState(turf.isActive !== false);
+/* ─────────────────────────────────────────────
+   VENUE CARD  (matches the design mockup)
+───────────────────────────────────────────── */
+function VenueCard({ turf, bookings, token, onTabChange }) {
+  const { token: authToken } = useAuth();
+  const tk = token || authToken;
 
-  const turfBookings = bookings?.filter(b => b.turf_id?._id === turf._id || b.turf_id === turf._id) || [];
-  const today = new Date().toISOString().split('T')[0];
-  const todayB = turfBookings.filter(b => b.date === today && b.status !== 'cancelled');
-  const todayRev = todayB.reduce((sum, b) => sum + (b.total_price || 0), 0);
-  
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const weeklyB = turfBookings.filter(b => new Date(b.date) >= sevenDaysAgo && b.status !== 'cancelled');
-  const weeklyRev = weeklyB.reduce((sum, b) => sum + (b.total_price || 0), 0);
+  const [isActive, setIsActive]   = useState(turf.isActive !== false);
+  const [toggling, setToggling]   = useState(false);
 
-  const handleSaveEdit = async () => {
-    setSaving(true);
+  const turfBookings = bookings?.filter(b =>
+    (b.turf_id?._id || b.turf_id) === turf._id
+  ) || [];
+
+  const totalEarned = turfBookings
+    .filter(b => b.status !== 'cancelled')
+    .reduce((s, b) => s + (b.total_price || 0), 0);
+
+  const rating    = turf.rating || 4.5;
+  const reviews   = turf.reviewCount || 0;
+  const amenities = (turf.amenities || []).slice(0, 3);
+
+  const handleToggle = async () => {
+    setToggling(true);
     try {
-      await axios.put(`${API}/turfs/${turf._id}`, editData, { headers: { Authorization: `Bearer ${token}` } });
-      setEditMode(false);
-      // Refresh will happen via parent's onChange
-    } catch (err) {
-      alert(err.response?.data?.msg || 'Failed to update venue');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleToggleStatus = async () => {
-    setStatusUpdating(true);
-    try {
-      const res = await axios.patch(`${API}/turfs/${turf._id}/status`, {}, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.patch(`${API}/turfs/${turf._id}/status`, {}, {
+        headers: { Authorization: `Bearer ${tk}` },
+      });
       setIsActive(res.data.isActive);
-    } catch (err) {
-      alert(err.response?.data?.msg || 'Failed to update status');
+    } catch {
+      /* silent */
     } finally {
-      setStatusUpdating(false);
-      setActionMenu(null);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!window.confirm(`Are you sure you want to delete "${turf.name}"? This action cannot be undone.`)) {
-      return;
-    }
-    
-    try {
-      await axios.delete(`${API}/turfs/${turf._id}`, { headers: { Authorization: `Bearer ${token}` } });
-      alert('Venue deleted successfully');
-      window.location.reload(); // Refresh to show updated list
-    } catch (err) {
-      alert(err.response?.data?.msg || 'Failed to delete venue');
-    } finally {
-      setActionMenu(null);
+      setToggling(false);
     }
   };
 
   return (
-    <div style={{ 
-      background: 'white', borderRadius: '24px', border: '1.5px solid #EEF2E6', overflow: 'hidden',
-      transition: '0.3s all'
+    <div style={{
+      background: '#fff', borderRadius: '20px',
+      border: '1.5px solid #E9EDE8', overflow: 'hidden',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+      display: 'flex', flexDirection: 'column',
     }}>
-      <div style={{ padding: '1.5rem', display: 'flex', gap: '2rem' }}>
-        <div style={{ width: '280px', height: '180px', borderRadius: '16px', overflow: 'hidden', position: 'relative', flexShrink: 0 }}>
-          <img src={turf.images?.[0] || '/images/football.png'} alt={turf.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          <div style={{ position: 'absolute', top: '12px', left: '12px', background: isActive ? '#CEF17B' : '#98A2B3', color: 'white', fontSize: '0.7rem', fontWeight: '800', padding: '4px 10px', borderRadius: '6px' }}>{isActive ? 'ACTIVE' : 'INACTIVE'}</div>
-          <div style={{ position: 'absolute', bottom: '12px', left: '12px', background: 'rgba(0,0,0,0.6)', color: 'white', fontSize: '0.7rem', fontWeight: '700', padding: '4px 10px', borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Eye size={12} /> {turf.images?.length || 0}
+      {/* Image / sport banner */}
+      <div style={{ position: 'relative', height: '160px', background: GREEN, overflow: 'hidden' }}>
+        {turf.images?.[0] ? (
+          <img
+            src={turf.images[0]}
+            alt={turf.name}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.85 }}
+          />
+        ) : (
+          <div style={{
+            width: '100%', height: '100%', display: 'flex',
+            alignItems: 'center', justifyContent: 'center', fontSize: '4rem',
+          }}>
+            {sportIcon(turf.sport)}
           </div>
+        )}
+
+        {/* Sport badge */}
+        <div style={{
+          position: 'absolute', top: '12px', left: '12px',
+          background: 'rgba(0,0,0,0.55)', color: '#fff',
+          fontSize: '0.68rem', fontWeight: '800', letterSpacing: '1px',
+          padding: '4px 10px', borderRadius: '6px', textTransform: 'uppercase',
+        }}>
+          {turf.sport || 'Multi-sport'}
         </div>
 
-        <div style={{ flex: 1 }}>
-          {editMode ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <input value={editData.name} onChange={e => setEditData({...editData, name: e.target.value})} style={editInputStyle} placeholder="Venue name" />
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                <input value={editData.location} onChange={e => setEditData({...editData, location: e.target.value})} style={editInputStyle} placeholder="Location" />
-                <input value={editData.city} onChange={e => setEditData({...editData, city: e.target.value})} style={editInputStyle} placeholder="City" />
-              </div>
-              <input type="number" value={editData.price_per_hour} onChange={e => setEditData({...editData, price_per_hour: e.target.value})} style={editInputStyle} placeholder="Price per hour" />
-              <textarea value={editData.description} onChange={e => setEditData({...editData, description: e.target.value})} style={{ ...editInputStyle, height: '80px', resize: 'none' }} placeholder="Description" />
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={handleSaveEdit} disabled={saving} style={{ ...actionBtnStyle, background: '#CEF17B', color: '#084734', border: 'none' }}>{saving ? 'Saving...' : 'Save Changes'}</button>
-                <button onClick={() => setEditMode(false)} style={actionBtnStyle}>Cancel</button>
-              </div>
-            </div>
-          ) : (
-            <>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
-                <h3 style={{ fontSize: '1.4rem', fontWeight: '800', color: '#161616' }}>{turf.name}</h3>
-                <span style={{ background: '#DCEFB8', color: '#CEF17B', fontSize: '0.75rem', fontWeight: '700', padding: '4px 10px', borderRadius: '6px' }}>Featured</span>
-              </div>
-              <p style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#98A2B3', fontSize: '0.9rem', fontWeight: '500' }}>
-                <MapPin size={16} /> {turf.location}, {turf.city}
-              </p>
-              
-              <div style={{ display: 'flex', gap: '8px', marginTop: '1rem' }}>
-                <span style={tagStyle}>{turf.sport || 'Multi-sport'}</span>
-                {turf.amenities?.slice(0, 2).map((a, i) => (
-                  <span key={i} style={{ ...tagStyle, background: '#EEF2E6', color: '#98A2B3' }}>{a}</span>
-                ))}
-              </div>
-            </div>
-            <div style={{ display: 'flex', gap: '10px', position: 'relative' }}>
-               <button onClick={() => window.open(`/turf/${turf._id}`, '_blank')} style={actionBtnStyle}><Eye size={16} /> View</button>
-               <button onClick={() => setEditMode(true)} style={actionBtnStyle}><Edit2 size={16} /> Edit</button>
-               <button onClick={() => setActionMenu(actionMenu ? null : turf._id)} style={actionBtnStyle}><MoreVertical size={16} /></button>
-               
-               {actionMenu === turf._id && (
-                 <div style={dropdownStyle}>
-                   <div onClick={() => { onTabChange?.('slots'); setActionMenu(null); }} style={dropdownItem}>Manage Slots</div>
-                   <div onClick={() => { onTabChange?.('pricing'); setActionMenu(null); }} style={dropdownItem}>Update Pricing</div>
-                   <div onClick={handleToggleStatus} style={{ ...dropdownItem, color: isActive ? '#ef4444' : '#CEF17B' }}>
-                     {statusUpdating ? 'Updating...' : isActive ? 'Mark as Inactive' : 'Mark as Active'}
-                   </div>
-                   <div style={{ borderTop: '1px solid #EEF2E6', margin: '4px 0' }}></div>
-                   <div onClick={handleDelete} style={{ ...dropdownItem, color: '#ef4444' }}>
-                     Delete Venue
-                   </div>
-                 </div>
-               )}
-
-               <button onClick={onToggle} style={{ ...actionBtnStyle, background: isExpanded ? '#EEF2E6' : 'transparent' }}>
-                 {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-               </button>
-            </div>
-          </div>
-
-          <div style={{ marginTop: '1.5rem', display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#98A2B3', fontSize: '0.85rem', fontWeight: '600' }}>
-              <Clock size={16} /> Open {turf.openTime || '6:00 AM'} - {turf.closeTime || '11:00 PM'}
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#161616', fontSize: '0.85rem', fontWeight: '800' }}>
-              <span style={{ color: '#98A2B3' }}>₹</span> {turf.price_per_hour?.toLocaleString()} <span style={{ color: '#98A2B3', fontWeight: '500' }}>per hour</span>
-            </div>
-          </div>
-            </>
-          )}
+        {/* Active badge */}
+        <div style={{
+          position: 'absolute', top: '12px', right: '12px',
+          background: isActive ? '#D1FAE5' : '#F3F4F6',
+          color: isActive ? '#065F46' : '#6B7280',
+          fontSize: '0.68rem', fontWeight: '800',
+          padding: '4px 10px', borderRadius: '6px',
+          display: 'flex', alignItems: 'center', gap: '4px',
+        }}>
+          <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: isActive ? '#10B981' : '#9CA3AF', display: 'inline-block' }} />
+          {isActive ? 'Active' : 'Inactive'}
         </div>
+
+        {/* Rating */}
+        {reviews > 0 && (
+          <div style={{
+            position: 'absolute', bottom: '12px', left: '12px',
+            background: 'rgba(0,0,0,0.6)', color: '#fff',
+            fontSize: '0.72rem', fontWeight: '700',
+            padding: '4px 10px', borderRadius: '6px',
+            display: 'flex', alignItems: 'center', gap: '4px',
+          }}>
+            <Star size={12} fill="#FBBF24" color="#FBBF24" />
+            {rating.toFixed(1)} · {reviews} reviews
+          </div>
+        )}
       </div>
 
-      {isExpanded && (
-        <div style={{ borderTop: '1.5px solid #EEF2E6', background: 'white' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', padding: '1.5rem 2rem', gap: '2rem' }}>
-             <OverviewCard label="Today's Overview" stats={[
-               { label: 'Bookings', value: todayB.length.toString(), icon: <Calendar size={14} /> },
-               { label: 'Revenue', value: `₹${todayRev.toLocaleString()}`, icon: <TrendingUp size={14} />, color: '#CEF17B' },
-             ]} />
-             <OverviewCard label="Weekly Overview" stats={[
-               { label: 'Bookings', value: weeklyB.length.toString(), icon: <Calendar size={14} /> },
-               { label: 'Revenue', value: `₹${weeklyRev.toLocaleString()}`, icon: <TrendingUp size={14} />, color: '#CEF17B' },
-             ]} />
-             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6', background: '#F8FAF7' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Venue Status</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: isActive ? '#CEF17B' : '#98A2B3' }}></div>
-                    <div>
-                       <div style={{ fontSize: '0.9rem', fontWeight: '800', color: isActive ? '#CEF17B' : '#98A2B3' }}>{isActive ? 'Active' : 'Inactive'}</div>
-                       <div style={{ fontSize: '0.75rem', color: '#98A2B3', fontWeight: '500' }}>{isActive ? 'Listed on TurfX' : 'Hidden from search'}</div>
-                    </div>
-                  </div>
-                  <div 
-                    onClick={handleToggleStatus}
-                    style={{ width: '44px', height: '24px', background: isActive ? '#CEF17B' : '#DCEFB8', borderRadius: '20px', padding: '2px', cursor: 'pointer', position: 'relative', transition: '0.3s' }}>
-                    <div style={{ position: 'absolute', top: '2px', right: isActive ? '2px' : 'auto', left: isActive ? 'auto' : '2px', width: '20px', height: '20px', background: 'white', borderRadius: '50%', transition: '0.3s' }}></div>
-                  </div>
-                </div>
-             </div>
-          </div>
+      {/* Body */}
+      <div style={{ padding: '1.2rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+        <h3 style={{ fontWeight: '800', fontSize: '1.1rem', color: '#0D1F0F', marginBottom: '4px' }}>
+          {turf.name}
+        </h3>
+        <p style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#9CA3AF', fontSize: '0.82rem', marginBottom: '1rem' }}>
+          <MapPin size={13} /> {turf.location}{turf.city ? `, ${turf.city}` : ''}
+        </p>
 
-          <div style={{ padding: '0 2rem 2rem' }}>
-            <div style={{ display: 'flex', gap: '2rem', borderBottom: '1.5px solid #EEF2E6', paddingBottom: '12px', marginBottom: '2rem' }}>
-              {['Overview', 'Photos', 'Sports', 'Slots', 'Pricing', 'Amenities', 'Reviews', 'Bookings'].map((sub, i) => (
-                <div key={sub} style={{ fontSize: '0.85rem', fontWeight: '700', color: i === 0 ? '#CEF17B' : '#98A2B3', cursor: 'pointer' }}>{sub}</div>
-              ))}
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '3rem' }}>
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                  <InfoItem label="Venue ID" value={`#${turf._id?.slice(-8)?.toUpperCase()}`} />
-                  <InfoItem label="Created On" value={turf.createdAt ? new Date(turf.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'} />
-                  <InfoItem label="Sport" value={turf.sport || 'Multi-sport'} />
-               </div>
-               <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                  <InfoItem label="Surface Type" value={turf.surfaceType || 'Standard'} />
-                  <InfoItem label="Venue Size" value={turf.venueSize || 'N/A'} />
-                  <InfoItem label="Address" value={`${turf.location}, ${turf.city}`} />
-               </div>
-               <div>
-                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase', marginBottom: '8px' }}>Description</div>
-                  <p style={{ fontSize: '0.85rem', color: '#98A2B3', fontWeight: '500', lineHeight: 1.6 }}>
-                    {turf.description || turf.shortDescription || 'No description available.'}
-                  </p>
-               </div>
-            </div>
-          </div>
+        {/* Stats row */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '0.5rem', marginBottom: '1rem',
+          background: '#F9FAFB', borderRadius: '12px', padding: '0.8rem',
+        }}>
+          <StatCell label="Bookings" value={turfBookings.filter(b => b.status !== 'cancelled').length} />
+          <StatCell
+            label="Earned"
+            value={totalEarned >= 1000 ? `₹${(totalEarned / 1000).toFixed(0)}K` : `₹${totalEarned}`}
+            highlight
+          />
+          <StatCell label="Per Hour" value={`₹${(turf.price_per_hour || 0).toLocaleString()}`} />
         </div>
-      )}
-    </div>
-  );
-}
 
-function OverviewCard({ label, stats }) {
-  return (
-    <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1.5px solid #EEF2E6', background: '#F8FAF7' }}>
-      <div style={{ fontSize: '0.8rem', fontWeight: '800', color: '#161616', marginBottom: '1.5rem', textTransform: 'uppercase' }}>{label}</div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {stats.map((s, i) => (
-          <div key={i}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: '#98A2B3', fontSize: '0.75rem', fontWeight: '600', marginBottom: '6px' }}>
-              {s.icon} {s.label}
-            </div>
-            <div style={{ fontSize: '1.1rem', fontWeight: '800', color: s.color || '#161616' }}>{s.value}</div>
+        {/* Amenity tags */}
+        {amenities.length > 0 && (
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+            {amenities.map((a, i) => (
+              <span key={i} style={{
+                background: '#F0FDF4', color: '#065F46',
+                fontSize: '0.7rem', fontWeight: '700',
+                padding: '3px 10px', borderRadius: '6px', textTransform: 'capitalize',
+              }}>
+                {a}
+              </span>
+            ))}
           </div>
-        ))}
+        )}
+
+        {/* Action buttons */}
+        <div style={{ display: 'flex', gap: '8px', marginTop: 'auto' }}>
+          <button
+            onClick={() => onTabChange?.('bookings')}
+            style={{ ...btnPrimary, flex: 1, justifyContent: 'center', padding: '10px' }}
+          >
+            Manage
+          </button>
+          <button
+            style={{ ...btnOutline, flex: 1, justifyContent: 'center', padding: '10px' }}
+          >
+            <Edit2 size={14} /> Edit
+          </button>
+          <button
+            onClick={() => onTabChange?.('slots')}
+            style={{ ...btnOutline, flex: 1, justifyContent: 'center', padding: '10px' }}
+          >
+            <Settings size={14} /> Slots
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-function InfoItem({ label, value }) {
+function StatCell({ label, value, highlight }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr' }}>
-      <span style={{ fontSize: '0.75rem', fontWeight: '700', color: '#98A2B3', textTransform: 'uppercase' }}>{label}</span>
-      <span style={{ fontSize: '0.85rem', fontWeight: '600', color: '#161616' }}>{value}</span>
+    <div style={{ textAlign: 'center' }}>
+      <div style={{
+        fontSize: '0.95rem', fontWeight: '800',
+        color: highlight ? GREEN : '#0D1F0F',
+      }}>{value}</div>
+      <div style={{ fontSize: '0.65rem', fontWeight: '600', color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+        {label}
+      </div>
     </div>
   );
 }
 
-const filterBtnStyle = {
-  display: 'flex', alignItems: 'center', gap: '8px', padding: '0 20px',
-  borderRadius: '16px', border: '1.5px solid #EEF2E6', background: 'white',
-  fontSize: '0.9rem', fontWeight: '600', color: '#161616', cursor: 'pointer'
+/* ── shared styles ── */
+const btnPrimary = {
+  background: GREEN, color: LIME, border: 'none',
+  padding: '10px 20px', borderRadius: '10px',
+  fontWeight: '800', fontSize: '0.85rem',
+  display: 'flex', alignItems: 'center', gap: '6px',
+  cursor: 'pointer',
 };
 
-const editInputStyle = {
-  width: '100%', padding: '10px 14px', borderRadius: '10px', border: '1.5px solid #DCEFB8',
-  fontSize: '0.9rem', fontWeight: '600', outline: 'none', background: 'white', boxSizing: 'border-box'
+const btnOutline = {
+  background: '#fff', color: '#374151',
+  border: '1.5px solid #E9EDE8',
+  padding: '10px 20px', borderRadius: '10px',
+  fontWeight: '700', fontSize: '0.85rem',
+  display: 'flex', alignItems: 'center', gap: '6px',
+  cursor: 'pointer',
 };
 
-const tagStyle = {
-  background: '#F8FAF7', border: '1.5px solid #EEF2E6', color: '#98A2B3',
-  padding: '4px 12px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: '700'
-};
-
-const actionBtnStyle = {
-  background: 'white', border: '1.5px solid #EEF2E6', padding: '8px 16px',
-  borderRadius: '12px', fontSize: '0.85rem', fontWeight: '700', color: '#161616',
-  cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', transition: '0.2s'
-};
-
-const dropdownStyle = {
-  position: 'absolute', top: '100%', right: 0, width: '180px',
-  background: 'white', borderRadius: '12px', border: '1.5px solid #EEF2E6',
-  boxShadow: '0 8px 30px rgba(0,0,0,0.08)', zIndex: 1000,
-  padding: '8px', marginTop: '8px', overflow: 'hidden'
-};
-
-const dropdownItem = {
-  padding: '10px 14px', fontSize: '0.85rem', fontWeight: '700', color: '#98A2B3',
-  cursor: 'pointer', borderRadius: '8px', transition: '0.2s', display: 'flex',
-  alignItems: 'center', gap: '10px'
+const selectStyle = {
+  padding: '10px 14px', borderRadius: '12px',
+  border: '1.5px solid #E9EDE8', fontSize: '0.88rem',
+  fontWeight: '600', color: '#374151', outline: 'none',
+  background: '#fff', cursor: 'pointer',
 };
