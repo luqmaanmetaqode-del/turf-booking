@@ -7,6 +7,11 @@ import logo from '../../assets/logo.png';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
+// ── Brand colors — same as Home/Explore pages ──
+const GREEN  = '#084734';   // primary dark green
+const LIME   = '#CEF17B';   // accent lime
+const LIME_BG = '#DCEFB8';  // light lime tint
+
 export default function PartnerLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -43,6 +48,7 @@ export default function PartnerLogin() {
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', fontFamily: "'Inter', sans-serif" }}>
+
       {/* ── LEFT PANEL ── */}
       <div style={{
         width: '480px', minWidth: '480px', background: '#fff',
@@ -53,16 +59,16 @@ export default function PartnerLogin() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '3rem' }}>
           <Link to="/"><img src={logo} alt="TurfX" style={{ height: '36px' }} /></Link>
           <span style={{
-            background: '#E8F5D0', color: '#4A7C2F', fontWeight: '800',
+            background: LIME_BG, color: GREEN, fontWeight: '800',
             fontSize: '0.75rem', letterSpacing: '1.5px', padding: '4px 10px',
             borderRadius: '6px',
           }}>PARTNER</span>
         </div>
 
-        <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#0D1F0F', marginBottom: '8px', lineHeight: 1.2 }}>
+        <h2 style={{ fontSize: '2rem', fontWeight: '800', color: '#161616', marginBottom: '8px', lineHeight: 1.2 }}>
           Partner Access
         </h2>
-        <p style={{ color: '#6B7280', fontWeight: '500', marginBottom: '2.5rem', fontSize: '0.95rem' }}>
+        <p style={{ color: '#98A2B3', fontWeight: '500', marginBottom: '2.5rem', fontSize: '0.95rem' }}>
           Sign in to manage your venue operations and bookings
         </p>
 
@@ -80,7 +86,7 @@ export default function PartnerLogin() {
           {/* Mobile */}
           <div>
             <label style={labelStyle}>Mobile Number</label>
-            <div style={{ display: 'flex', gap: '0', borderRadius: '12px', border: '1.5px solid #E5E7EB', overflow: 'hidden', background: '#fff' }}>
+            <div style={{ display: 'flex', borderRadius: '12px', border: '1.5px solid #E5E7EB', overflow: 'hidden', background: '#fff' }}>
               <div style={{
                 padding: '14px 16px', background: '#F9FAFB', borderRight: '1.5px solid #E5E7EB',
                 display: 'flex', alignItems: 'center', gap: '6px',
@@ -118,47 +124,39 @@ export default function PartnerLogin() {
                   boxSizing: 'border-box',
                 }}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
-                  background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF',
-                  display: 'flex', alignItems: 'center', padding: 0,
-                }}
-              >
+              <button type="button" onClick={() => setShowPassword(!showPassword)} style={{
+                position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)',
+                background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF',
+                display: 'flex', alignItems: 'center', padding: 0,
+              }}>
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
             <div style={{ textAlign: 'right', marginTop: '8px' }}>
-              <Link to="/partner/forgot-password" style={{ color: '#2D6A4F', fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
+              <Link to="/partner/forgot-password" style={{ color: GREEN, fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
                 Forgot password?
               </Link>
             </div>
           </div>
 
           {/* Submit */}
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              width: '100%', background: loading ? '#b5d96a' : '#CEF17B',
-              color: '#0D2B14', border: 'none', padding: '16px',
-              borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer',
-              fontWeight: '800', fontSize: '1rem', display: 'flex',
-              alignItems: 'center', justifyContent: 'center', gap: '8px',
-              transition: 'background 0.2s', marginTop: '0.5rem',
-            }}
-          >
+          <button type="submit" disabled={loading} style={{
+            width: '100%', background: loading ? '#b5d96a' : LIME,
+            color: GREEN, border: 'none', padding: '16px',
+            borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer',
+            fontWeight: '800', fontSize: '1rem', display: 'flex',
+            alignItems: 'center', justifyContent: 'center', gap: '8px',
+            transition: 'background 0.2s', marginTop: '0.5rem',
+          }}>
             <LogIn size={18} />
             {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #F3F4F6' }}>
-          <p style={{ color: '#9CA3AF', fontSize: '0.88rem' }}>new here?</p>
-          <Link to="/partner/register" style={{ color: '#111827', fontWeight: '700', textDecoration: 'none', fontSize: '0.95rem' }}>
-            New partner? <span style={{ color: '#2D6A4F', fontWeight: '800', textDecoration: 'underline' }}>Register your venue</span>
+          <p style={{ color: '#9CA3AF', fontSize: '0.88rem', marginBottom: '6px' }}>new here?</p>
+          <Link to="/partner/register" style={{ color: '#161616', fontWeight: '700', textDecoration: 'none', fontSize: '0.95rem' }}>
+            New partner? <span style={{ color: GREEN, fontWeight: '800', textDecoration: 'underline' }}>Register your venue</span>
           </Link>
         </div>
 
@@ -167,13 +165,13 @@ export default function PartnerLogin() {
         </p>
       </div>
 
-      {/* ── RIGHT PANEL (dark green) ── */}
+      {/* ── RIGHT PANEL ── */}
       <div style={{
-        flex: 1, background: '#0A3728',
+        flex: 1, background: GREEN,
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         padding: '5rem', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Grid LINE pattern — like the mockup */}
+        {/* Grid line pattern */}
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `
@@ -184,17 +182,15 @@ export default function PartnerLogin() {
           pointerEvents: 'none',
         }} />
 
-        {/* Decorative circle removed */}
-
         <div style={{ position: 'relative', zIndex: 2 }}>
-          <p style={{ color: '#CEF17B', fontWeight: '700', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem' }}>
+          <p style={{ color: LIME, fontWeight: '700', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem' }}>
             — VENUE PARTNERS
           </p>
           <h1 style={{ fontSize: '3rem', fontWeight: '900', color: '#fff', lineHeight: 1.15, marginBottom: '1.5rem' }}>
             Scale Your<br />
-            <span style={{ color: '#CEF17B' }}>Sports Business.</span>
+            <span style={{ color: LIME }}>Sports Business.</span>
           </h1>
-          <p style={{ color: '#9DB8A0', fontSize: '1rem', fontWeight: '400', lineHeight: 1.7, maxWidth: '480px', marginBottom: '3rem' }}>
+          <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '1rem', lineHeight: 1.7, maxWidth: '480px', marginBottom: '3rem' }}>
             Join India's largest sports turf network and put your venue in front of thousands of players every day.
           </p>
 
@@ -208,12 +204,13 @@ export default function PartnerLogin() {
               <div key={f.n} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
                 <div style={{
                   width: '36px', height: '36px', borderRadius: '50%',
-                  background: '#CEF17B', color: '#0D2B14',
+                  background: LIME, color: GREEN,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '0.85rem', fontWeight: '900', flexShrink: 0,
-                }}>{f.n}</div>                <div>
+                }}>{f.n}</div>
+                <div>
                   <div style={{ fontWeight: '700', color: '#fff', fontSize: '1rem' }}>{f.title}</div>
-                  <div style={{ color: '#7A9E80', fontWeight: '400', marginTop: '4px', fontSize: '0.88rem', lineHeight: 1.5 }}>{f.sub}</div>
+                  <div style={{ color: 'rgba(255,255,255,0.55)', marginTop: '4px', fontSize: '0.88rem', lineHeight: 1.5 }}>{f.sub}</div>
                 </div>
               </div>
             ))}
@@ -227,23 +224,16 @@ export default function PartnerLogin() {
               { val: '4.8★', label: 'Avg rating' },
             ].map(s => (
               <div key={s.val} style={{
-                background: 'rgba(206,241,123,0.1)', border: '1px solid rgba(206,241,123,0.2)',
+                background: 'rgba(206,241,123,0.12)', border: `1px solid rgba(206,241,123,0.25)`,
                 borderRadius: '50px', padding: '10px 20px',
                 display: 'flex', alignItems: 'center', gap: '8px',
               }}>
-                <span style={{ color: '#CEF17B', fontWeight: '800', fontSize: '1rem' }}>{s.val}</span>
-                <span style={{ color: '#7A9E80', fontSize: '0.85rem' }}>{s.label}</span>
+                <span style={{ color: LIME, fontWeight: '800', fontSize: '1rem' }}>{s.val}</span>
+                <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.85rem' }}>{s.label}</span>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Bottom gradient */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: '35%',
-          background: 'linear-gradient(to top, rgba(0,0,0,0.3), transparent)',
-          pointerEvents: 'none',
-        }} />
       </div>
     </div>
   );

@@ -29,10 +29,10 @@ import PartnerOffers from '../../components/partner/PartnerOffers';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
-const SIDEBAR_BG = '#1C2B1E';
-const SIDEBAR_ACTIVE = '#2D3F2F';
+const SIDEBAR_BG = '#084734';
+const SIDEBAR_ACTIVE = 'rgba(206,241,123,0.12)';
 const ACCENT = '#CEF17B';
-const ACCENT_DARK = '#1A3A1F';
+const ACCENT_DARK = '#084734';
 
 const navGroups = [
   {
@@ -126,7 +126,7 @@ export default function PartnerDashboard() {
       }}>
         {/* Logo */}
         <div style={{ padding: '1.5rem 1.5rem 1.2rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ background: '#2D4A30', borderRadius: '10px', padding: '6px', display: 'flex', alignItems: 'center' }}>
+          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', padding: '6px', display: 'flex', alignItems: 'center' }}>
             <img src={logo} alt="TurfX" style={{ height: '30px' }} />
           </div>
           <span style={{
