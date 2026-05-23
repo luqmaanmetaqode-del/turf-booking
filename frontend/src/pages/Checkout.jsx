@@ -141,7 +141,7 @@ export default function Checkout() {
 
       // Razorpay payment
       const options = {
-        key: process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_live_Ssj5gmcgaYP9HB',
         amount,
         currency,
         name: 'TurfX',
@@ -160,12 +160,16 @@ export default function Checkout() {
             }, { headers: { Authorization: `Bearer ${token}` } });
             setRequestSent(true);
           } catch (err) {
-            alert('Payment successful but booking failed. Please contact support.');
+            alert('Payment received but booking failed. Please contact support with your payment ID: ' + response.razorpay_payment_id);
           }
         },
+        modal: {
+          ondismiss: () => { setLoading(false); },
+        },
         prefill: {
-          name:    user?.name,
-          contact: user?.phone,
+          name:    user?.name || '',
+          contact: user?.phone?.replace('+91', '') || '',
+          email:   user?.email || '',
         },
         theme: { color: '#084734' },
       };
