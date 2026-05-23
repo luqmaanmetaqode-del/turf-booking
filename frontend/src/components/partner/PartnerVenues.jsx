@@ -200,6 +200,7 @@ function VenueCard({ turf, bookings, token, onTabChange }) {
   const reviews   = turf.reviewCount || 0;
   const amenities = (turf.amenities || []).slice(0, 3);
 
+  // eslint-disable-next-line no-unused-vars
   const handleToggle = async () => {
     try {
       const res = await axios.patch(`${API}/turfs/${turf._id}/status`, {}, {
