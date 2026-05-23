@@ -29,7 +29,7 @@ import PartnerOffers from '../../components/partner/PartnerOffers';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
-const SIDEBAR_BG = '#084734';
+const SIDEBAR_BG = '#084734'; // same as home page green
 const SIDEBAR_ACTIVE = 'rgba(206,241,123,0.12)';
 const ACCENT = '#CEF17B';
 const ACCENT_DARK = '#084734';
