@@ -141,7 +141,7 @@ export default function Checkout() {
 
       // Razorpay payment
       const options = {
-        key: 'rzp_test_placeholder',
+        key: process.env.REACT_APP_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
         amount,
         currency,
         name: 'TurfX',
@@ -150,23 +150,24 @@ export default function Checkout() {
         handler: async (response) => {
           try {
             await axios.post(`${API}/bookings/direct`, {
-              turf_id: turfId,
+              turf_id:              turfId,
               date,
-              time_slots: selectedSlots,
-              total_price: totalAmount,
-              payment_id: response.razorpay_payment_id,
+              time_slots:           selectedSlots,
+              total_price:          totalAmount,
+              razorpay_order_id:    response.razorpay_order_id,
+              razorpay_payment_id:  response.razorpay_payment_id,
+              razorpay_signature:   response.razorpay_signature,
             }, { headers: { Authorization: `Bearer ${token}` } });
-            
             setRequestSent(true);
           } catch (err) {
             alert('Payment successful but booking failed. Please contact support.');
           }
         },
         prefill: {
-          name: user?.name,
+          name:    user?.name,
           contact: user?.phone,
         },
-        theme: { color: '#CEF17B' },
+        theme: { color: '#084734' },
       };
 
       const rzp = new window.Razorpay(options);

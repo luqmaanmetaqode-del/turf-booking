@@ -21,6 +21,18 @@ const BookingSchema = new mongoose.Schema({
   refund_id: { type: String },
   cancelled_at: { type: Date },
   cancellation_reason: { type: String },
+
+  // ── Wallet split tracking ──
+  platform_fee:   { type: Number, default: 0 },  // flat ₹25
+  gst_amount:     { type: Number, default: 0 },  // 18% on platform fee
+  partner_amount: { type: Number, default: 0 },  // turf price only (goes to partner)
+  // partner_wallet_status: hold → released (on check-in/date pass) → refunded (on cancel)
+  partner_wallet_status: {
+    type: String,
+    enum: ['none', 'hold', 'released', 'refunded'],
+    default: 'none',
+  },
+  checked_in_at: { type: Date },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Booking', BookingSchema);
