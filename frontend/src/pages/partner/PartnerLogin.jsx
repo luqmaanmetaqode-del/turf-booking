@@ -131,7 +131,7 @@ export default function PartnerLogin() {
               </button>
             </div>
             <div style={{ textAlign: 'right', marginTop: '8px' }}>
-              <Link to="/partner/forgot-password" style={{ color: '#4A7C2F', fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
+              <Link to="/partner/forgot-password" style={{ color: '#2D6A4F', fontSize: '0.85rem', fontWeight: '600', textDecoration: 'none' }}>
                 Forgot password?
               </Link>
             </div>
@@ -142,8 +142,8 @@ export default function PartnerLogin() {
             type="submit"
             disabled={loading}
             style={{
-              width: '100%', background: loading ? '#6B9E4A' : '#1A3A1F',
-              color: '#CEF17B', border: 'none', padding: '16px',
+              width: '100%', background: loading ? '#b5d96a' : '#CEF17B',
+              color: '#0D2B14', border: 'none', padding: '16px',
               borderRadius: '12px', cursor: loading ? 'not-allowed' : 'pointer',
               fontWeight: '800', fontSize: '1rem', display: 'flex',
               alignItems: 'center', justifyContent: 'center', gap: '8px',
@@ -157,8 +157,8 @@ export default function PartnerLogin() {
 
         <div style={{ textAlign: 'center', marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid #F3F4F6' }}>
           <p style={{ color: '#9CA3AF', fontSize: '0.88rem' }}>new here?</p>
-          <Link to="/partner/register" style={{ color: '#1A3A1F', fontWeight: '700', textDecoration: 'none', fontSize: '0.95rem' }}>
-            New partner? <span style={{ color: '#4A7C2F', textDecoration: 'underline' }}>Register your venue</span>
+          <Link to="/partner/register" style={{ color: '#111827', fontWeight: '700', textDecoration: 'none', fontSize: '0.95rem' }}>
+            New partner? <span style={{ color: '#2D6A4F', fontWeight: '800', textDecoration: 'underline' }}>Register your venue</span>
           </Link>
         </div>
 
@@ -169,15 +169,23 @@ export default function PartnerLogin() {
 
       {/* ── RIGHT PANEL (dark green) ── */}
       <div style={{
-        flex: 1, background: '#0D2B14',
+        flex: 1, background: '#1B3A2D',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         padding: '5rem', position: 'relative', overflow: 'hidden',
       }}>
+        {/* Grid dot pattern */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          backgroundImage: 'radial-gradient(circle, rgba(206,241,123,0.15) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+          pointerEvents: 'none',
+        }} />
+
         {/* Decorative circle */}
         <div style={{
           position: 'absolute', top: '6%', right: '8%',
-          width: '120px', height: '120px', borderRadius: '50%',
-          border: '2px solid rgba(206,241,123,0.15)',
+          width: '130px', height: '130px', borderRadius: '50%',
+          border: '1.5px solid rgba(206,241,123,0.2)',
         }} />
 
         <div style={{ position: 'relative', zIndex: 2 }}>
@@ -205,8 +213,7 @@ export default function PartnerLogin() {
                   background: '#CEF17B', color: '#0D2B14',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '0.85rem', fontWeight: '900', flexShrink: 0,
-                }}>{f.n}</div>
-                <div>
+                }}>{f.n}</div>                <div>
                   <div style={{ fontWeight: '700', color: '#fff', fontSize: '1rem' }}>{f.title}</div>
                   <div style={{ color: '#7A9E80', fontWeight: '400', marginTop: '4px', fontSize: '0.88rem', lineHeight: 1.5 }}>{f.sub}</div>
                 </div>
