@@ -169,15 +169,18 @@ export default function PartnerLogin() {
 
       {/* ── RIGHT PANEL (dark green) ── */}
       <div style={{
-        flex: 1, background: '#1B3A2D',
+        flex: 1, background: '#0A3728',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
         padding: '5rem', position: 'relative', overflow: 'hidden',
       }}>
-        {/* Grid dot pattern */}
+        {/* Grid LINE pattern — like the mockup */}
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(206,241,123,0.15) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
+          backgroundImage: `
+            linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)
+          `,
+          backgroundSize: '80px 80px',
           pointerEvents: 'none',
         }} />
 
