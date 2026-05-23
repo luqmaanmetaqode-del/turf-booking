@@ -118,15 +118,19 @@ router.post('/razorpay-order', auth, async (req, res) => {
       });
     }
 
+    console.log(`💳 Creating Razorpay order: ₹${amount} | Key: ${process.env.RAZORPAY_KEY_ID}`);
+
     const order = await razorpay.orders.create({
       amount:   Math.round(amount * 100),
       currency: 'INR',
       receipt:  'receipt_' + Date.now(),
     });
+
+    console.log(`✅ Razorpay order created: ${order.id}`);
     res.json(order);
   } catch (err) {
-    console.error('Razorpay order error:', err);
-    res.status(500).json({ msg: 'Failed to create payment order' });
+    console.error('❌ Razorpay order error:', JSON.stringify(err?.error || err?.message || err));
+    res.status(500).json({ msg: 'Failed to create payment order', detail: err?.error?.description || err?.message });
   }
 });
 
