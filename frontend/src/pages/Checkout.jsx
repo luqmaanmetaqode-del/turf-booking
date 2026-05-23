@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,14 +10,32 @@ export default function Checkout() {
   const { state } = useLocation();
   const { token, user } = useAuth();
   const navigate = useNavigate();
-  const turf = state?.turf;
+  const { id: turfIdParam } = useParams();
+  const [turf, setTurf] = useState(state?.turf || null);
+  const [turfLoading, setTurfLoading] = useState(!state?.turf);
   const [date, setDate] = useState(state?.date || new Date().toISOString().split('T')[0]);
-  const [selectedSlots, setSelectedSlots] = useState([]); // Array of selected slots
-  const [sport, setSport] = useState(turf?.sport || 'Football');
+  const [selectedSlots, setSelectedSlots] = useState([]);
+  const [sport, setSport] = useState(state?.turf?.sport || 'Football');
   const [requestSent, setRequestSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [bookedSlots, setBookedSlots] = useState([]);
   const [slotsLoading, setSlotsLoading] = useState(false);
+
+  // If turf wasn't passed via state (e.g. page refresh), try to get turfId from URL
+  const turfIdFromUrl = window.location.pathname.split('/checkout/')[1];
+
+  useEffect(() => {
+    if (!turf && turfIdFromUrl) {
+      setTurfLoading(true);
+      axios.get(`${API}/turfs/${turfIdFromUrl}`)
+        .then(res => { setTurf(res.data); setSport(res.data.sport || 'Football'); })
+        .catch(() => {})
+        .finally(() => setTurfLoading(false));
+    } else {
+      setTurfLoading(false);
+    }
+  }, [turfIdFromUrl]);
+
   const turfId = turf?._id || turf?.id;
 
   // Generate hourly slots (6 AM to 11 PM)
@@ -160,6 +178,12 @@ export default function Checkout() {
     }
     setLoading(false);
   };
+
+  if (turfLoading) return (
+    <div style={{ textAlign:'center', padding:'6rem 2rem', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
+      <p style={{ color:'#98A2B3', fontSize:'1.1rem', fontWeight:'600' }}>Loading venue details...</p>
+    </div>
+  );
 
   if (!turf) return (
     <div style={{ textAlign:'center', padding:'6rem 2rem', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>

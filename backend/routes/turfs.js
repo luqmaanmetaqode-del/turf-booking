@@ -26,10 +26,14 @@ router.get('/', async (req, res) => {
       filter.city = { $regex: city, $options: 'i' };
     }
     
-    // Sport filter (supports multiple sports)
+    // Sport filter (supports multiple sports - checks both sport and sports fields)
     if (sport) {
       const sportArray = sport.split(',').map(s => s.trim());
-      filter.sports = { $in: sportArray };
+      filter.$or = filter.$or || [];
+      filter.$or.push(
+        { sport: { $in: sportArray } },
+        { sports: { $in: sportArray } }
+      );
     }
     
     // Price range filter
@@ -52,11 +56,18 @@ router.get('/', async (req, res) => {
     
     // Search by name or location
     if (search) {
-      filter.$or = [
+      const searchOr = [
         { name: { $regex: search, $options: 'i' } },
         { location: { $regex: search, $options: 'i' } },
         { city: { $regex: search, $options: 'i' } }
       ];
+      if (filter.$or) {
+        // Combine with AND: existing $or AND search $or
+        filter.$and = [{ $or: filter.$or }, { $or: searchOr }];
+        delete filter.$or;
+      } else {
+        filter.$or = searchOr;
+      }
     }
     
     // Location-based filter (nearby turfs)

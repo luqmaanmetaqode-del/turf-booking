@@ -208,7 +208,7 @@ export default function TurfDetail() {
               </div>
             </div>
 
-            <button onClick={() => navigate('/checkout', { state:{ turf } })} style={{
+            <button onClick={() => navigate(`/checkout/${turf._id}`, { state:{ turf } })} style={{
               width:'100%', background:'#CEF17B', color:'white',
               border:'none', padding:'20px', borderRadius:'20px',
               cursor:'pointer', fontWeight:'900', fontSize:'1.25rem',

@@ -51,6 +51,9 @@ export default function App() {
             <Route path="/checkout" element={
               <MainLayout><ProtectedRoute><Checkout /></ProtectedRoute></MainLayout>
             } />
+            <Route path="/checkout/:id" element={
+              <MainLayout><ProtectedRoute><Checkout /></ProtectedRoute></MainLayout>
+            } />
             <Route path="/my-bookings" element={
               <MainLayout><ProtectedRoute><MyBookings /></ProtectedRoute></MainLayout>
             } />
