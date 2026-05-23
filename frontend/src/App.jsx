@@ -10,7 +10,7 @@ import TurfDetail from './pages/TurfDetail';
 import MyBookings from './pages/MyBookings';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
-import Register from './pages/Register';
+
 import PartnerLogin from './pages/partner/PartnerLogin';
 import PartnerRegister from './pages/partner/PartnerRegister';
 import PartnerDashboard from './pages/partner/PartnerDashboard';

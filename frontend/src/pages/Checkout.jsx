@@ -10,7 +10,7 @@ export default function Checkout() {
   const { state } = useLocation();
   const { token, user } = useAuth();
   const navigate = useNavigate();
-  const { id: turfIdParam } = useParams();
+  useParams();
   const [turf, setTurf] = useState(state?.turf || null);
   const [turfLoading, setTurfLoading] = useState(!state?.turf);
   const [date, setDate] = useState(state?.date || new Date().toISOString().split('T')[0]);

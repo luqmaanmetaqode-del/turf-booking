@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Search, Filter, Plus, Eye, Edit2, MoreVertical, ChevronDown, ChevronUp, MapPin, Phone, Mail, Clock, Star, TrendingUp, Users, Calendar } from 'lucide-react';
+import { Search, Filter, Plus, Eye, Edit2, MoreVertical, ChevronDown, ChevronUp, MapPin, Clock, TrendingUp, Calendar } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const API = 'https://turfx.metaqode.co.in/api';

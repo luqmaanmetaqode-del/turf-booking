@@ -72,7 +72,7 @@ function isToday(dateStr) {
 }
 
 export default function MyBookings() {
-  const { token, user } = useAuth();
+  const { token } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('upcoming');

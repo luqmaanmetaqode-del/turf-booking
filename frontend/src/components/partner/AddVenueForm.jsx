@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { 
   ChevronLeft, ChevronRight, Check, Upload, MapPin, Info, 
-  Clock, IndianRupee, ShieldCheck, User as UserIcon, Users, 
+  Clock, ShieldCheck, User as UserIcon, Users, 
   Star, Wifi, Music, Coffee, Wind, Trash2 
 } from 'lucide-react';
 

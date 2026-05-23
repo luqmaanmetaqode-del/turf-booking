@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
-import ThemeToggle from '../../components/ThemeToggle';
 import AdminWallet from '../../components/admin/AdminWallet';
 import {
   IndianRupee, TrendingUp, Users, MapPin,
@@ -74,7 +73,6 @@ export default function AdminDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('overview');
-  const [expandedMonth, setExpandedMonth] = useState(null);
 
   useEffect(() => {
     // If not logged in at all → go to admin login

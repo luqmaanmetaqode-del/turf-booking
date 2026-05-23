@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { IndianRupee, TrendingUp, DollarSign, Wallet, Download, ArrowDownCircle } from 'lucide-react';
+import { IndianRupee, TrendingUp, DollarSign, Wallet, ArrowDownCircle } from 'lucide-react';
 
 export default function AdminWallet({ bookings = [] }) {
   const [showWithdraw, setShowWithdraw] = useState(false);

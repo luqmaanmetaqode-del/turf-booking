@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Star, MessageCircle, Filter, Search, ChevronDown, User } from 'lucide-react';
+import { Star, MessageCircle, Filter, User } from 'lucide-react';
 
 export default function PartnerReviews({ data }) {
   const reviews = data?.reviews || [];

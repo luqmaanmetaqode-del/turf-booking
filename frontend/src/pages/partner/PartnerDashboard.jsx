@@ -1,13 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
-import { useTheme } from '../../context/ThemeContext';
-import ThemeToggle from '../../components/ThemeToggle';
 import { useNavigate } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 import {
   LayoutDashboard, MapPin, Calendar, Clock,
-  IndianRupee, TrendingUp, Star, Settings,
+  IndianRupee, TrendingUp, Settings,
   LogOut, Bell, User as UserIcon, Wallet, Percent, HelpCircle
 } from 'lucide-react';
 
@@ -71,10 +69,9 @@ function formatDate() {
 
 export default function PartnerDashboard() {
   const { token, user, logout } = useAuth();
-  const { colors } = useTheme();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [, setLoading] = useState(true);
   const [tab, setTab] = useState('dashboard');
   const [showAddForm, setShowAddForm] = useState(false);
   const [showCreateBooking, setShowCreateBooking] = useState(false);

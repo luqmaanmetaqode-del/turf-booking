@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Settings, Bell, Lock, Shield, User, Globe, MessageSquare, CreditCard, Save, Check } from 'lucide-react';
+import { Bell, Lock, Shield, User, CreditCard, Save, Check } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const API = 'https://turfx.metaqode.co.in/api';

@@ -1,10 +1,10 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { 
-  IndianRupee, Save, Plus, Trash2, 
-  Clock, Calendar, Zap, AlertCircle,
-  ChevronDown, MapPin, Check, X
+  Save, Plus, Trash2, 
+  Clock, Zap, AlertCircle,
+  MapPin, Check, X
 } from 'lucide-react';
 
 const API = 'https://turfx.metaqode.co.in/api';

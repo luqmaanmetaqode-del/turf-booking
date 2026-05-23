@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { 
-  ChevronLeft, Search, Filter, Check, Clock, 
-  MapPin, Star, IndianRupee, Info, ShieldCheck,
-  ChevronRight, Calendar as CalIcon, TrendingUp, User as UserIcon
+  ChevronLeft, Search, Filter, Check,
+  MapPin, Star,
+  ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
@@ -273,18 +273,6 @@ function SummaryRow({ label, value }) {
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
        <span style={{ fontSize: '0.8rem', color: '#98A2B3', fontWeight: '600' }}>{label}</span>
        <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#161616' }}>{value}</span>
-    </div>
-  );
-}
-
-function Feature({ icon, title, sub }) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-       <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#DCEFB8', color: '#084734', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{icon}</div>
-       <div>
-          <div style={{ fontSize: '0.85rem', fontWeight: '800', color: '#161616' }}>{title}</div>
-          <div style={{ fontSize: '0.7rem', color: '#98A2B3', fontWeight: '600' }}>{sub}</div>
-       </div>
     </div>
   );
 }

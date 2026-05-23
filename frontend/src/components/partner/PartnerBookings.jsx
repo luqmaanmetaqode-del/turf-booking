@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { 
-  Search, Filter, Calendar as CalIcon, Download, Plus, 
+  Search, Filter, Calendar as CalIcon, Download,
   MoreVertical, Eye, ChevronLeft, ChevronRight, X as XIcon,
   Clock, IndianRupee, CheckCircle, Phone
 } from 'lucide-react';
@@ -367,12 +367,6 @@ const btnPrimary = {
   background: '#CEF17B', color: '#084734', border: 'none', padding: '10px 20px',
   borderRadius: '12px', fontWeight: '800', fontSize: '0.85rem', display: 'flex',
   alignItems: 'center', gap: '8px', cursor: 'pointer', boxShadow: '0 4px 12px rgba(30,190,116,0.2)'
-};
-
-const btnSecondary = {
-  background: 'white', color: '#161616', border: '1.5px solid #EEF2E6', padding: '10px 20px',
-  borderRadius: '12px', fontWeight: '700', fontSize: '0.85rem', display: 'flex',
-  alignItems: 'center', gap: '8px', cursor: 'pointer'
 };
 
 const statCard = {
