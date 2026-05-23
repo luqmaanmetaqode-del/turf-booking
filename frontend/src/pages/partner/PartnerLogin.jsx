@@ -184,12 +184,7 @@ export default function PartnerLogin() {
           pointerEvents: 'none',
         }} />
 
-        {/* Decorative circle */}
-        <div style={{
-          position: 'absolute', top: '6%', right: '8%',
-          width: '130px', height: '130px', borderRadius: '50%',
-          border: '1.5px solid rgba(206,241,123,0.2)',
-        }} />
+        {/* Decorative circle removed */}
 
         <div style={{ position: 'relative', zIndex: 2 }}>
           <p style={{ color: '#CEF17B', fontWeight: '700', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '1.5rem' }}>
