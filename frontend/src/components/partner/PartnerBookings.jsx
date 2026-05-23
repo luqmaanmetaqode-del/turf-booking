@@ -2,8 +2,8 @@ import { useState } from 'react';
 import axios from 'axios';
 import {
   Search, Download, ChevronLeft, ChevronRight,
-  X as XIcon, Clock, IndianRupee, CheckCircle,
-  Calendar as CalIcon, Star,
+  Clock, IndianRupee,
+  Calendar as CalIcon,
 } from 'lucide-react';
 
 const API = 'https://turfx.metaqode.co.in/api';

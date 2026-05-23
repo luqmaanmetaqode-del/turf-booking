@@ -187,7 +187,6 @@ function VenueCard({ turf, bookings, token, onTabChange }) {
   const tk = token || authToken;
 
   const [isActive, setIsActive]   = useState(turf.isActive !== false);
-  const [toggling, setToggling]   = useState(false);
 
   const turfBookings = bookings?.filter(b =>
     (b.turf_id?._id || b.turf_id) === turf._id
@@ -202,7 +201,6 @@ function VenueCard({ turf, bookings, token, onTabChange }) {
   const amenities = (turf.amenities || []).slice(0, 3);
 
   const handleToggle = async () => {
-    setToggling(true);
     try {
       const res = await axios.patch(`${API}/turfs/${turf._id}/status`, {}, {
         headers: { Authorization: `Bearer ${tk}` },
@@ -210,8 +208,6 @@ function VenueCard({ turf, bookings, token, onTabChange }) {
       setIsActive(res.data.isActive);
     } catch {
       /* silent */
-    } finally {
-      setToggling(false);
     }
   };
 
