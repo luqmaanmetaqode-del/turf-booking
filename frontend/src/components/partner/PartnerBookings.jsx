@@ -19,7 +19,30 @@ export default function PartnerBookings({ data, token }) {
   const [cancellingId, setCancelling] = useState(null);
   const [notice, setNotice]         = useState(null);
   const [page, setPage]             = useState(1);
+  const [exporting, setExporting]   = useState(false);
   const PER_PAGE = 8;
+
+  const handleExportCSV = async () => {
+    setExporting(true);
+    try {
+      const res = await axios.get(`${API}/exports/bookings/csv`, {
+        headers: { Authorization: `Bearer ${token}` },
+        responseType: 'blob',
+      });
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `bookings-${Date.now()}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setNotice({ type: 'error', text: 'Failed to export CSV. Please try again.' });
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const bookings = data?.bookings || [];
   const today    = new Date().toISOString().split('T')[0];
@@ -77,6 +100,18 @@ export default function PartnerBookings({ data, token }) {
     }
   };
 
+  const handleCheckin = async (id) => {
+    if (!window.confirm('Mark this booking as checked-in? This will release the payment to your wallet.')) return;
+    try {
+      await axios.post(`${API}/bookings/checkin/${id}`, {}, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setNotice({ type: 'success', text: 'Check-in successful. Wallet updated.' });
+    } catch (err) {
+      setNotice({ type: 'error', text: err.response?.data?.msg || 'Failed to check in.' });
+    }
+  };
+
   /* ── upcoming summary (right panel) ── */
   const upcoming       = bookings.filter(b => b.date >= today && b.status === 'confirmed');
   const upcomingRev    = upcoming.reduce((s, b) => s + (b.total_price || 0), 0);
@@ -131,10 +166,11 @@ export default function PartnerBookings({ data, token }) {
             ))}
           </div>
           <button
-            onClick={() => window.open(`${API}/exports/bookings/csv`, '_blank')}
-            style={{ ...btnOutline, gap: '6px' }}
+            onClick={handleExportCSV}
+            disabled={exporting}
+            style={{ ...btnOutline, gap: '6px', opacity: exporting ? 0.7 : 1 }}
           >
-            <Download size={15} /> Export CSV
+            <Download size={15} /> {exporting ? 'Exporting...' : 'Export CSV'}
           </button>
         </div>
 
@@ -227,6 +263,7 @@ export default function PartnerBookings({ data, token }) {
                   b={b}
                   today={today}
                   onCancel={handleCancel}
+                  onCheckin={handleCheckin}
                   cancelling={cancellingId === b._id}
                   isLast={i === paged.length - 1}
                 />
@@ -350,7 +387,7 @@ export default function PartnerBookings({ data, token }) {
 /* ─────────────────────────────────────────────
    BOOKING ROW
 ───────────────────────────────────────────── */
-function BookingRow({ b, today, onCancel, cancelling, isLast }) {
+function BookingRow({ b, today, onCancel, onCheckin, cancelling, isLast }) {
   const statusMap = {
     confirmed:  { bg: '#D1FAE5', color: '#065F46', label: 'TODAY' },
     pending:    { bg: '#FEF3C7', color: '#92400E', label: 'PENDING' },
@@ -455,19 +492,33 @@ function BookingRow({ b, today, onCancel, cancelling, isLast }) {
 
       {/* Actions */}
       <td style={tdStyle}>
-        {s === 'confirmed' && (
-          <button
-            onClick={() => onCancel(b._id)}
-            disabled={cancelling}
-            style={{
-              background: '#FEE2E2', color: '#DC2626',
-              border: 'none', padding: '5px 10px', borderRadius: '7px',
-              fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer',
-            }}
-          >
-            {cancelling ? '...' : 'Cancel'}
-          </button>
-        )}
+        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {s === 'confirmed' && (
+            <>
+              <button
+                onClick={() => onCheckin(b._id)}
+                style={{
+                  background: '#D1FAE5', color: '#065F46',
+                  border: 'none', padding: '5px 10px', borderRadius: '7px',
+                  fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer',
+                }}
+              >
+                ✓ Check-in
+              </button>
+              <button
+                onClick={() => onCancel(b._id)}
+                disabled={cancelling}
+                style={{
+                  background: '#FEE2E2', color: '#DC2626',
+                  border: 'none', padding: '5px 10px', borderRadius: '7px',
+                  fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer',
+                }}
+              >
+                {cancelling ? '...' : 'Cancel'}
+              </button>
+            </>
+          )}
+        </div>
       </td>
     </tr>
   );

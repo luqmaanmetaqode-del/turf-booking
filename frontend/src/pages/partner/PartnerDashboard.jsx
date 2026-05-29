@@ -411,7 +411,7 @@ export default function PartnerDashboard() {
                 <div style={{ background: '#fff', borderRadius: '16px', padding: '1.5rem', border: '1px solid #E9EDE8' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem' }}>
                     <h3 style={{ fontWeight: '800', fontSize: '1rem', color: '#0D1F0F', margin: 0 }}>Recent Activity</h3>
-                    <span style={{ color: ACCENT_DARK, fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline' }}>All activity →</span>
+                    <span onClick={() => switchTab('bookings')} style={{ color: ACCENT_DARK, fontWeight: '700', fontSize: '0.82rem', cursor: 'pointer', textDecoration: 'underline' }}>All activity →</span>
                   </div>
                   {data.recentActivity?.length > 0 ? data.recentActivity.slice(0, 5).map((a, i) => {
                     const dotColors = ['#10B981','#3B82F6','#F59E0B','#EF4444','#8B5CF6'];
@@ -434,7 +434,7 @@ export default function PartnerDashboard() {
 
           {/* ── OTHER TABS ── */}
           {tab === 'venues' && !showAddForm && (
-            <PartnerVenues data={data} onAddClick={() => setShowAddForm(true)} onTabChange={switchTab} />
+            <PartnerVenues data={data} onAddClick={() => setShowAddForm(true)} onTabChange={switchTab} onRefresh={fetchDashboard} />
           )}
           {showAddForm && (
             <AddVenueForm onCancel={() => setShowAddForm(false)} onComplete={() => { setShowAddForm(false); fetchDashboard(); }} />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Search, Plus, Star, MapPin, Edit2, Settings } from 'lucide-react';
+import { Search, Plus, Star, MapPin, Edit2, Settings, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const API = 'https://turfx.metaqode.co.in/api';
@@ -21,7 +21,131 @@ function sportIcon(sport) {
   return SPORT_ICONS[(sport || '').toLowerCase()] || '🏟️';
 }
 
-export default function PartnerVenues({ data, onAddClick, onTabChange }) {
+/* ─────────────────────────────────────────────
+   EDIT VENUE MODAL
+───────────────────────────────────────────── */
+function EditVenueModal({ turf, token, onClose, onSaved }) {
+  const [form, setForm] = useState({
+    name: turf.name || '',
+    location: turf.location || '',
+    city: turf.city || '',
+    price_per_hour: turf.price_per_hour || '',
+    sport: turf.sport || '',
+    description: turf.description || '',
+  });
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSave = async () => {
+    if (!form.name.trim()) return setError('Venue name is required');
+    if (!form.price_per_hour || isNaN(parseFloat(form.price_per_hour)) || parseFloat(form.price_per_hour) <= 0) {
+      return setError('Please enter a valid price per hour');
+    }
+    setSaving(true);
+    setError('');
+    try {
+      await axios.put(`${API}/turfs/${turf._id}`, {
+        name: form.name.trim(),
+        location: form.location.trim(),
+        city: form.city.trim(),
+        price_per_hour: parseFloat(form.price_per_hour),
+        sport: form.sport,
+        description: form.description.trim(),
+      }, { headers: { Authorization: `Bearer ${token}` } });
+      onSaved();
+    } catch (err) {
+      setError(err.response?.data?.msg || 'Failed to save changes. Please try again.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const overlay = {
+    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    zIndex: 9999, padding: '1rem',
+  };
+  const modal = {
+    background: '#fff', borderRadius: '20px', padding: '2rem',
+    width: '100%', maxWidth: '520px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+  };
+  const inp = {
+    width: '100%', padding: '10px 14px', borderRadius: '10px',
+    border: '1.5px solid #E9EDE8', fontSize: '0.9rem', fontWeight: '600',
+    outline: 'none', boxSizing: 'border-box', marginTop: '6px',
+  };
+  const lbl = { fontSize: '0.8rem', fontWeight: '700', color: '#374151', textTransform: 'uppercase', letterSpacing: '0.5px' };
+
+  return (
+    <div style={overlay} onClick={e => e.target === e.currentTarget && onClose()}>
+      <div style={modal}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h3 style={{ fontWeight: '900', fontSize: '1.2rem', color: '#0D1F0F', margin: 0 }}>Edit Venue</h3>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF' }}>
+            <X size={20} />
+          </button>
+        </div>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+          <div>
+            <label style={lbl}>Venue Name *</label>
+            <input style={inp} value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} placeholder="e.g. Green Turf Arena" />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div>
+              <label style={lbl}>Location / Landmark</label>
+              <input style={inp} value={form.location} onChange={e => setForm({ ...form, location: e.target.value })} placeholder="e.g. Koramangala" />
+            </div>
+            <div>
+              <label style={lbl}>City</label>
+              <input style={inp} value={form.city} onChange={e => setForm({ ...form, city: e.target.value })} placeholder="e.g. Bengaluru" />
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            <div>
+              <label style={lbl}>Price per Hour (₹) *</label>
+              <input style={inp} type="number" min="1" value={form.price_per_hour} onChange={e => setForm({ ...form, price_per_hour: e.target.value })} placeholder="e.g. 1200" />
+            </div>
+            <div>
+              <label style={lbl}>Sport</label>
+              <select style={inp} value={form.sport} onChange={e => setForm({ ...form, sport: e.target.value })}>
+                {['Football', 'Cricket', 'Badminton', 'Tennis', 'Basketball', 'Volleyball'].map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div>
+            <label style={lbl}>Description</label>
+            <textarea
+              style={{ ...inp, height: '80px', resize: 'vertical' }}
+              value={form.description}
+              onChange={e => setForm({ ...form, description: e.target.value })}
+              placeholder="Brief description of your venue..."
+            />
+          </div>
+        </div>
+
+        {error && (
+          <div style={{ marginTop: '1rem', padding: '10px 14px', borderRadius: '10px', background: '#FEE2E2', color: '#DC2626', fontWeight: '700', fontSize: '0.85rem' }}>
+            {error}
+          </div>
+        )}
+
+        <div style={{ display: 'flex', gap: '10px', marginTop: '1.5rem' }}>
+          <button onClick={onClose} style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1.5px solid #E9EDE8', background: '#fff', fontWeight: '700', cursor: 'pointer', color: '#374151' }}>
+            Cancel
+          </button>
+          <button onClick={handleSave} disabled={saving} style={{ flex: 2, padding: '12px', borderRadius: '10px', border: 'none', background: GREEN, color: LIME, fontWeight: '800', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.7 : 1 }}>
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function PartnerVenues({ data, onAddClick, onTabChange, onRefresh }) {
   const { token } = useAuth();
   const [search, setSearch]       = useState('');
   const [sportFilter, setSport]   = useState('All Sports');
@@ -147,6 +271,7 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
             bookings={data?.bookings}
             token={token}
             onTabChange={onTabChange}
+            onRefresh={onRefresh}
           />
         ))}
 
@@ -182,11 +307,12 @@ export default function PartnerVenues({ data, onAddClick, onTabChange }) {
 /* ─────────────────────────────────────────────
    VENUE CARD  (matches the design mockup)
 ───────────────────────────────────────────── */
-function VenueCard({ turf, bookings, token, onTabChange }) {
+function VenueCard({ turf, bookings, token, onTabChange, onRefresh }) {
   const { token: authToken } = useAuth();
   const tk = token || authToken;
 
   const [isActive, setIsActive]   = useState(turf.isActive !== false);
+  const [editOpen, setEditOpen]   = useState(false);
 
   const turfBookings = bookings?.filter(b =>
     (b.turf_id?._id || b.turf_id) === turf._id
@@ -219,6 +345,14 @@ function VenueCard({ turf, bookings, token, onTabChange }) {
       boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
       display: 'flex', flexDirection: 'column',
     }}>
+      {editOpen && (
+        <EditVenueModal
+          turf={turf}
+          token={tk}
+          onClose={() => setEditOpen(false)}
+          onSaved={() => { setEditOpen(false); onRefresh?.(); }}
+        />
+      )}
       {/* Image / sport banner */}
       <div style={{ position: 'relative', height: '160px', background: GREEN, overflow: 'hidden' }}>
         {turf.images?.[0] ? (
@@ -322,6 +456,7 @@ function VenueCard({ turf, bookings, token, onTabChange }) {
             Manage
           </button>
           <button
+            onClick={() => setEditOpen(true)}
             style={{ ...btnOutline, flex: 1, justifyContent: 'center', padding: '10px' }}
           >
             <Edit2 size={14} /> Edit

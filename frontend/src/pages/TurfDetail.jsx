@@ -3,12 +3,24 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import ReviewCard from '../components/ReviewCard';
 import { useAuth } from '../context/AuthContext';
+
 const API = 'https://turfx.metaqode.co.in/api';
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+}
 
 export default function TurfDetail() {
   const { id } = useParams();
   const { token, user } = useAuth();
   const navigate = useNavigate();
+  const isMobile = useWindowWidth() < 768;
   const [turf, setTurf] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(5);
@@ -136,7 +148,7 @@ export default function TurfDetail() {
         )}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 400px', gap:'5rem', alignItems:'start' }}>
+      <div style={{ display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 400px', gap: isMobile ? '2rem' : '5rem', alignItems:'start' }}>
         {/* LEFT — Info */}
         <div>
           <h1 style={{ fontSize:'3.5rem', fontWeight:'900', marginBottom:'16px', color:'#161616', letterSpacing: '-1.5px', lineHeight: 1.1 }}>{turf.name}</h1>
@@ -173,14 +185,14 @@ export default function TurfDetail() {
                   <label style={{ display: 'block', fontSize: '0.9rem', color: '#98A2B3', marginBottom: '10px', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Your Feedback</label>
                   <textarea placeholder="Tell us about the turf quality, lighting, and service..." value={comment} onChange={e => setComment(e.target.value)} rows={5} style={{ width:'100%', padding:'18px', borderRadius:'16px', border:'1.5px solid #EEF2E6', fontSize:'1.1rem', resize:'none', boxSizing:'border-box', outline: 'none', background: '#F8FAF7', fontWeight: '600', lineHeight: 1.6 }} />
                 </div>
-                <button onClick={handleReview} style={{ background:'#CEF17B', color:'white', border:'none', padding:'18px 48px', borderRadius:'18px', cursor:'pointer', fontWeight:'900', fontSize:'1.1rem', boxShadow: '0 8px 25px rgba(30,190,116,0.3)', transition: 'all 0.3s' }}>Submit Review</button>
+                <button onClick={handleReview} style={{ background:'#084734', color:'#CEF17B', border:'none', padding:'18px 48px', borderRadius:'18px', cursor:'pointer', fontWeight:'900', fontSize:'1.1rem', boxShadow: '0 8px 25px rgba(8,71,52,0.3)', transition: 'all 0.3s' }}>Submit Review</button>
               </div>
             )}
           </div>
         </div>
 
         {/* RIGHT — Booking Card */}
-        <div style={{ position:'sticky', top:'120px' }}>
+        <div style={{ position: isMobile ? 'static' : 'sticky', top:'120px' }}>
           <div style={{ background:'white', borderRadius:'32px', padding:'3rem', border:'1.5px solid #EEF2E6', boxShadow:'0 30px 60px rgba(0,0,0,0.1)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', marginBottom:'2.5rem' }}>
               <div>

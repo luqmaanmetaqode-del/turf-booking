@@ -183,4 +183,36 @@ module.exports = {
 
   sendPartnerBookingRequest: (booking, partner, turf, user) =>
     send(safeEmail(partner), `New Booking Request – ${safe(turf?.name)}`, partnerBookingRequestHtml(booking, partner, turf, user)),
+
+  sendKYCApproved: (partner, kyc) =>
+    send(safeEmail(partner), 'KYC Verified – You can now list venues on TurfX', `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+        <div style="background:#084734;padding:30px;text-align:center;">
+          <h1 style="color:#CEF17B;margin:0;">KYC Approved ✅</h1>
+        </div>
+        <div style="padding:30px;background:#f8fafc;">
+          <p>Hi ${safeName(partner)},</p>
+          <p>Your KYC verification has been <strong>approved</strong>. You can now list venues and accept bookings on TurfX.</p>
+          <div style="text-align:center;margin:30px 0;">
+            <a href="${FRONTEND_URL}/partner/dashboard" style="background:#084734;color:#CEF17B;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;">Go to Dashboard</a>
+          </div>
+        </div>
+      </div>`),
+
+  sendKYCRejected: (partner, kyc) =>
+    send(safeEmail(partner), 'KYC Verification Update – Action Required', `
+      <div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;">
+        <div style="background:#ef4444;padding:30px;text-align:center;">
+          <h1 style="color:#fff;margin:0;">KYC Not Approved</h1>
+        </div>
+        <div style="padding:30px;background:#f8fafc;">
+          <p>Hi ${safeName(partner)},</p>
+          <p>Your KYC submission could not be approved at this time.</p>
+          ${kyc?.rejection_reason ? `<div style="background:#fff3cd;padding:16px;border-radius:8px;margin:16px 0;"><p><strong>Reason:</strong> ${kyc.rejection_reason}</p></div>` : ''}
+          <p>Please resubmit with the correct documents.</p>
+          <div style="text-align:center;margin:30px 0;">
+            <a href="${FRONTEND_URL}/partner/dashboard" style="background:#084734;color:#CEF17B;padding:14px 28px;text-decoration:none;border-radius:8px;font-weight:bold;">Resubmit KYC</a>
+          </div>
+        </div>
+      </div>`),
 };

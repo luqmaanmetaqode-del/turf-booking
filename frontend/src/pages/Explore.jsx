@@ -19,13 +19,22 @@ export default function Explore() {
   const [turfs, setTurfs] = useState([]);
   const [sport, setSport] = useState('All');
   const [search, setSearch] = useState('');
-  const [maxPrice, setMaxPrice] = useState(2000);
-  const [city, setCity] = useState('Bengaluru');
+  const [maxPrice, setMaxPrice] = useState(5000);
+  const [city, setCity] = useState('All Cities');
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState('Top Rated');
   const [viewMode, setViewMode] = useState('grid');
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
 
   useEffect(() => {
     const cityParam = searchParams.get('city');
@@ -50,13 +59,14 @@ export default function Explore() {
   const turfsList = Array.isArray(turfs) ? turfs : [];
 
   let filtered = turfsList.filter(t => {
-    const matchSport = sport === 'All' || t.sport === sport;
+    const matchSport = sport === 'All' || (t.sport || '').toLowerCase() === sport.toLowerCase();
     const matchSearch = !search ||
-      t.name.toLowerCase().includes(search.toLowerCase()) ||
-      t.location.toLowerCase().includes(search.toLowerCase()) ||
-      t.city.toLowerCase().includes(search.toLowerCase());
-    const matchPrice = t.price_per_hour <= maxPrice;
-    const matchCity = city === 'All Cities' || t.city.toLowerCase() === city.toLowerCase();
+      (t.name || '').toLowerCase().includes(search.toLowerCase()) ||
+      (t.location || '').toLowerCase().includes(search.toLowerCase()) ||
+      (t.city || '').toLowerCase().includes(search.toLowerCase());
+    const matchPrice = (t.price_per_hour || 0) <= maxPrice;
+    const matchCity = city === 'All Cities' ||
+      (t.city || '').toLowerCase().includes(city.toLowerCase());
     return matchSport && matchSearch && matchPrice && matchCity;
   });
 
@@ -140,6 +150,7 @@ export default function Explore() {
             borderRadius: '16px', overflow: 'hidden',
             boxShadow: '0 8px 40px rgba(0,0,0,0.15)',
             border: '1px solid #e5e7eb',
+            flexDirection: isMobile ? 'column' : 'row',
           }}>
             {/* City */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '16px 20px', borderRight: '1px solid #e5e7eb', minWidth: '160px' }}>
@@ -172,7 +183,7 @@ export default function Explore() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '16px 20px', borderRight: '1px solid #e5e7eb' }}>
               <span style={{ fontSize: '0.82rem', color: '#98A2B3', fontWeight: '600', whiteSpace: 'nowrap' }}>Max price</span>
               <input
-                type="range" min="500" max="5000" step="100"
+                type="range" min="500" max="10000" step="100"
                 value={maxPrice}
                 onChange={e => setMaxPrice(parseInt(e.target.value))}
                 style={{ width: '100px', accentColor: '#084734' }}
@@ -265,7 +276,7 @@ export default function Explore() {
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🏟</div>
             <p style={{ fontSize: '1.2rem', fontWeight: '700', marginBottom: '8px', fontFamily: "'Sora', sans-serif" }}>No venues match your criteria</p>
             <p style={{ fontSize: '0.9rem', marginBottom: '1.5rem' }}>Try adjusting your filters or search term</p>
-            <button onClick={() => { setSport('All'); setCity('Bengaluru'); setSearch(''); setMaxPrice(2000); }}
+            <button onClick={() => { setSport('All'); setCity('All Cities'); setSearch(''); setMaxPrice(5000); }}
               style={{ background: '#084734', color: '#CEF17B', border: 'none', padding: '12px 28px', borderRadius: '10px', fontWeight: '700', cursor: 'pointer' }}>
               Clear All Filters
             </button>
@@ -274,7 +285,9 @@ export default function Explore() {
           <>
             <div style={{
               display: viewMode === 'grid' ? 'grid' : 'flex',
-              gridTemplateColumns: viewMode === 'grid' ? 'repeat(3, 1fr)' : undefined,
+              gridTemplateColumns: viewMode === 'grid'
+                ? (isMobile ? '1fr' : windowWidth < 1024 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)')
+                : undefined,
               flexDirection: viewMode === 'list' ? 'column' : undefined,
               gap: '1.5rem',
             }}>

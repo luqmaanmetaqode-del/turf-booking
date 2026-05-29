@@ -38,11 +38,21 @@ export default function PartnerPricing({ data }) {
   // Load rules when selectedTurf or basePrice changes
   useEffect(() => {
     if (currentTurf) {
+      // Prefer backend-saved rules
+      if (currentTurf.pricingRules && currentTurf.pricingRules.length > 0) {
+        // Sync base price in the base rule
+        const updated = currentTurf.pricingRules.map(r =>
+          r.id === `${currentTurf._id}-base` ? { ...r, price: basePrice } : r
+        );
+        setRules(updated);
+        return;
+      }
+
+      // Fall back to localStorage cache
       const savedRules = localStorage.getItem(`turf_pricing_rules_${currentTurf._id}`);
       if (savedRules) {
         try {
           const parsed = JSON.parse(savedRules);
-          // Sync base price inside rules if it was changed
           const updated = parsed.map(r => {
             if (r.id === `${currentTurf._id}-base`) {
               return { ...r, price: basePrice };
@@ -124,7 +134,11 @@ export default function PartnerPricing({ data }) {
     setSaving(true);
     setError('');
     try {
-      await axios.put(`${API}/turfs/${currentTurf._id}`, { price_per_hour: parseFloat(basePrice) }, { headers: { Authorization: `Bearer ${token}` } });
+      await axios.put(`${API}/turfs/${currentTurf._id}`, {
+        price_per_hour: parseFloat(basePrice),
+        pricingRules: rules,
+      }, { headers: { Authorization: `Bearer ${token}` } });
+      // Also persist locally as a cache
       localStorage.setItem(`turf_pricing_rules_${currentTurf._id}`, JSON.stringify(rules));
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);

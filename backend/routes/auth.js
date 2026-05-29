@@ -22,6 +22,18 @@ router.post('/register-password', async (req, res) => {
       return res.status(400).json({ msg: 'Password must be at least 6 characters' });
     }
 
+    // Validate name
+    if (!name || !name.trim()) {
+      return res.status(400).json({ msg: 'First name is required' });
+    }
+    const trimmedName = name.trim();
+    if (trimmedName.length > 50) {
+      return res.status(400).json({ msg: 'Name must be 50 characters or less' });
+    }
+    if (!/^[a-zA-Z\s'.,-]{2,50}$/.test(trimmedName)) {
+      return res.status(400).json({ msg: 'Name can only contain letters, spaces, and basic punctuation' });
+    }
+
     // Check if phone already exists
     const existing = await User.findOne({ phone: phone.toString() });
     if (existing) {
@@ -31,12 +43,12 @@ router.post('/register-password', async (req, res) => {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Build user object
+    // Build user object — role is always 'user' regardless of what client sends
     const userData = {
-      name: name || '',
+      name: trimmedName,
       phone: phone.toString(),
       password: hashedPassword,
-      role: role || 'user',
+      role: 'user',
     };
 
     // Only set email if provided (avoid null unique index issues)
@@ -139,6 +151,18 @@ router.post('/update-profile', auth, async (req, res) => {
     res.json(user);
   } catch (err) {
     res.status(500).json({ msg: 'Failed to update profile' });
+  }
+});
+
+// POST /api/auth/logout — Invalidate token (client-side blacklist via short expiry signal)
+router.post('/logout', auth, async (req, res) => {
+  try {
+    // JWTs are stateless — we signal the client to clear its token.
+    // For true server-side invalidation a token blacklist (Redis) would be needed.
+    // This endpoint exists so clients can call it and get a 200 confirmation.
+    res.json({ msg: 'Logged out successfully' });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error during logout' });
   }
 });
 

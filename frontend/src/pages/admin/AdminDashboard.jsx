@@ -73,6 +73,10 @@ export default function AdminDashboard() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState('overview');
+  const [allVenues, setAllVenues] = useState([]);
+  const [kycList, setKycList] = useState([]);
+  const [supportTickets, setSupportTickets] = useState([]);
+  const [sideLoading, setSideLoading] = useState(false);
 
   useEffect(() => {
     // If not logged in at all → go to admin login
@@ -102,6 +106,39 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
+
+  const fetchVenues = async () => {
+    setSideLoading(true);
+    try {
+      const res = await axios.get(`${API}/admin/turfs`, { headers: { Authorization: `Bearer ${token}` } });
+      setAllVenues(res.data);
+    } catch (err) { console.error(err); }
+    finally { setSideLoading(false); }
+  };
+
+  const fetchKYC = async () => {
+    setSideLoading(true);
+    try {
+      const res = await axios.get(`${API}/kyc/admin/all`, { headers: { Authorization: `Bearer ${token}` } });
+      setKycList(res.data);
+    } catch (err) { console.error(err); }
+    finally { setSideLoading(false); }
+  };
+
+  const fetchSupport = async () => {
+    setSideLoading(true);
+    try {
+      const res = await axios.get(`${API}/admin/support/tickets`, { headers: { Authorization: `Bearer ${token}` } });
+      setSupportTickets(res.data);
+    } catch (err) { console.error(err); }
+    finally { setSideLoading(false); }
+  };
+
+  useEffect(() => {
+    if (tab === 'venues' && allVenues.length === 0) fetchVenues();
+    if (tab === 'kyc' && kycList.length === 0) fetchKYC();
+    if (tab === 'support' && supportTickets.length === 0) fetchSupport();
+  }, [tab]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleExportCSV = () => {
     if (!data) return;
@@ -141,6 +178,9 @@ export default function AdminDashboard() {
     { id: 'turfs', label: 'Per Venue' },
     { id: 'transactions', label: 'Transactions' },
     { id: 'wallet', label: 'Platform Wallet' },
+    { id: 'venues', label: 'All Venues' },
+    { id: 'kyc', label: 'KYC Requests' },
+    { id: 'support', label: 'Support Tickets' },
   ];
 
   return (
@@ -190,6 +230,9 @@ export default function AdminDashboard() {
               {tab === 'turfs' && 'Revenue Per Venue'}
               {tab === 'transactions' && 'All Transactions'}
               {tab === 'wallet' && 'Platform Wallet'}
+              {tab === 'venues' && 'All Venues'}
+              {tab === 'kyc' && 'KYC Requests'}
+              {tab === 'support' && 'Support Tickets'}
             </h1>
             <p style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: '600', marginTop: '2px' }}>
               Platform fee: ₹{s.platformFeePerBooking}/booking + GST ₹{s.gstPerBooking} = ₹{s.totalFeePerBooking} total per booking
@@ -404,6 +447,201 @@ export default function AdminDashboard() {
           {/* ── WALLET TAB ── */}
           {tab === 'wallet' && (
             <AdminWallet bookings={data?.allBookings || []} />
+          )}
+
+          {/* ── ALL VENUES TAB ── */}
+          {tab === 'venues' && (
+            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+              {sideLoading ? (
+                <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>Loading venues...</div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead style={{ background: '#F8FAF7' }}>
+                    <tr>
+                      {['#', 'Venue Name', 'Sport', 'City', 'Owner', 'Price/hr', 'Status', 'Action'].map(h => (
+                        <th key={h} style={thStyle}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allVenues.length > 0 ? allVenues.map((v, i) => (
+                      <tr key={v._id} style={{ borderBottom: '1px solid #EEF2E6' }}>
+                        <td style={{ ...tdStyle, color: '#94a3b8', fontWeight: '700' }}>{i + 1}</td>
+                        <td style={{ ...tdStyle, fontWeight: '800', color: '#0f172a' }}>{v.name}</td>
+                        <td style={tdStyle}><span style={{ ...numBadge }}>{v.sport || '—'}</span></td>
+                        <td style={{ ...tdStyle, fontWeight: '600', color: '#374151' }}>{v.city || '—'}</td>
+                        <td style={tdStyle}>
+                          <div style={{ fontWeight: '700', color: '#0f172a', fontSize: '0.85rem' }}>{v.owner_id?.name || '—'}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>{v.owner_id?.phone || ''}</div>
+                        </td>
+                        <td style={{ ...tdStyle, fontWeight: '800', color: '#CEF17B' }}>₹{(v.price_per_hour || 0).toLocaleString()}</td>
+                        <td style={tdStyle}>
+                          <span style={{
+                            background: v.isActive !== false ? '#D1FAE5' : '#FEE2E2',
+                            color: v.isActive !== false ? '#065F46' : '#DC2626',
+                            padding: '4px 10px', borderRadius: '8px',
+                            fontSize: '0.72rem', fontWeight: '800',
+                          }}>
+                            {v.isActive !== false ? 'Active' : 'Inactive'}
+                          </span>
+                        </td>
+                        <td style={tdStyle}>
+                          <button
+                            onClick={async () => {
+                              try {
+                                await axios.patch(`${API}/admin/turfs/${v._id}/status`, {}, { headers: { Authorization: `Bearer ${token}` } });
+                                fetchVenues();
+                              } catch { alert('Failed to update status'); }
+                            }}
+                            style={{ background: '#F3F4F6', border: 'none', padding: '6px 12px', borderRadius: '8px', fontWeight: '700', fontSize: '0.78rem', cursor: 'pointer', color: '#374151' }}
+                          >
+                            Toggle
+                          </button>
+                        </td>
+                      </tr>
+                    )) : (
+                      <tr><td colSpan="8" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>No venues found</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {/* ── KYC TAB ── */}
+          {tab === 'kyc' && (
+            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+              {sideLoading ? (
+                <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>Loading KYC requests...</div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead style={{ background: '#F8FAF7' }}>
+                    <tr>
+                      {['Partner', 'Phone', 'Business', 'Submitted', 'Status', 'Action'].map(h => (
+                        <th key={h} style={thStyle}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {kycList.length > 0 ? kycList.map((k, i) => (
+                      <tr key={k._id} style={{ borderBottom: '1px solid #EEF2E6' }}>
+                        <td style={{ ...tdStyle, fontWeight: '800', color: '#0f172a' }}>{k.user_id?.name || k.full_name || '—'}</td>
+                        <td style={{ ...tdStyle, fontWeight: '600', color: '#374151', fontSize: '0.85rem' }}>{k.user_id?.phone || '—'}</td>
+                        <td style={{ ...tdStyle, fontWeight: '600', color: '#374151', fontSize: '0.85rem' }}>{k.business_name || '—'}</td>
+                        <td style={{ ...tdStyle, fontWeight: '600', color: '#94a3b8', fontSize: '0.82rem' }}>
+                          {k.submitted_at ? new Date(k.submitted_at).toLocaleDateString('en-IN') : '—'}
+                        </td>
+                        <td style={tdStyle}>
+                          <span style={{
+                            background: k.status === 'approved' ? '#D1FAE5' : k.status === 'rejected' ? '#FEE2E2' : '#FEF3C7',
+                            color: k.status === 'approved' ? '#065F46' : k.status === 'rejected' ? '#DC2626' : '#92400E',
+                            padding: '4px 10px', borderRadius: '8px', fontSize: '0.72rem', fontWeight: '800',
+                          }}>
+                            {(k.status || 'pending').toUpperCase()}
+                          </span>
+                        </td>
+                        <td style={tdStyle}>
+                          <div style={{ display: 'flex', gap: '6px' }}>
+                            {k.status !== 'approved' && (
+                              <button
+                                onClick={async () => {
+                                  try {
+                                    await axios.put(`${API}/kyc/admin/review/${k._id}`, { status: 'approved' }, { headers: { Authorization: `Bearer ${token}` } });
+                                    fetchKYC();
+                                  } catch { alert('Failed to approve'); }
+                                }}
+                                style={{ background: '#D1FAE5', color: '#065F46', border: 'none', padding: '5px 10px', borderRadius: '7px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
+                              >Approve</button>
+                            )}
+                            {k.status !== 'rejected' && (
+                              <button
+                                onClick={async () => {
+                                  const reason = window.prompt('Rejection reason (optional):');
+                                  try {
+                                    await axios.put(`${API}/kyc/admin/review/${k._id}`, { status: 'rejected', rejection_reason: reason || '' }, { headers: { Authorization: `Bearer ${token}` } });
+                                    fetchKYC();
+                                  } catch { alert('Failed to reject'); }
+                                }}
+                                style={{ background: '#FEE2E2', color: '#DC2626', border: 'none', padding: '5px 10px', borderRadius: '7px', fontSize: '0.72rem', fontWeight: '700', cursor: 'pointer' }}
+                              >Reject</button>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    )) : (
+                      <tr><td colSpan="6" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>No KYC submissions yet</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          )}
+
+          {/* ── SUPPORT TICKETS TAB ── */}
+          {tab === 'support' && (
+            <div style={{ background: 'white', borderRadius: '20px', border: '1.5px solid #EEF2E6', overflow: 'hidden' }}>
+              {sideLoading ? (
+                <div style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>Loading support tickets...</div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead style={{ background: '#F8FAF7' }}>
+                    <tr>
+                      {['User', 'Subject', 'Category', 'Priority', 'Created', 'Status', 'Action'].map(h => (
+                        <th key={h} style={thStyle}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {supportTickets.length > 0 ? supportTickets.map((t) => (
+                      <tr key={t._id} style={{ borderBottom: '1px solid #EEF2E6' }}>
+                        <td style={{ ...tdStyle, fontWeight: '800', color: '#0f172a', fontSize: '0.85rem' }}>
+                          <div>{t.user_id?.name || '—'}</div>
+                          <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{t.user_id?.phone || ''}</div>
+                        </td>
+                        <td style={{ ...tdStyle, fontWeight: '700', color: '#374151', fontSize: '0.85rem', maxWidth: '200px' }}>{t.subject}</td>
+                        <td style={tdStyle}><span style={numBadge}>{t.category || 'Other'}</span></td>
+                        <td style={tdStyle}>
+                          <span style={{
+                            background: t.priority === 'Urgent' ? '#FEE2E2' : t.priority === 'High' ? '#FEF3C7' : '#F3F4F6',
+                            color: t.priority === 'Urgent' ? '#DC2626' : t.priority === 'High' ? '#92400E' : '#374151',
+                            padding: '3px 8px', borderRadius: '6px', fontSize: '0.7rem', fontWeight: '800',
+                          }}>{t.priority || 'Medium'}</span>
+                        </td>
+                        <td style={{ ...tdStyle, fontWeight: '600', color: '#94a3b8', fontSize: '0.8rem' }}>
+                          {t.createdAt ? new Date(t.createdAt).toLocaleDateString('en-IN') : '—'}
+                        </td>
+                        <td style={tdStyle}>
+                          <span style={{
+                            background: t.status === 'Resolved' || t.status === 'Closed' ? '#D1FAE5' : t.status === 'In Progress' ? '#DBEAFE' : '#FEF3C7',
+                            color: t.status === 'Resolved' || t.status === 'Closed' ? '#065F46' : t.status === 'In Progress' ? '#1D4ED8' : '#92400E',
+                            padding: '4px 10px', borderRadius: '8px', fontSize: '0.72rem', fontWeight: '800',
+                          }}>{t.status || 'Open'}</span>
+                        </td>
+                        <td style={tdStyle}>
+                          <select
+                            defaultValue={t.status || 'Open'}
+                            onChange={async (e) => {
+                              try {
+                                await axios.patch(`${API}/admin/support/tickets/${t._id}`, { status: e.target.value }, { headers: { Authorization: `Bearer ${token}` } });
+                                fetchSupport();
+                              } catch { alert('Failed to update ticket'); }
+                            }}
+                            style={{ padding: '5px 8px', borderRadius: '7px', border: '1.5px solid #E9EDE8', fontSize: '0.78rem', fontWeight: '600', cursor: 'pointer', outline: 'none' }}
+                          >
+                            <option>Open</option>
+                            <option>In Progress</option>
+                            <option>Resolved</option>
+                            <option>Closed</option>
+                          </select>
+                        </td>
+                      </tr>
+                    )) : (
+                      <tr><td colSpan="7" style={{ padding: '3rem', textAlign: 'center', color: '#94a3b8', fontWeight: '600' }}>No support tickets yet</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
+            </div>
           )}
 
         </div>

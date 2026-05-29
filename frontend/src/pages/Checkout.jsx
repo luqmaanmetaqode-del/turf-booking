@@ -6,13 +6,25 @@ import { useAuth } from '../context/AuthContext';
 const API = process.env.REACT_APP_API_URL || 'https://turfx.metaqode.co.in/api';
 const SPORTS = ['Football', 'Cricket', 'Tennis'];
 
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handler = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+  return width;
+}
+
 export default function Checkout() {
   const { state } = useLocation();
   const { token, user } = useAuth();
   const navigate = useNavigate();
   useParams();
+  const isMobile = useWindowWidth() < 768;
   const [turf, setTurf] = useState(state?.turf || null);
   const [turfLoading, setTurfLoading] = useState(!state?.turf);
+  const [turfError, setTurfError] = useState(false);
   const [date, setDate] = useState(state?.date || new Date().toISOString().split('T')[0]);
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [sport, setSport] = useState(state?.turf?.sport || 'Football');
@@ -27,9 +39,10 @@ export default function Checkout() {
   useEffect(() => {
     if (!turf && turfIdFromUrl) {
       setTurfLoading(true);
+      setTurfError(false);
       axios.get(`${API}/turfs/${turfIdFromUrl}`)
         .then(res => { setTurf(res.data); setSport(res.data.sport || 'Football'); })
-        .catch(() => {})
+        .catch(() => setTurfError(true))
         .finally(() => setTurfLoading(false));
     } else {
       setTurfLoading(false);
@@ -37,6 +50,52 @@ export default function Checkout() {
   }, [turfIdFromUrl]);
 
   const turfId = turf?._id || turf?.id;
+
+  // ── PEAK HOUR PRICING ──
+  // Returns the correct price for a slot based on pricingRules saved on the turf.
+  // Falls back to base price_per_hour if no matching rule found.
+  const getPriceForSlot = (slotHour) => {
+    const rules = turf?.pricingRules;
+    if (!rules || rules.length === 0) return turf?.price_per_hour || 0;
+
+    const bookingDate = new Date(date);
+    const dayOfWeek = bookingDate.getDay(); // 0=Sun, 6=Sat
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+
+    // Convert slot hour (e.g. 16) to "HH:MM" for comparison
+    const slotTime = `${String(slotHour).padStart(2, '0')}:00`;
+
+    // Find the most specific matching active rule
+    const matchingRules = rules.filter(r => {
+      if (!r.active) return false;
+      const typeMatch =
+        r.type === 'All Days' ||
+        (r.type === 'Weekend' && isWeekend) ||
+        (r.type === 'Weekday' && !isWeekend);
+      if (!typeMatch) return false;
+      // Time range check
+      return slotTime >= r.startTime && slotTime < r.endTime;
+    });
+
+    if (matchingRules.length === 0) return turf?.price_per_hour || 0;
+    // Use the most specific rule (Weekend > Weekday > All Days)
+    const priority = { Weekend: 3, Weekday: 2, 'All Days': 1 };
+    matchingRules.sort((a, b) => (priority[b.type] || 0) - (priority[a.type] || 0));
+    return matchingRules[0].price;
+  };
+
+  // PRICE CALCULATIONS — per-slot pricing with peak hour support
+  const platformFee = 25;
+  const gstOnFee = Math.round(platformFee * 0.18);
+  const totalConvenienceFee = platformFee + gstOnFee;
+
+  const slotPrices = selectedSlots.map(label => {
+    const slot = hourlySlots.find(s => s.label === label);
+    return slot ? getPriceForSlot(slot.hour) : (turf?.price_per_hour || 0);
+  });
+  const courtPrice = slotPrices.reduce((sum, p) => sum + p, 0);
+  const numberOfSlots = selectedSlots.length;
+  const totalAmount = courtPrice + (numberOfSlots > 0 ? totalConvenienceFee : 0);
 
   // Generate hourly slots (6 AM to 11 PM)
   const generateHourlySlots = () => {
@@ -65,15 +124,6 @@ export default function Checkout() {
   };
 
   const hourlySlots = generateHourlySlots();
-
-  // PRICE CALCULATIONS (per slot)
-  const pricePerSlot = turf ? turf.price_per_hour : 0;
-  const numberOfSlots = selectedSlots.length;
-  const courtPrice = pricePerSlot * numberOfSlots;
-  const platformFee = 25; // Flat Rs. 25 platform fee
-  const gstOnFee = Math.round(platformFee * 0.18); // 18% GST on platform fee
-  const totalConvenienceFee = platformFee + gstOnFee;
-  const totalAmount = courtPrice + totalConvenienceFee;
 
   useEffect(() => {
     const script = document.createElement('script');
@@ -186,15 +236,18 @@ export default function Checkout() {
 
   if (turfLoading) return (
     <div style={{ textAlign:'center', padding:'6rem 2rem', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
+      <div style={{ width:'48px', height:'48px', border:'4px solid #EEF2E6', borderTop:'4px solid #084734', borderRadius:'50%', animation:'spin 1s linear infinite', margin:'0 auto 1rem' }} />
       <p style={{ color:'#98A2B3', fontSize:'1.1rem', fontWeight:'600' }}>Loading venue details...</p>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 
-  if (!turf) return (
+  if (turfError || !turf) return (
     <div style={{ textAlign:'center', padding:'6rem 2rem', minHeight:'calc(100vh - 72px)', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center' }}>
-      <h2 style={{ color:'#161616', marginBottom:'1rem', fontSize: '2rem', fontWeight: '900' }}>No Venue Selected</h2>
-      <p style={{ color:'#666', marginBottom:'2rem', fontWeight: '500' }}>Please choose a turf to book first</p>
-      <button onClick={() => navigate('/explore')} style={{ background:'#CEF17B', color:'white', border:'none', padding:'14px 40px', borderRadius:'14px', cursor:'pointer', fontWeight:'800', fontSize: '1rem' }}>Browse Venues</button>
+      <div style={{ fontSize:'4rem', marginBottom:'1rem' }}>🏟️</div>
+      <h2 style={{ color:'#161616', marginBottom:'1rem', fontSize: '2rem', fontWeight: '900' }}>Venue Not Found</h2>
+      <p style={{ color:'#666', marginBottom:'2rem', fontWeight: '500' }}>The venue you're looking for doesn't exist or the link is invalid.</p>
+      <button onClick={() => navigate('/explore')} style={{ background:'#084734', color:'#CEF17B', border:'none', padding:'14px 40px', borderRadius:'14px', cursor:'pointer', fontWeight:'800', fontSize: '1rem' }}>Browse Venues</button>
     </div>
   );
 
@@ -217,7 +270,7 @@ export default function Checkout() {
 
   return (
     <div style={{ background:'#F8FAF7', minHeight:'calc(100vh - 72px)' }}>
-      <div style={{ maxWidth:'1100px', margin:'0 auto', padding:'3rem 2rem', display:'grid', gridTemplateColumns:'1fr 400px', gap:'3rem', alignItems:'start' }}>
+      <div style={{ maxWidth:'1100px', margin:'0 auto', padding: isMobile ? '1.5rem 1rem' : '3rem 2rem', display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 400px', gap: isMobile ? '1.5rem' : '3rem', alignItems:'start' }}>
         {/* LEFT */}
         <div>
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'2rem', boxShadow: '0 4px 15px rgba(0,0,0,0.02)' }}>
@@ -256,7 +309,7 @@ export default function Checkout() {
             </div>
             <div style={rowStyle}>
               <label style={{ fontWeight:'800', color:'#161616', fontSize: '1rem' }}>Date</label>
-              <input type="date" value={date} onChange={e => setDate(e.target.value)} min={new Date().toISOString().split('T')[0]} style={inputStyle} />
+              <input type="date" value={date} onChange={e => { setDate(e.target.value); setSelectedSlots([]); }} min={new Date().toISOString().split('T')[0]} style={inputStyle} />
             </div>
             <div style={rowStyle}>
               <label style={{ fontWeight:'800', color:'#161616', fontSize: '1rem' }}>Select Time Slot</label>
@@ -324,7 +377,7 @@ export default function Checkout() {
         </div>
 
         {/* RIGHT */}
-        <div style={{ position:'sticky', top:'100px' }}>
+        <div style={{ position: isMobile ? 'static' : 'sticky', top:'100px' }}>
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
             <h3 style={{ fontSize:'1.2rem', fontWeight:'900', color: '#161616', marginBottom: '1.5rem' }}>Booking Summary</h3>
             <div style={{ background:'#F8FAF7', borderRadius:'16px', padding:'1.25rem', border:'1.5px solid #EEF2E6' }}>
@@ -341,20 +394,33 @@ export default function Checkout() {
           <div style={{ background:'white', borderRadius:'24px', padding:'2rem', border:'1px solid #eee', marginBottom:'1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
             <h3 style={{ fontSize:'1.2rem', fontWeight:'900', marginBottom:'1.5rem', color: '#161616' }}>Price Breakdown</h3>
             
-            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
-              <span style={{ color:'#98A2B3', fontWeight: '600' }}>Court Rental ({numberOfSlots} {numberOfSlots === 1 ? 'Slot' : 'Slots'})</span>
-              <span style={{ fontWeight:'800', color: '#161616' }}>INR {courtPrice.toLocaleString()}</span>
-            </div>
+            {/* Show per-slot breakdown if peak pricing is active */}
+            {selectedSlots.length > 0 && slotPrices.some((p, i, arr) => p !== arr[0]) ? (
+              selectedSlots.map((label, i) => (
+                <div key={label} style={{ display:'flex', justifyContent:'space-between', marginBottom:'10px', fontSize: '0.88rem' }}>
+                  <span style={{ color:'#98A2B3', fontWeight: '600' }}>{label}</span>
+                  <span style={{ fontWeight:'800', color: '#161616' }}>INR {slotPrices[i].toLocaleString()}</span>
+                </div>
+              ))
+            ) : (
+              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
+                <span style={{ color:'#98A2B3', fontWeight: '600' }}>Court Rental ({numberOfSlots} {numberOfSlots === 1 ? 'Slot' : 'Slots'})</span>
+                <span style={{ fontWeight:'800', color: '#161616' }}>INR {courtPrice.toLocaleString()}</span>
+              </div>
+            )}
 
-            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
-              <span style={{ color:'#98A2B3', fontWeight: '600' }}>Platform Fee</span>
-              <span style={{ fontWeight:'800', color: '#161616' }}>INR {platformFee.toLocaleString()}</span>
-            </div>
-
-            <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
-              <span style={{ color:'#98A2B3', fontWeight: '600' }}>GST (18%)</span>
-              <span style={{ fontWeight:'800', color: '#161616' }}>INR {gstOnFee.toLocaleString()}</span>
-            </div>
+            {numberOfSlots > 0 && (
+              <>
+                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
+                  <span style={{ color:'#98A2B3', fontWeight: '600' }}>Platform Fee</span>
+                  <span style={{ fontWeight:'800', color: '#161616' }}>INR {platformFee.toLocaleString()}</span>
+                </div>
+                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:'14px', fontSize: '0.95rem' }}>
+                  <span style={{ color:'#98A2B3', fontWeight: '600' }}>GST (18%)</span>
+                  <span style={{ fontWeight:'800', color: '#161616' }}>INR {gstOnFee.toLocaleString()}</span>
+                </div>
+              </>
+            )}
 
             <div style={{ display:'flex', justifyContent:'space-between', paddingTop:'16px', borderTop:'1.5px solid #EEF2E6', marginTop: '8px' }}>
               <span style={{ fontWeight:'900', fontSize:'1.2rem', color: '#161616' }}>Total Amount</span>

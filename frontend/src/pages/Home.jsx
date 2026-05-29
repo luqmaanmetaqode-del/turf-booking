@@ -49,7 +49,9 @@ export default function Home() {
   };
 
   const turfsList = Array.isArray(turfs) ? turfs : [];
-  const filtered = sport === 'All' ? turfsList : turfsList.filter(t => t.sport === sport);
+  const filtered = sport === 'All'
+    ? turfsList
+    : turfsList.filter(t => (t.sport || '').toLowerCase() === sport.toLowerCase());
 
   return (
     <div style={{ background: '#F8FAF7', fontFamily: "'DM Sans', sans-serif" }}>

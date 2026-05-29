@@ -1,5 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
 import logo from '../assets/logo.png';
 import { useState, useEffect, useRef } from 'react';
 
@@ -12,13 +13,24 @@ const CITIES = [
 
 export default function Navbar() {
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [city, setCity] = useState('Bengaluru');
   const [showCities, setShowCities] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const cityRef = useRef(null);
   const menuRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = windowWidth < 768;
 
   useEffect(() => {
     const handleClick = (e) => {
@@ -58,7 +70,7 @@ export default function Navbar() {
 
         {/* City Selector */}
         <div style={{ position: 'relative' }} ref={cityRef}>
-          <div
+          <button
             onClick={() => setShowCities(!showCities)}
             style={{
               display: 'flex', alignItems: 'center', gap: '6px',
@@ -70,8 +82,8 @@ export default function Navbar() {
             }}
           >
             <span style={{ fontSize: '0.85rem', color: 'white', fontWeight: '600' }}>📍 {city}</span>
-            <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.7)', transform: showCities ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }}>▼</span>
-          </div>
+            <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.7)', transform: showCities ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s', display: 'inline-block' }}>▼</span>
+          </button>
 
           {showCities && (
             <div style={{
@@ -86,81 +98,103 @@ export default function Navbar() {
                 Select City
               </div>
               {CITIES.map(c => (
-                <div key={c} onClick={() => { setCity(c); setShowCities(false); navigate(`/explore?city=${c}`); }}
-                  style={{ padding: '8px 12px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', color: city === c ? '#084734' : '#444', background: city === c ? '#DCEFB8' : 'transparent', fontWeight: city === c ? '700' : '500', transition: 'all 0.15s' }}
+                <button key={c} onClick={() => { setCity(c); setShowCities(false); navigate(`/explore?city=${c}`); }}
+                  style={{ padding: '8px 12px', borderRadius: '10px', cursor: 'pointer', fontSize: '0.85rem', color: city === c ? '#084734' : '#444', background: city === c ? '#DCEFB8' : 'transparent', fontWeight: city === c ? '700' : '500', transition: 'all 0.15s', border: 'none', textAlign: 'left', width: '100%' }}
                   onMouseEnter={e => { if (city !== c) e.target.style.background = '#f5f5f5'; }}
                   onMouseLeave={e => { if (city !== c) e.target.style.background = 'transparent'; }}
-                >{c}</div>
+                >{c}</button>
               ))}
             </div>
           )}
         </div>
       </div>
 
-      {/* Center — Nav Links */}
-      <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-        {navLinks.map(({ path, label }) => (
-          <Link key={label} to={path} style={{
-            color: isActive(path) && label !== 'Venues' ? '#CEF17B' : 'rgba(255,255,255,0.85)',
-            textDecoration: 'none',
-            fontSize: '0.9rem', fontWeight: isActive(path) ? '700' : '500',
-            padding: '8px 18px',
-            borderRadius: '8px',
-            transition: 'all 0.2s',
-          }}
-            onMouseEnter={e => { e.target.style.color = '#CEF17B'; }}
-            onMouseLeave={e => { e.target.style.color = isActive(path) && label !== 'Venues' ? '#CEF17B' : 'rgba(255,255,255,0.85)'; }}
-          >
-            {label}
-          </Link>
-        ))}
-      </div>
+      {/* Center — Nav Links (hidden on mobile) */}
+      {!isMobile && (
+        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+          {navLinks.map(({ path, label }) => (
+            <Link key={label} to={path} style={{
+              color: isActive(path) && label !== 'Venues' ? '#CEF17B' : 'rgba(255,255,255,0.85)',
+              textDecoration: 'none',
+              fontSize: '0.9rem', fontWeight: isActive(path) ? '700' : '500',
+              padding: '8px 18px',
+              borderRadius: '8px',
+              transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => { e.target.style.color = '#CEF17B'; }}
+              onMouseLeave={e => { e.target.style.color = isActive(path) && label !== 'Venues' ? '#CEF17B' : 'rgba(255,255,255,0.85)'; }}
+            >
+              {label}
+            </Link>
+          ))}
+        </div>
+      )}
 
       {/* Right — Auth */}
       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-        {/* Moon icon */}
-        <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.1rem', cursor: 'pointer' }}>🌙</span>
-
-        {/* Admin Link */}
-        <Link to="/admin" style={{
-          color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
-          fontSize: '0.85rem', fontWeight: '500',
-          padding: '7px 16px', borderRadius: '20px',
-          border: '1px solid rgba(255,255,255,0.3)',
-          transition: 'all 0.2s',
-        }}
-          onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; }}
-          onMouseLeave={e => { e.target.style.background = 'transparent'; }}
+        {/* Dark mode toggle */}
+        <button
+          onClick={toggleTheme}
+          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          style={{
+            background: 'rgba(255,255,255,0.1)',
+            border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '50%',
+            width: '34px', height: '34px',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            cursor: 'pointer', fontSize: '1rem',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
         >
-          Admin
-        </Link>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
 
-        {/* List your venue */}
-        <Link to="/partner" style={{
-          color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
-          fontSize: '0.85rem', fontWeight: '500',
-          padding: '7px 16px', borderRadius: '20px',
-          border: '1px solid rgba(255,255,255,0.3)',
-          transition: 'all 0.2s',
-        }}
-          onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; }}
-          onMouseLeave={e => { e.target.style.background = 'transparent'; }}
-        >
-          List Your Venue
-        </Link>
+        {/* Desktop-only links */}
+        {!isMobile && (
+          <>
+            <Link to="/admin" style={{
+              color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
+              fontSize: '0.85rem', fontWeight: '500',
+              padding: '7px 16px', borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.3)',
+              transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; }}
+              onMouseLeave={e => { e.target.style.background = 'transparent'; }}
+            >
+              Admin
+            </Link>
 
+            <Link to="/partner" style={{
+              color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
+              fontSize: '0.85rem', fontWeight: '500',
+              padding: '7px 16px', borderRadius: '20px',
+              border: '1px solid rgba(255,255,255,0.3)',
+              transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; }}
+              onMouseLeave={e => { e.target.style.background = 'transparent'; }}
+            >
+              List Your Venue
+            </Link>
+          </>
+        )}
+
+        {/* User menu / Login button */}
         {user ? (
           <div style={{ position: 'relative' }} ref={menuRef}>
-            <div onClick={() => setShowUserMenu(!showUserMenu)}
-              style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', padding: '6px 14px 6px 6px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.2s' }}
+            <button onClick={() => setShowUserMenu(!showUserMenu)}
+              style={{ display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer', padding: '6px 14px 6px 6px', borderRadius: '30px', border: '1px solid rgba(255,255,255,0.3)', transition: 'all 0.2s', background: 'transparent' }}
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
               onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
             >
               <div style={{ width: '30px', height: '30px', borderRadius: '50%', background: '#CEF17B', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#084734', fontWeight: '800', fontSize: '0.85rem' }}>
                 {user.name.charAt(0).toUpperCase()}
               </div>
-              <span style={{ color: 'white', fontWeight: '600', fontSize: '0.88rem' }}>{user.name.split(' ')[0]}</span>
-            </div>
+              {!isMobile && <span style={{ color: 'white', fontWeight: '600', fontSize: '0.88rem' }}>{user.name.split(' ')[0]}</span>}
+            </button>
 
             {showUserMenu && (
               <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: 'white', borderRadius: '14px', boxShadow: '0 12px 48px rgba(0,0,0,0.2)', padding: '8px', width: '200px', zIndex: 999 }}>
@@ -168,31 +202,63 @@ export default function Navbar() {
                   <div style={{ fontWeight: '800', fontSize: '0.9rem', color: '#161616' }}>{user.name}</div>
                   <div style={{ fontSize: '0.8rem', color: '#888', marginTop: '2px' }}>{user.email}</div>
                 </div>
+                {isMobile && (
+                  <>
+                    <Link to="/" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Home</Link>
+                    <Link to="/explore" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Explore Venues</Link>
+                    <Link to="/partner" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>List Your Venue</Link>
+                    <div style={{ borderTop: '1px solid #f0f0f0', margin: '4px 0' }} />
+                  </>
+                )}
                 <Link to="/my-bookings" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}
                   onMouseEnter={e => e.target.style.background = '#f5f5f5'}
                   onMouseLeave={e => e.target.style.background = 'transparent'}
                 >My Bookings</Link>
-                <div onClick={() => { logout(); navigate('/'); setShowUserMenu(false); }}
-                  style={{ padding: '10px 14px', borderRadius: '8px', color: '#ef4444', fontSize: '0.88rem', fontWeight: '600', cursor: 'pointer' }}
-                  onMouseEnter={e => e.target.style.background = '#fef2f2'}
-                  onMouseLeave={e => e.target.style.background = 'transparent'}
-                >Logout</div>
+                <button onClick={() => { logout(); navigate('/'); setShowUserMenu(false); }}
+                  style={{ padding: '10px 14px', borderRadius: '8px', color: '#ef4444', fontSize: '0.88rem', fontWeight: '600', cursor: 'pointer', background: 'none', border: 'none', width: '100%', textAlign: 'left' }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#fef2f2'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >Logout</button>
               </div>
             )}
           </div>
         ) : (
-          <button onClick={() => navigate('/login')} style={{
-            background: '#CEF17B', color: '#084734',
-            border: 'none', padding: '10px 24px',
-            borderRadius: '25px', cursor: 'pointer',
-            fontSize: '0.88rem', fontWeight: '800',
-            transition: 'all 0.2s',
-          }}
-            onMouseEnter={e => { e.target.style.opacity = '0.9'; e.target.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }}
-          >
-            Login / Signup
-          </button>
+          isMobile ? (
+            /* Mobile: hamburger opens a simple menu */
+            <div style={{ position: 'relative' }} ref={menuRef}>
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '8px', width: '36px', height: '36px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '5px', cursor: 'pointer' }}
+                aria-label="Menu"
+              >
+                <span style={{ width: '18px', height: '2px', background: 'white', borderRadius: '2px' }} />
+                <span style={{ width: '18px', height: '2px', background: 'white', borderRadius: '2px' }} />
+                <span style={{ width: '18px', height: '2px', background: 'white', borderRadius: '2px' }} />
+              </button>
+              {showUserMenu && (
+                <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: 'white', borderRadius: '14px', boxShadow: '0 12px 48px rgba(0,0,0,0.2)', padding: '8px', width: '200px', zIndex: 999 }}>
+                  <Link to="/" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Home</Link>
+                  <Link to="/explore" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Explore Venues</Link>
+                  <Link to="/partner" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>List Your Venue</Link>
+                  <div style={{ borderTop: '1px solid #f0f0f0', margin: '4px 0' }} />
+                  <button onClick={() => { navigate('/login'); setShowUserMenu(false); }} style={{ padding: '10px 14px', borderRadius: '8px', color: '#084734', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', background: 'none', border: 'none', width: '100%', textAlign: 'left' }}>Login / Signup</button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button onClick={() => navigate('/login')} style={{
+              background: '#CEF17B', color: '#084734',
+              border: 'none', padding: '10px 24px',
+              borderRadius: '25px', cursor: 'pointer',
+              fontSize: '0.88rem', fontWeight: '800',
+              transition: 'all 0.2s',
+            }}
+              onMouseEnter={e => { e.target.style.opacity = '0.9'; e.target.style.transform = 'translateY(-1px)'; }}
+              onMouseLeave={e => { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }}
+            >
+              Login / Signup
+            </button>
+          )
         )}
       </div>
     </nav>

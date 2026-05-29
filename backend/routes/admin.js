@@ -122,4 +122,79 @@ router.get('/users', auth, adminOnly, async (req, res) => {
   }
 });
 
+// GET /api/admin/turfs — All venues list
+router.get('/turfs', auth, adminOnly, async (req, res) => {
+  try {
+    const turfs = await Turf.find({})
+      .populate('owner_id', 'name phone email')
+      .sort({ createdAt: -1 });
+    res.json(turfs);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// PATCH /api/admin/turfs/:id/status — Toggle venue active/inactive
+router.patch('/turfs/:id/status', auth, adminOnly, async (req, res) => {
+  try {
+    const turf = await Turf.findById(req.params.id);
+    if (!turf) return res.status(404).json({ msg: 'Venue not found' });
+    turf.isActive = !turf.isActive;
+    await turf.save();
+    res.json({ msg: `Venue ${turf.isActive ? 'activated' : 'deactivated'}`, isActive: turf.isActive });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// GET /api/admin/support/tickets — All support tickets
+router.get('/support/tickets', auth, adminOnly, async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    // Reuse the SupportTicket model if already compiled
+    const SupportTicket = mongoose.models.SupportTicket ||
+      mongoose.model('SupportTicket', new mongoose.Schema({
+        user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        subject: String,
+        category: String,
+        description: String,
+        status: { type: String, default: 'Open' },
+        priority: { type: String, default: 'Medium' },
+        messages: [{ sender: String, message: String, timestamp: Date }],
+        createdAt: { type: Date, default: Date.now },
+        updatedAt: { type: Date, default: Date.now },
+      }));
+
+    const tickets = await SupportTicket.find({})
+      .populate('user_id', 'name phone email')
+      .sort({ createdAt: -1 });
+    res.json(tickets);
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
+// PATCH /api/admin/support/tickets/:id — Update ticket status
+router.patch('/support/tickets/:id', auth, adminOnly, async (req, res) => {
+  try {
+    const mongoose = require('mongoose');
+    const SupportTicket = mongoose.models.SupportTicket;
+    if (!SupportTicket) return res.status(500).json({ msg: 'SupportTicket model not loaded' });
+
+    const { status, reply } = req.body;
+    const ticket = await SupportTicket.findById(req.params.id);
+    if (!ticket) return res.status(404).json({ msg: 'Ticket not found' });
+
+    if (status) ticket.status = status;
+    if (reply) {
+      ticket.messages.push({ sender: 'support', message: reply, timestamp: new Date() });
+    }
+    ticket.updatedAt = new Date();
+    await ticket.save();
+    res.json({ msg: 'Ticket updated', ticket });
+  } catch (err) {
+    res.status(500).json({ msg: 'Server error' });
+  }
+});
+
 module.exports = router;

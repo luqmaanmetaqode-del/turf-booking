@@ -1,6 +1,9 @@
 import { TrendingUp, ArrowUpRight, Calendar, Filter, Download, ArrowDownRight, Users, CreditCard } from 'lucide-react';
+import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 
 export default function PartnerEarnings({ data }) {
+  const { token } = useAuth();
   const bookings = data?.bookings || [];
   const confirmedBookings = bookings.filter(b => b.status === 'confirmed');
   const cancelledBookings = bookings.filter(b => b.status === 'cancelled');
@@ -54,7 +57,22 @@ export default function PartnerEarnings({ data }) {
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
            <div style={dateRange}><Calendar size={18} /> Last 7 Days</div>
-           <button onClick={() => window.open(`http://localhost:5001/api/exports/earnings/csv`, '_blank')} style={btnPrimary}><Download size={18} /> Export Data</button>
+           <button onClick={async () => {
+             try {
+               const res = await axios.get('https://turfx.metaqode.co.in/api/exports/earnings/csv', {
+                 headers: { Authorization: `Bearer ${token}` },
+                 responseType: 'blob',
+               });
+               const url = window.URL.createObjectURL(new Blob([res.data]));
+               const link = document.createElement('a');
+               link.href = url;
+               link.setAttribute('download', `earnings-${Date.now()}.csv`);
+               document.body.appendChild(link);
+               link.click();
+               link.remove();
+               window.URL.revokeObjectURL(url);
+             } catch { alert('Export failed. Please try again.'); }
+           }} style={btnPrimary}><Download size={18} /> Export Data</button>
         </div>
       </div>
 

@@ -1,6 +1,8 @@
 import { createContext, useContext, useState } from 'react';
+import axios from 'axios';
 
 const AuthContext = createContext(null);
+const API = 'https://turfx.metaqode.co.in/api';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(
@@ -17,7 +19,14 @@ export function AuthProvider({ children }) {
     localStorage.setItem('token', tokenData);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    // Notify backend (best-effort — don't block on failure)
+    const currentToken = localStorage.getItem('token');
+    if (currentToken) {
+      axios.post(`${API}/auth/logout`, {}, {
+        headers: { Authorization: `Bearer ${currentToken}` },
+      }).catch(() => {});
+    }
     setUser(null);
     setToken(null);
     localStorage.clear();

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const API = 'https://turfx.metaqode.co.in/api';
 
@@ -73,6 +74,7 @@ function isToday(dateStr) {
 
 export default function MyBookings() {
   const { token } = useAuth();
+  const navigate = useNavigate();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('upcoming');
@@ -257,7 +259,7 @@ export default function MyBookings() {
             </p>
             {activeTab === 'upcoming' && (
               <button
-                onClick={() => window.location.href = '/explore'}
+                onClick={() => navigate('/explore')}
                 style={{
                   padding: '12px 28px', borderRadius: '12px', border: 'none',
                   background: '#084734', color: 'white', fontWeight: 800,
@@ -294,6 +296,7 @@ function BookingCard({
   booking: b, activeTab, rescheduleId, newDate, newSlot,
   setRescheduleId, setNewDate, setNewSlot, handleCancel, handleReschedule,
 }) {
+  const navigate = useNavigate();
   const sportKey = getSportKey(b.turf_id?.sport);
   const emoji = SPORT_EMOJI[sportKey] || SPORT_EMOJI.default;
   const bg = SPORT_BG[sportKey] || SPORT_BG.default;
@@ -399,11 +402,11 @@ function BookingCard({
             {activeTab === 'upcoming' && (
               <>
                 {todayBooking && (
-                  <ActionBtn primary onClick={() => window.open(`https://maps.google.com/?q=${b.turf_id?.name}`, '_blank')}>
+                  <ActionBtn primary onClick={() => window.open(`https://maps.google.com/?q=${encodeURIComponent(b.turf_id?.name || '')}`, '_blank')}>
                     Get Directions
                   </ActionBtn>
                 )}
-                <ActionBtn onClick={() => window.location.href = `/turf/${b.turf_id?._id}`}>
+                <ActionBtn onClick={() => navigate(`/turf/${b.turf_id?._id}`)}>
                   View Details
                 </ActionBtn>
                 {(b.status === 'confirmed' || b.status === 'approved') && !todayBooking && (
@@ -415,11 +418,11 @@ function BookingCard({
             )}
             {activeTab === 'completed' && (
               <>
-                <ActionBtn onClick={() => window.location.href = `/turf/${b.turf_id?._id}`}>
+                <ActionBtn onClick={() => navigate(`/checkout/${b.turf_id?._id}`)}>
                   Book Again
                 </ActionBtn>
                 {!b.rating && (
-                  <ActionBtn onClick={() => window.location.href = `/turf/${b.turf_id?._id}#review`}>
+                  <ActionBtn onClick={() => navigate(`/turf/${b.turf_id?._id}`)}>
                     Rate &amp; Review
                   </ActionBtn>
                 )}
@@ -431,7 +434,7 @@ function BookingCard({
               </>
             )}
             {activeTab === 'cancelled' && (
-              <ActionBtn onClick={() => window.location.href = `/turf/${b.turf_id?._id}`}>
+              <ActionBtn onClick={() => navigate(`/checkout/${b.turf_id?._id}`)}>
                 Book Again
               </ActionBtn>
             )}

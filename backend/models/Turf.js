@@ -27,6 +27,15 @@ const TurfSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true },
   openTime: { type: String, default: '06:00 AM' },
   closeTime: { type: String, default: '11:00 PM' },
+  pricingRules: [{
+    id:        { type: String },
+    category:  { type: String },
+    type:      { type: String },   // Weekday / Weekend / All Days
+    startTime: { type: String },
+    endTime:   { type: String },
+    price:     { type: Number },
+    active:    { type: Boolean, default: true },
+  }],
 }, { timestamps: true });
 
 module.exports = mongoose.model('Turf', TurfSchema);
