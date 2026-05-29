@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimiter');
+const smsService = require('../services/smsService');
 const router = express.Router();
 
 // Apply rate limiting to all auth routes
@@ -177,10 +178,26 @@ router.post('/forgot-password', async (req, res) => {
     user.otpExpiry = otpExpiry;
     await user.save();
 
-    // Send OTP via SMS (you can implement SMS service here)
-    console.log(`Password reset OTP for ${phone}: ${otp}`);
-
-    res.json({ msg: 'OTP sent to your phone number' });
+    // Send OTP via SMS using MSG91
+    const smsResult = await smsService.sendOTP(phone, otp);
+    
+    if (smsResult.success) {
+      res.json({ 
+        msg: 'OTP sent to your phone number',
+        phone: smsResult.phone 
+      });
+    } else if (smsResult.fallback) {
+      // SMS failed but OTP is logged to console
+      res.json({ 
+        msg: 'OTP sent to your phone number',
+        debug: 'Check server logs for OTP (SMS service temporarily unavailable)'
+      });
+    } else {
+      res.status(500).json({ 
+        msg: 'Failed to send OTP. Please try again.',
+        error: smsResult.error 
+      });
+    }
   } catch (err) {
     console.error('Forgot password error:', err);
     res.status(500).json({ msg: 'Server error during password reset request' });
