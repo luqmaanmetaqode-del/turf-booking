@@ -14,6 +14,7 @@ import ForgotPassword from './pages/ForgotPassword';
 
 import PartnerLogin from './pages/partner/PartnerLogin';
 import PartnerRegister from './pages/partner/PartnerRegister';
+import PartnerForgotPassword from './pages/partner/PartnerForgotPassword';
 import PartnerDashboard from './pages/partner/PartnerDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLogin from './pages/admin/AdminLogin';
@@ -38,6 +39,7 @@ export default function App() {
             <Route path="/partner" element={<PartnerLogin />} />
             <Route path="/partner/login" element={<PartnerLogin />} />
             <Route path="/partner/register" element={<PartnerRegister />} />
+            <Route path="/partner/forgot-password" element={<PartnerForgotPassword />} />
             <Route path="/partner/dashboard" element={<PartnerDashboard />} />
             <Route path="/admin" element={<AdminLogin />} />
             <Route path="/admin/login" element={<AdminLogin />} />

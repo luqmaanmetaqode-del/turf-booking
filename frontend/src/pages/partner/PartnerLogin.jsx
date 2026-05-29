@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, LogIn } from 'lucide-react';
 import logo from '../../assets/logo.png';
 
@@ -15,11 +15,22 @@ const LIME_BG = '#DCEFB8';  // light lime tint
 export default function PartnerLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Check for success message from forgot password
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -79,6 +90,16 @@ export default function PartnerLogin() {
             fontWeight: '600', border: '1px solid #fecdd3',
           }}>
             {error}
+          </div>
+        )}
+
+        {successMessage && (
+          <div style={{
+            background: '#f0fdf4', color: '#15803d', padding: '14px 16px',
+            borderRadius: '12px', marginBottom: '1.5rem', fontSize: '0.88rem',
+            fontWeight: '600', border: '1px solid #bbf7d0',
+          }}>
+            {successMessage}
           </div>
         )}
 
