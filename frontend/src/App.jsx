@@ -10,6 +10,7 @@ import TurfDetail from './pages/TurfDetail';
 import MyBookings from './pages/MyBookings';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
 
 import PartnerLogin from './pages/partner/PartnerLogin';
 import PartnerRegister from './pages/partner/PartnerRegister';
@@ -48,6 +49,7 @@ export default function App() {
             <Route path="/turf/:id" element={<MainLayout><TurfDetail /></MainLayout>} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/checkout" element={
               <MainLayout><ProtectedRoute><Checkout /></ProtectedRoute></MainLayout>
             } />

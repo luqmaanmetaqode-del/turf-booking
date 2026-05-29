@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.png';
 
 const API = 'https://turfx.metaqode.co.in/api';
@@ -11,7 +11,11 @@ const SPORT_ICONS = ['⚽', '🏏', '🏸', '🎾', '🏀'];
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [tab, setTab] = useState('login'); // 'login' | 'register'
+
+  // Success message from forgot password
+  const [successMessage, setSuccessMessage] = useState('');
 
   // Login state
   const [phone, setPhone] = useState('');
@@ -29,6 +33,15 @@ export default function Login() {
   const [showRegPass, setShowRegPass] = useState(false);
   const [regError, setRegError] = useState('');
   const [regLoading, setRegLoading] = useState(false);
+
+  // Check for success message from forgot password
+  useEffect(() => {
+    if (location.state?.message) {
+      setSuccessMessage(location.state.message);
+      // Clear the message after 5 seconds
+      setTimeout(() => setSuccessMessage(''), 5000);
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -212,6 +225,7 @@ export default function Login() {
             </p>
 
             {loginError && <ErrorBox msg={loginError} />}
+            {successMessage && <SuccessBox msg={successMessage} />}
 
             <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
               <div>
@@ -244,9 +258,9 @@ export default function Login() {
               </div>
 
               <div style={{ textAlign: 'right', marginTop: '-8px' }}>
-                <span style={{ color: '#084734', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer' }}>
+                <Link to="/forgot-password" style={{ color: '#084734', fontSize: '0.85rem', fontWeight: 700, textDecoration: 'none' }}>
                   Forgot password?
-                </span>
+                </Link>
               </div>
 
               <button type="submit" disabled={loginLoading} style={submitBtn(loginLoading)}>
@@ -407,6 +421,18 @@ function ErrorBox({ msg }) {
       background: '#fff1f2', color: '#be123c', padding: '12px 16px',
       borderRadius: '10px', marginBottom: '1.2rem', fontSize: '0.88rem',
       border: '1.5px solid #fecdd3', fontWeight: 700,
+    }}>
+      {msg}
+    </div>
+  );
+}
+
+function SuccessBox({ msg }) {
+  return (
+    <div style={{
+      background: '#f0fdf4', color: '#15803d', padding: '12px 16px',
+      borderRadius: '10px', marginBottom: '1.2rem', fontSize: '0.88rem',
+      border: '1.5px solid #bbf7d0', fontWeight: 700,
     }}>
       {msg}
     </div>

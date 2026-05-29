@@ -154,6 +154,85 @@ router.post('/update-profile', auth, async (req, res) => {
   }
 });
 
+// POST /api/auth/forgot-password — Send OTP for password reset
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { phone } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ msg: 'Phone number is required' });
+    }
+
+    const user = await User.findOne({ phone: phone.toString() });
+    if (!user) {
+      return res.status(400).json({ msg: 'No account found with this phone number' });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Save OTP to user
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+    await user.save();
+
+    // Send OTP via SMS (you can implement SMS service here)
+    console.log(`Password reset OTP for ${phone}: ${otp}`);
+
+    res.json({ msg: 'OTP sent to your phone number' });
+  } catch (err) {
+    console.error('Forgot password error:', err);
+    res.status(500).json({ msg: 'Server error during password reset request' });
+  }
+});
+
+// POST /api/auth/reset-password — Reset password with OTP
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { phone, otp, newPassword } = req.body;
+
+    if (!phone || !otp || !newPassword) {
+      return res.status(400).json({ msg: 'Phone, OTP, and new password are required' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ msg: 'Password must be at least 6 characters' });
+    }
+
+    const user = await User.findOne({ phone: phone.toString() });
+    if (!user) {
+      return res.status(400).json({ msg: 'No account found with this phone number' });
+    }
+
+    if (!user.otp || !user.otpExpiry) {
+      return res.status(400).json({ msg: 'No password reset request found. Please request a new OTP.' });
+    }
+
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).json({ msg: 'OTP has expired. Please request a new one.' });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ msg: 'Invalid OTP' });
+    }
+
+    // Hash new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update password and clear OTP
+    user.password = hashedPassword;
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    res.json({ msg: 'Password reset successfully' });
+  } catch (err) {
+    console.error('Reset password error:', err);
+    res.status(500).json({ msg: 'Server error during password reset' });
+  }
+});
+
 // POST /api/auth/logout — Invalidate token (client-side blacklist via short expiry signal)
 router.post('/logout', auth, async (req, res) => {
   try {
