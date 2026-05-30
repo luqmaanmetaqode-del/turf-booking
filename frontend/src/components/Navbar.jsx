@@ -1,6 +1,5 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { useTheme } from '../context/ThemeContext';
 import logo from '../assets/logo.png';
 import { useState, useEffect, useRef } from 'react';
 
@@ -13,13 +12,11 @@ const CITIES = [
 
 export default function Navbar() {
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [city, setCity] = useState('Bengaluru');
   const [showCities, setShowCities] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const cityRef = useRef(null);
   const menuRef = useRef(null);
@@ -130,29 +127,8 @@ export default function Navbar() {
         </div>
       )}
 
-      {/* Right — Auth */}
+      {/* Right — Auth (NO dark mode toggle, NO admin, NO list venue buttons) */}
       <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-        {/* Dark mode toggle */}
-        <button
-          onClick={toggleTheme}
-          title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          style={{
-            background: 'rgba(255,255,255,0.1)',
-            border: '1px solid rgba(255,255,255,0.2)',
-            borderRadius: '50%',
-            width: '34px', height: '34px',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            cursor: 'pointer', fontSize: '1rem',
-            transition: 'background 0.2s',
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-
-
-
         {/* User menu / Login button */}
         {user ? (
           <div style={{ position: 'relative' }} ref={menuRef}>
