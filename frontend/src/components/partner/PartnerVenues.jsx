@@ -338,6 +338,23 @@ function VenueCard({ turf, bookings, token, onTabChange, onRefresh }) {
     }
   };
 
+  const handleDeleteTurf = async (turfId) => {
+    if (!window.confirm('Are you sure you want to delete this venue? This action cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      await axios.delete(`${API}/turfs/${turfId}`, {
+        headers: { Authorization: `Bearer ${tk}` },
+      });
+      alert('Venue deleted successfully!');
+      onRefresh?.(); // Refresh the venues list
+    } catch (error) {
+      console.error('Delete error:', error);
+      alert(error.response?.data?.msg || 'Failed to delete venue. Please try again.');
+    }
+  };
+
   return (
     <div style={{
       background: '#fff', borderRadius: '20px',
@@ -466,6 +483,30 @@ function VenueCard({ turf, bookings, token, onTabChange, onRefresh }) {
             style={{ ...btnOutline, flex: 1, justifyContent: 'center', padding: '10px' }}
           >
             <Settings size={14} /> Slots
+          </button>
+        </div>
+
+        {/* Delete button - separate row */}
+        <div style={{ marginTop: '8px' }}>
+          <button
+            onClick={() => handleDeleteTurf(turf._id)}
+            style={{
+              width: '100%',
+              background: '#FEE2E2',
+              color: '#DC2626',
+              border: '1.5px solid #FECACA',
+              padding: '10px',
+              borderRadius: '10px',
+              fontWeight: '700',
+              fontSize: '0.85rem',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+            }}
+          >
+            🗑️ Delete Venue
           </button>
         </div>
       </div>
