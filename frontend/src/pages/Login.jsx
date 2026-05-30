@@ -13,12 +13,20 @@ export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const [tab, setTab] = useState('login'); // 'login' | 'register'
+  const [loginMethod, setLoginMethod] = useState('otp'); // 'otp' | 'password'
 
   // Success message from forgot password
   const [successMessage, setSuccessMessage] = useState('');
 
-  // Login state
+  // OTP Login state
   const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+
+  // Password Login state
+  const [passPhone, setPassPhone] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [loginError, setLoginError] = useState('');
@@ -43,15 +51,57 @@ export default function Login() {
     }
   }, [location.state]);
 
+  const handleSendOTP = async (e) => {
+    e.preventDefault();
+    if (phone.length < 10) {
+      setOtpError('Enter a valid 10-digit mobile number');
+      return;
+    }
+    setOtpLoading(true);
+    setOtpError('');
+    try {
+      await axios.post(`${API}/auth/send-otp`, {
+        phone: `+91${phone}`,
+      });
+      setOtpSent(true);
+    } catch (err) {
+      setOtpError(err.response?.data?.msg || 'Failed to send OTP. Please try again.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    if (!otp || otp.length !== 6) {
+      setOtpError('Please enter the 6-digit OTP');
+      return;
+    }
+    setOtpLoading(true);
+    setOtpError('');
+    try {
+      const res = await axios.post(`${API}/auth/verify-otp`, {
+        phone: `+91${phone}`,
+        otp,
+      });
+      login(res.data.user, res.data.token);
+      navigate('/');
+    } catch (err) {
+      setOtpError(err.response?.data?.msg || 'Invalid OTP. Please try again.');
+    } finally {
+      setOtpLoading(false);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
-    if (phone.length < 10) { setLoginError('Enter a valid 10-digit mobile number'); return; }
+    if (passPhone.length < 10) { setLoginError('Enter a valid 10-digit mobile number'); return; }
     if (!password) { setLoginError('Please enter your password'); return; }
     setLoginLoading(true);
     setLoginError('');
     try {
       const res = await axios.post(`${API}/auth/password-login`, {
-        phone: `+91${phone}`,
+        phone: `+91${passPhone}`,
         password,
       });
       login(res.data.user, res.data.token);
@@ -220,58 +270,139 @@ export default function Login() {
             <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#161616', marginBottom: '0.3rem' }}>
               Welcome Back
             </h2>
-            <p style={{ color: '#98A2B3', fontWeight: 500, marginBottom: '2rem', fontSize: '0.95rem' }}>
+            <p style={{ color: '#98A2B3', fontWeight: 500, marginBottom: '1.5rem', fontSize: '0.95rem' }}>
               Access your TurfX account to continue
             </p>
 
+            {/* Login Method Toggle */}
+            <div style={{ display: 'flex', marginBottom: '1.5rem', borderRadius: '8px', background: '#F8FAF7', padding: '4px' }}>
+              <button
+                type="button"
+                onClick={() => setLoginMethod('otp')}
+                style={{
+                  flex: 1, padding: '8px 16px', border: 'none', borderRadius: '6px',
+                  background: loginMethod === 'otp' ? '#084734' : 'transparent',
+                  color: loginMethod === 'otp' ? '#CEF17B' : '#98A2B3',
+                  fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Login with OTP
+              </button>
+              <button
+                type="button"
+                onClick={() => setLoginMethod('password')}
+                style={{
+                  flex: 1, padding: '8px 16px', border: 'none', borderRadius: '6px',
+                  background: loginMethod === 'password' ? '#084734' : 'transparent',
+                  color: loginMethod === 'password' ? '#CEF17B' : '#98A2B3',
+                  fontSize: '0.85rem', fontWeight: 600, cursor: 'pointer',
+                  transition: 'all 0.2s'
+                }}
+              >
+                Login with Password
+              </button>
+            </div>
+
             {loginError && <ErrorBox msg={loginError} />}
+            {otpError && <ErrorBox msg={otpError} />}
             {successMessage && <SuccessBox msg={successMessage} />}
 
-            <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
-              <div>
-                <Label>Mobile Number</Label>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <PhonePrefix />
-                  <input
-                    type="tel" placeholder="Enter your mobile number"
-                    value={phone} maxLength={10}
-                    onChange={e => { setPhone(e.target.value.replace(/\D/g, '')); setLoginError(''); }}
-                    style={inputStyle} autoFocus
-                  />
+            {/* OTP Login Form */}
+            {loginMethod === 'otp' && (
+              <form onSubmit={otpSent ? handleVerifyOTP : handleSendOTP} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                <div>
+                  <Label>Mobile Number</Label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <PhonePrefix />
+                    <input
+                      type="tel" placeholder="Enter your mobile number"
+                      value={phone} maxLength={10}
+                      onChange={e => { setPhone(e.target.value.replace(/\D/g, '')); setOtpError(''); }}
+                      style={inputStyle} autoFocus
+                      disabled={otpSent}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div>
-                <Label>Password</Label>
-                <div style={{ position: 'relative' }}>
-                  <input
-                    type={showPass ? 'text' : 'password'}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={e => { setPassword(e.target.value); setLoginError(''); }}
-                    style={{ ...inputStyle, paddingRight: '48px' }}
-                  />
-                  <button type="button" onClick={() => setShowPass(p => !p)} style={eyeBtn}>
-                    {showPass ? '🙈' : '👁'}
-                  </button>
-                </div>
-              </div>
-
-              <div style={{ textAlign: 'right', marginTop: '-8px' }}>
-                <Link to="/forgot-password" style={{ color: '#084734', fontSize: '0.85rem', fontWeight: 700, textDecoration: 'none' }}>
-                  Forgot password?
-                </Link>
-              </div>
-
-              <button type="submit" disabled={loginLoading} style={submitBtn(loginLoading)}>
-                {loginLoading ? 'Logging in...' : (
-                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                    <span style={{ fontSize: '1.2rem' }}>→]</span>
-                    <span>Login</span>
-                  </span>
+                {otpSent && (
+                  <div>
+                    <Label>Enter OTP</Label>
+                    <input
+                      type="text" placeholder="Enter 6-digit OTP"
+                      value={otp} maxLength={6}
+                      onChange={e => { setOtp(e.target.value.replace(/\D/g, '')); setOtpError(''); }}
+                      style={inputStyle} autoFocus
+                    />
+                  </div>
                 )}
-              </button>
-            </form>
+
+                <button type="submit" disabled={otpLoading} style={submitBtn(otpLoading)}>
+                  {otpLoading ? (otpSent ? 'Verifying...' : 'Sending OTP...') : (otpSent ? 'Verify OTP' : 'Send OTP')}
+                </button>
+
+                {otpSent && (
+                  <div style={{ textAlign: 'center', marginTop: '-8px' }}>
+                    <button
+                      type="button"
+                      onClick={() => { setOtpSent(false); setOtp(''); setOtpError(''); }}
+                      style={{ background: 'none', border: 'none', color: '#084734', fontSize: '0.85rem', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+                    >
+                      Change phone number
+                    </button>
+                  </div>
+                )}
+              </form>
+            )}
+
+            {/* Password Login Form */}
+            {loginMethod === 'password' && (
+              <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+                <div>
+                  <Label>Mobile Number</Label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <PhonePrefix />
+                    <input
+                      type="tel" placeholder="Enter your mobile number"
+                      value={passPhone} maxLength={10}
+                      onChange={e => { setPassPhone(e.target.value.replace(/\D/g, '')); setLoginError(''); }}
+                      style={inputStyle} autoFocus
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <Label>Password</Label>
+                  <div style={{ position: 'relative' }}>
+                    <input
+                      type={showPass ? 'text' : 'password'}
+                      placeholder="Enter your password"
+                      value={password}
+                      onChange={e => { setPassword(e.target.value); setLoginError(''); }}
+                      style={{ ...inputStyle, paddingRight: '48px' }}
+                    />
+                    <button type="button" onClick={() => setShowPass(p => !p)} style={eyeBtn}>
+                      {showPass ? '🙈' : '👁'}
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ textAlign: 'right', marginTop: '-8px' }}>
+                  <Link to="/forgot-password" style={{ color: '#084734', fontSize: '0.85rem', fontWeight: 700, textDecoration: 'none' }}>
+                    Forgot password?
+                  </Link>
+                </div>
+
+                <button type="submit" disabled={loginLoading} style={submitBtn(loginLoading)}>
+                  {loginLoading ? 'Logging in...' : (
+                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                      <span style={{ fontSize: '1.2rem' }}>→]</span>
+                      <span>Login</span>
+                    </span>
+                  )}
+                </button>
+              </form>
+            )}
 
             <p style={{ textAlign: 'center', marginTop: '1.2rem', color: '#98A2B3', fontSize: '0.9rem', fontWeight: 500 }}>
               New to TurfX?{' '}

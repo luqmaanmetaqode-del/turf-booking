@@ -10,6 +10,102 @@ const router = express.Router();
 // Apply rate limiting to all auth routes
 router.use(authLimiter);
 
+// POST /api/auth/send-otp — Send OTP for login
+router.post('/send-otp', async (req, res) => {
+  try {
+    const { phone } = req.body;
+
+    if (!phone) {
+      return res.status(400).json({ msg: 'Phone number is required' });
+    }
+
+    // Check if user exists, if not create one
+    let user = await User.findOne({ phone: phone.toString() });
+    if (!user) {
+      user = new User({
+        phone: phone.toString(),
+        role: 'user'
+      });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Save OTP to user
+    user.otp = otp;
+    user.otpExpiry = otpExpiry;
+    await user.save();
+
+    // For now, just log OTP to console (SMS can be added later)
+    console.log(`Login OTP for ${phone}: ${otp}`);
+
+    res.json({ msg: 'OTP sent to your phone number' });
+  } catch (err) {
+    console.error('Send OTP error:', err);
+    res.status(500).json({ msg: 'Server error during OTP generation' });
+  }
+});
+
+// POST /api/auth/verify-otp — Login with OTP
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { phone, otp, name } = req.body;
+
+    if (!phone || !otp) {
+      return res.status(400).json({ msg: 'Phone and OTP are required' });
+    }
+
+    const user = await User.findOne({ phone: phone.toString() });
+    if (!user) {
+      return res.status(400).json({ msg: 'No account found with this phone number' });
+    }
+
+    if (!user.otp || !user.otpExpiry) {
+      return res.status(400).json({ msg: 'No OTP request found. Please request a new OTP.' });
+    }
+
+    if (user.otpExpiry < new Date()) {
+      return res.status(400).json({ msg: 'OTP has expired. Please request a new one.' });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(400).json({ msg: 'Invalid OTP' });
+    }
+
+    // Update user name if provided and not already set
+    if (name && name.trim() && (!user.name || user.name.trim() === '')) {
+      user.name = name.trim();
+    }
+
+    // Clear OTP
+    user.otp = undefined;
+    user.otpExpiry = undefined;
+    await user.save();
+
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: {
+        id: user._id,
+        name: user.name || '',
+        phone: user.phone,
+        email: user.email || '',
+        role: user.role,
+        createdAt: user.createdAt,
+      },
+    });
+  } catch (err) {
+    console.error('Verify OTP error:', err);
+    res.status(500).json({ msg: 'Server error during OTP verification' });
+  }
+});
+
 // POST /api/auth/register-password — Register with phone + password
 router.post('/register-password', async (req, res) => {
   try {
