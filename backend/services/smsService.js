@@ -1,12 +1,17 @@
 const twilio = require('twilio');
+const axios = require('axios');
 
 class SMSService {
   constructor() {
+    // Twilio Configuration
     this.accountSid = process.env.TWILIO_ACCOUNT_SID;
     this.authToken = process.env.TWILIO_AUTH_TOKEN;
     this.fromNumber = process.env.TWILIO_PHONE_NUMBER;
     
-    if (this.accountSid && this.authToken) {
+    // Fast2SMS Configuration (Indian SMS service)
+    this.fast2smsApiKey = process.env.FAST2SMS_API_KEY;
+    
+    if (this.accountSid && this.authToken && this.fromNumber && this.fromNumber !== '+1234567890') {
       this.client = twilio(this.accountSid, this.authToken);
     }
   }
@@ -25,29 +30,40 @@ class SMSService {
         cleanPhone = '+' + cleanPhone;
       }
 
-      if (!this.client) {
-        throw new Error('Twilio not configured');
+      // Try Fast2SMS first (for Indian numbers)
+      if (cleanPhone.startsWith('+91') && this.fast2smsApiKey) {
+        const indianNumber = cleanPhone.replace('+91', '');
+        const result = await this.sendVifast2SMS(indianNumber, otp);
+        if (result.success) {
+          return result;
+        }
       }
 
-      const message = `Your TurfX password reset OTP is: ${otp}. Valid for 10 minutes. Do not share this OTP with anyone.`;
+      // Fallback to Twilio
+      if (this.client) {
+        const message = `Your TurfX OTP is: ${otp}. Valid for 10 minutes. Do not share this OTP with anyone.`;
 
-      const result = await this.client.messages.create({
-        body: message,
-        from: this.fromNumber,
-        to: cleanPhone
-      });
+        const result = await this.client.messages.create({
+          body: message,
+          from: this.fromNumber,
+          to: cleanPhone
+        });
 
-      console.log(`✅ SMS sent via Twilio to ${cleanPhone}: ${otp}`);
-      console.log(`📱 Message SID: ${result.sid}`);
-      
-      return {
-        success: true,
-        messageId: result.sid,
-        phone: cleanPhone
-      };
+        console.log(`✅ SMS sent via Twilio to ${cleanPhone}: ${otp}`);
+        console.log(`📱 Message SID: ${result.sid}`);
+        
+        return {
+          success: true,
+          messageId: result.sid,
+          phone: cleanPhone,
+          provider: 'Twilio'
+        };
+      }
+
+      throw new Error('No SMS service configured');
 
     } catch (error) {
-      console.error('❌ Twilio SMS failed:', error.message);
+      console.error('❌ SMS failed:', error.message);
       
       // Fallback: Log OTP to console if SMS fails
       console.log(`📱 FALLBACK - OTP for ${phone}: ${otp}`);
@@ -57,6 +73,40 @@ class SMSService {
         error: error.message,
         fallback: true
       };
+    }
+  }
+
+  async sendVifast2SMS(phone, otp) {
+    try {
+      const message = `Your TurfX OTP is ${otp}. Valid for 10 minutes. Do not share this OTP.`;
+      
+      const response = await axios.post('https://www.fast2sms.com/dev/bulkV2', {
+        variables_values: otp,
+        route: 'otp',
+        numbers: phone,
+        message: message
+      }, {
+        headers: {
+          'authorization': this.fast2smsApiKey,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.data.return === true) {
+        console.log(`✅ SMS sent via Fast2SMS to +91${phone}: ${otp}`);
+        return {
+          success: true,
+          messageId: response.data.request_id,
+          phone: `+91${phone}`,
+          provider: 'Fast2SMS'
+        };
+      } else {
+        throw new Error(response.data.message || 'Fast2SMS failed');
+      }
+
+    } catch (error) {
+      console.error('❌ Fast2SMS failed:', error.message);
+      return { success: false, error: error.message };
     }
   }
 
