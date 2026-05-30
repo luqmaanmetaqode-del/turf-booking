@@ -40,7 +40,12 @@ router.post('/send-otp', async (req, res) => {
     // For now, just log OTP to console (SMS can be added later)
     console.log(`Login OTP for ${phone}: ${otp}`);
 
-    res.json({ msg: 'OTP sent to your phone number' });
+    // TEMPORARY: Show OTP in response for testing (remove in production)
+    res.json({ 
+      msg: 'OTP sent to your phone number',
+      testOTP: otp,
+      note: 'SMS not working - use the OTP shown above'
+    });
   } catch (err) {
     console.error('Send OTP error:', err);
     res.status(500).json({ msg: 'Server error during OTP generation' });
@@ -274,7 +279,7 @@ router.post('/forgot-password', async (req, res) => {
     user.otpExpiry = otpExpiry;
     await user.save();
 
-    // Send OTP via SMS using MSG91
+    // Send OTP via SMS using Twilio
     const smsResult = await smsService.sendOTP(phone, otp);
     
     if (smsResult.success) {
@@ -283,10 +288,13 @@ router.post('/forgot-password', async (req, res) => {
         phone: smsResult.phone 
       });
     } else if (smsResult.fallback) {
-      // SMS failed but OTP is logged to console
+      // SMS failed but OTP is logged to console - for testing, include OTP in response
       res.json({ 
         msg: 'OTP sent to your phone number',
-        debug: 'Check server logs for OTP (SMS service temporarily unavailable)'
+        debug: 'SMS service temporarily unavailable',
+        // TEMPORARY: Show OTP in response for testing (remove in production)
+        testOTP: otp,
+        note: 'SMS not working - use the OTP shown above'
       });
     } else {
       res.status(500).json({ 
