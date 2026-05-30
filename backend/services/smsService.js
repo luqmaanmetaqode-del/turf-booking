@@ -1,19 +1,9 @@
-const twilio = require('twilio');
 const axios = require('axios');
 
 class SMSService {
   constructor() {
-    // Twilio Configuration
-    this.accountSid = process.env.TWILIO_ACCOUNT_SID;
-    this.authToken = process.env.TWILIO_AUTH_TOKEN;
-    this.fromNumber = process.env.TWILIO_PHONE_NUMBER;
-    
     // Fast2SMS Configuration (Indian SMS service)
     this.fast2smsApiKey = process.env.FAST2SMS_API_KEY;
-    
-    if (this.accountSid && this.authToken && this.fromNumber && this.fromNumber !== '+1234567890') {
-      this.client = twilio(this.accountSid, this.authToken);
-    }
   }
 
   async sendOTP(phone, otp) {
@@ -30,37 +20,16 @@ class SMSService {
         cleanPhone = '+' + cleanPhone;
       }
 
-      // Try Fast2SMS first (for Indian numbers)
+      // Use Fast2SMS for Indian numbers
       if (cleanPhone.startsWith('+91') && this.fast2smsApiKey) {
         const indianNumber = cleanPhone.replace('+91', '');
-        const result = await this.sendVifast2SMS(indianNumber, otp);
+        const result = await this.sendViaFast2SMS(indianNumber, otp);
         if (result.success) {
           return result;
         }
       }
 
-      // Fallback to Twilio
-      if (this.client) {
-        const message = `Your TurfX OTP is: ${otp}. Valid for 10 minutes. Do not share this OTP with anyone.`;
-
-        const result = await this.client.messages.create({
-          body: message,
-          from: this.fromNumber,
-          to: cleanPhone
-        });
-
-        console.log(`✅ SMS sent via Twilio to ${cleanPhone}: ${otp}`);
-        console.log(`📱 Message SID: ${result.sid}`);
-        
-        return {
-          success: true,
-          messageId: result.sid,
-          phone: cleanPhone,
-          provider: 'Twilio'
-        };
-      }
-
-      throw new Error('No SMS service configured');
+      throw new Error('Fast2SMS not configured or non-Indian number');
 
     } catch (error) {
       console.error('❌ SMS failed:', error.message);
@@ -76,7 +45,7 @@ class SMSService {
     }
   }
 
-  async sendVifast2SMS(phone, otp) {
+  async sendViaFast2SMS(phone, otp) {
     try {
       const message = `Your TurfX OTP is ${otp}. Valid for 10 minutes. Do not share this OTP.`;
       
@@ -113,14 +82,14 @@ class SMSService {
   async sendBookingConfirmation(phone, bookingDetails) {
     try {
       let cleanPhone = phone.replace(/\D/g, '');
+      
+      // Add +91 for Indian numbers if not present
       if (cleanPhone.length === 10) {
         cleanPhone = '+91' + cleanPhone;
+      } else if (cleanPhone.length === 12 && cleanPhone.startsWith('91')) {
+        cleanPhone = '+' + cleanPhone;
       } else if (!cleanPhone.startsWith('+')) {
         cleanPhone = '+' + cleanPhone;
-      }
-
-      if (!this.client) {
-        throw new Error('Twilio not configured');
       }
 
       const message = `🏟 TurfX Booking Confirmed! 
@@ -131,18 +100,40 @@ Amount: ₹${bookingDetails.amount}
 Booking ID: ${bookingDetails.bookingId}
 Enjoy your game!`;
 
-      const result = await this.client.messages.create({
-        body: message,
-        from: this.fromNumber,
-        to: cleanPhone
-      });
+      // Use Fast2SMS for Indian numbers
+      if (cleanPhone.startsWith('+91') && this.fast2smsApiKey) {
+        const indianNumber = cleanPhone.replace('+91', '');
+        
+        const response = await axios.post('https://www.fast2sms.com/dev/bulkV2', {
+          route: 'q',
+          message: message,
+          language: 'english',
+          flash: 0,
+          numbers: indianNumber
+        }, {
+          headers: {
+            'authorization': this.fast2smsApiKey,
+            'Content-Type': 'application/json'
+          }
+        });
 
-      console.log(`✅ Booking confirmation sent via Twilio to ${cleanPhone}`);
-      return { success: true, messageId: result.sid };
+        if (response.data.return === true) {
+          console.log(`✅ Booking confirmation sent via Fast2SMS to ${cleanPhone}`);
+          return { success: true, messageId: response.data.request_id };
+        } else {
+          throw new Error(response.data.message || 'Fast2SMS failed');
+        }
+      }
+
+      throw new Error('Fast2SMS not configured or non-Indian number');
 
     } catch (error) {
-      console.error('❌ Twilio booking SMS failed:', error.message);
-      return { success: false, error: error.message };
+      console.error('❌ Booking confirmation SMS failed:', error.message);
+      
+      // Fallback: Log booking details to console if SMS fails
+      console.log(`📱 FALLBACK - Booking confirmation for ${phone}:`, bookingDetails);
+      
+      return { success: false, error: error.message, fallback: true };
     }
   }
 }

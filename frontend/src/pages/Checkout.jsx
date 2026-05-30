@@ -153,6 +153,7 @@ export default function Checkout() {
   };
 
   const toggleSlotSelection = (slotLabel) => {
+    console.log('Slot clicked:', slotLabel); // Debug log
     if (selectedSlots.includes(slotLabel)) {
       setSelectedSlots(selectedSlots.filter(s => s !== slotLabel));
     } else {
@@ -325,7 +326,12 @@ export default function Checkout() {
                     <button
                       key={slot.value}
                       disabled={isBooked}
-                      onClick={() => !isBooked && toggleSlotSelection(slot.label)}
+                      onClick={() => {
+                        console.log('Button clicked for slot:', slot.label, 'isBooked:', isBooked);
+                        if (!isBooked) {
+                          toggleSlotSelection(slot.label);
+                        }
+                      }}
                       style={{
                         padding: '12px 8px',
                         borderRadius: '12px',
@@ -337,7 +343,10 @@ export default function Checkout() {
                         fontWeight: isSelected ? '800' : '600',
                         transition: 'all 0.2s',
                         textAlign: 'center',
-                        position: 'relative'
+                        position: 'relative',
+                        zIndex: 1,
+                        outline: 'none',
+                        userSelect: 'none'
                       }}
                     >
                       {isSelected && <span style={{ position: 'absolute', top: '4px', right: '6px', fontSize: '0.9rem' }}>✓</span>}
