@@ -69,7 +69,7 @@ function formatDate() {
 }
 
 export default function PartnerDashboard() {
-  const { token, user, logout } = useAuth();
+  const { token, user, logout, isLoading } = useAuth();
   const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [, setLoading] = useState(true);
@@ -86,9 +86,25 @@ export default function PartnerDashboard() {
   };
 
   useEffect(() => {
-    if (!user || (user.role !== 'owner' && user.role !== 'admin')) { navigate('/partner/login'); return; }
+    // Wait for auth to load before checking
+    if (isLoading) return;
+    
+    // Only redirect if user is definitely not authenticated
+    if (!user || !token) { 
+      console.log('No user or token found, redirecting to login');
+      navigate('/partner/login'); 
+      return; 
+    }
+    
+    // Only redirect if user role is definitely wrong
+    if (user.role !== 'owner' && user.role !== 'admin') { 
+      console.log('Invalid user role, redirecting to login');
+      navigate('/partner/login'); 
+      return; 
+    }
+    
     fetchDashboard();
-  }, [token, user, navigate]);
+  }, [token, user, isLoading]); // Added isLoading to wait for auth initialization
 
   const getBadgeCount = (id) => {
     if (!data) return null;
@@ -115,6 +131,31 @@ export default function PartnerDashboard() {
   const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : 'P';
 
   const switchTab = (id) => { setTab(id); setShowAddForm(false); setShowCreateBooking(false); };
+
+  // Show loading screen while auth is initializing
+  if (isLoading) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        minHeight: '100vh', 
+        background: '#F4F6F3',
+        flexDirection: 'column',
+        gap: '1rem'
+      }}>
+        <div style={{ 
+          width: '48px', 
+          height: '48px', 
+          border: '4px solid #E9EDE8', 
+          borderTop: '4px solid #CEF17B', 
+          borderRadius: '50%', 
+          animation: 'spin 1s linear infinite' 
+        }} />
+        <p style={{ color: '#6B7280', fontWeight: '600' }}>Loading partner dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#F4F6F3', fontFamily: "'Inter', sans-serif" }}>

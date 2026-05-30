@@ -1,16 +1,31 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
 const AuthContext = createContext(null);
 const API = 'https://turfx.metaqode.co.in/api';
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem('user')) || null
-  );
-  const [token, setToken] = useState(
-    localStorage.getItem('token') || null
-  );
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Initialize auth state from localStorage on app start
+  useEffect(() => {
+    try {
+      const storedUser = localStorage.getItem('user');
+      const storedToken = localStorage.getItem('token');
+      
+      if (storedUser && storedToken) {
+        setUser(JSON.parse(storedUser));
+        setToken(storedToken);
+      }
+    } catch (error) {
+      console.error('Error loading auth from localStorage:', error);
+      localStorage.clear();
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   const login = (userData, tokenData) => {
     setUser(userData);
@@ -20,6 +35,10 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
+    // Show confirmation before logging out
+    const confirmLogout = window.confirm('Are you sure you want to logout?');
+    if (!confirmLogout) return;
+
     // Notify backend (best-effort — don't block on failure)
     const currentToken = localStorage.getItem('token');
     if (currentToken) {
@@ -33,7 +52,7 @@ export function AuthProvider({ children }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );
