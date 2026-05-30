@@ -1,4 +1,4 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.png';
 import { useState, useEffect, useRef } from 'react';
@@ -13,7 +13,6 @@ const CITIES = [
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
   const [city, setCity] = useState('Bengaluru');
   const [showCities, setShowCities] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
@@ -37,14 +36,6 @@ export default function Navbar() {
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, []);
-
-  const isActive = (path) => location.pathname === path;
-
-  const navLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/explore', label: 'Book' },
-    { path: '/explore', label: 'Venues' },
-  ];
 
   return (
     <nav style={{
@@ -109,27 +100,50 @@ export default function Navbar() {
       {/* Center — Nav Links (hidden on mobile) */}
       {!isMobile && (
         <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
-          {navLinks.map(({ path, label }) => (
-            <Link key={label} to={path} style={{
-              color: isActive(path) && label !== 'Venues' ? '#CEF17B' : 'rgba(255,255,255,0.85)',
-              textDecoration: 'none',
-              fontSize: '0.9rem', fontWeight: isActive(path) ? '700' : '500',
-              padding: '8px 18px',
-              borderRadius: '8px',
-              transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.target.style.color = '#CEF17B'; }}
-              onMouseLeave={e => { e.target.style.color = isActive(path) && label !== 'Venues' ? '#CEF17B' : 'rgba(255,255,255,0.85)'; }}
-            >
-              {label}
-            </Link>
-          ))}
+          <Link to="/" style={{
+            color: 'rgba(255,255,255,0.85)',
+            textDecoration: 'none',
+            fontSize: '0.9rem', fontWeight: '500',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            transition: 'all 0.2s',
+          }}
+            onMouseEnter={e => { e.target.style.color = '#CEF17B'; }}
+            onMouseLeave={e => { e.target.style.color = 'rgba(255,255,255,0.85)'; }}
+          >
+            Home
+          </Link>
+          <Link to="/explore" style={{
+            color: 'rgba(255,255,255,0.85)',
+            textDecoration: 'none',
+            fontSize: '0.9rem', fontWeight: '500',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            transition: 'all 0.2s',
+          }}
+            onMouseEnter={e => { e.target.style.color = '#CEF17B'; }}
+            onMouseLeave={e => { e.target.style.color = 'rgba(255,255,255,0.85)'; }}
+          >
+            Book
+          </Link>
+          <Link to="/explore" style={{
+            color: 'rgba(255,255,255,0.85)',
+            textDecoration: 'none',
+            fontSize: '0.9rem', fontWeight: '500',
+            padding: '8px 18px',
+            borderRadius: '8px',
+            transition: 'all 0.2s',
+          }}
+            onMouseEnter={e => { e.target.style.color = '#CEF17B'; }}
+            onMouseLeave={e => { e.target.style.color = 'rgba(255,255,255,0.85)'; }}
+          >
+            Venues
+          </Link>
         </div>
       )}
 
-      {/* Right — Auth (NO dark mode toggle, NO admin, NO list venue buttons) */}
-      <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-        {/* User menu / Login button */}
+      {/* Right — ONLY Login/Signup or User Menu */}
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         {user ? (
           <div style={{ position: 'relative' }} ref={menuRef}>
             <button onClick={() => setShowUserMenu(!showUserMenu)}
