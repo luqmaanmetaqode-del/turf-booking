@@ -19,7 +19,7 @@ export default function Navbar() {
   const [city, setCity] = useState('Bengaluru');
   const [showCities, setShowCities] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const cityRef = useRef(null);
   const menuRef = useRef(null);
