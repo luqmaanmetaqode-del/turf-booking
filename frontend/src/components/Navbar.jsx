@@ -151,36 +151,7 @@ export default function Navbar() {
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
 
-        {/* Desktop-only links */}
-        {!isMobile && (
-          <>
-            <Link to="/admin" style={{
-              color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
-              fontSize: '0.85rem', fontWeight: '500',
-              padding: '7px 16px', borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.3)',
-              transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; }}
-              onMouseLeave={e => { e.target.style.background = 'transparent'; }}
-            >
-              Admin
-            </Link>
 
-            <Link to="/partner" style={{
-              color: 'rgba(255,255,255,0.85)', textDecoration: 'none',
-              fontSize: '0.85rem', fontWeight: '500',
-              padding: '7px 16px', borderRadius: '20px',
-              border: '1px solid rgba(255,255,255,0.3)',
-              transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.target.style.background = 'rgba(255,255,255,0.1)'; }}
-              onMouseLeave={e => { e.target.style.background = 'transparent'; }}
-            >
-              List Your Venue
-            </Link>
-          </>
-        )}
 
         {/* User menu / Login button */}
         {user ? (
@@ -206,7 +177,6 @@ export default function Navbar() {
                   <>
                     <Link to="/" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Home</Link>
                     <Link to="/explore" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Explore Venues</Link>
-                    <Link to="/partner" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>List Your Venue</Link>
                     <div style={{ borderTop: '1px solid #f0f0f0', margin: '4px 0' }} />
                   </>
                 )}
@@ -239,7 +209,6 @@ export default function Navbar() {
                 <div style={{ position: 'absolute', top: 'calc(100% + 8px)', right: 0, background: 'white', borderRadius: '14px', boxShadow: '0 12px 48px rgba(0,0,0,0.2)', padding: '8px', width: '200px', zIndex: 999 }}>
                   <Link to="/" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Home</Link>
                   <Link to="/explore" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>Explore Venues</Link>
-                  <Link to="/partner" onClick={() => setShowUserMenu(false)} style={{ display: 'block', padding: '10px 14px', borderRadius: '8px', color: '#444', textDecoration: 'none', fontSize: '0.88rem', fontWeight: '600' }}>List Your Venue</Link>
                   <div style={{ borderTop: '1px solid #f0f0f0', margin: '4px 0' }} />
                   <button onClick={() => { navigate('/login'); setShowUserMenu(false); }} style={{ padding: '10px 14px', borderRadius: '8px', color: '#084734', fontSize: '0.88rem', fontWeight: '700', cursor: 'pointer', background: 'none', border: 'none', width: '100%', textAlign: 'left' }}>Login / Signup</button>
                 </div>
